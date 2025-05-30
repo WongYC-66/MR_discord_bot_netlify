@@ -1,91 +1,50 @@
-exports.handler = async (event) => {
+import { OpenAI } from 'openai';
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+
+export const handler = async (event) => {
+    if (event.httpMethod !== 'POST') {
+        return {
+            statusCode: 405,
+            body: JSON.stringify({ error: 'Method not allowed' }),
+        };
+    }
+
+    const { message } = JSON.parse(event.body || '{}');
+    if (!message) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: 'Missing message' }),
+        };
+    }
+
     try {
-        if (event.httpMethod !== "POST") {
-            return {
-                statusCode: 405,
-                body: JSON.stringify({ error: "Method Not Allowed" }),
-            };
-        }
-
-        const { message } = JSON.parse(event.body || "{}");
-
-        if (!message) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ error: "No message provided" }),
-            };
-        }
-
-        const openaiKey = process.env.OPENAI_API_KEY;
-        const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
-
-        if (!openaiKey || !discordWebhook) {
-            return {
-                statusCode: 500,
-                body: JSON.stringify({ error: "Missing environment variables" }),
-            };
-        }
-
-        // Call OpenAI Chat Completion
-        const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${openaiKey}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                model: "gpt-3.5-turbo",
-                messages: [{ role: "user", content: message }],
-            }),
+        const gptResponse = await openai.chat.completions.create({
+            model: 'gpt-4', // or gpt-4-turbo, gpt-3.5-turbo
+            messages: [{ role: 'user', content: message }],
         });
 
-        if (!openaiResponse.ok) {
-            const errorBody = await openaiResponse.text();
-            return {
-                statusCode: openaiResponse.status,
-                body: JSON.stringify({ error: `OpenAI API error: ${errorBody}` }),
-            };
-        }
+        const reply = gptResponse.choices?.[0]?.message?.content || 'No reply';
 
-        const chatData = await openaiResponse.json();
-
-        // Debug: return full OpenAI response if needed
-        // console.log("OpenAI response:", chatData);
-
-        const gptReply = chatData.choices?.[0]?.message?.content;
-
-        if (!gptReply) {
-            return {
-                statusCode: 500,
-                body: JSON.stringify({ error: "OpenAI response missing content", openaiResponse: chatData }),
-            };
-        }
-
-        // Send message to Discord via webhook
-        const discordResponse = await fetch(discordWebhook, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+        await fetch(process.env.DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                content: `**User asked:** ${message}\n**ChatGPT replied:**\n${gptReply}`,
+                content: `**User:** ${message}\n**GPT:** ${reply}`,
             }),
         });
-
-        if (!discordResponse.ok) {
-            const errorBody = await discordResponse.text();
-            return {
-                statusCode: discordResponse.status,
-                body: JSON.stringify({ error: `Discord webhook error: ${errorBody}` }),
-            };
-        }
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ success: true, reply: gptReply }),
+            body: JSON.stringify({ success: true, reply }),
         };
-    } catch (err) {
+    } catch (error) {
+        console.error(error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: err.message }),
+            body: JSON.stringify({ error: error.message }),
         };
     }
 };
