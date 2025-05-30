@@ -22,7 +22,7 @@ export const handler = async (event) => {
 
     try {
         const gptResponse = await openai.chat.completions.create({
-            model: 'gpt-4', // or gpt-4-turbo, gpt-3.5-turbo
+            model: 'gpt-3.5-turbo',
             messages: [{ role: 'user', content: message }],
         });
 
