@@ -1,52 +1,91 @@
 exports.handler = async (event) => {
-  const { message } = JSON.parse(event.body || "{}");
+    try {
+        if (event.httpMethod !== "POST") {
+            return {
+                statusCode: 405,
+                body: JSON.stringify({ error: "Method Not Allowed" }),
+            };
+        }
 
-  if (!message) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "No message provided" }),
-    };
-  }
+        const { message } = JSON.parse(event.body || "{}");
 
-  const openaiKey = process.env.OPENAI_API_KEY;
-  const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
+        if (!message) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ error: "No message provided" }),
+            };
+        }
 
-  try {
-    // 1. Call OpenAI API
-    const chatRes = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${openaiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: message }],
-      }),
-    });
+        const openaiKey = process.env.OPENAI_API_KEY;
+        const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
 
-    const chatData = await chatRes.json();
-    const gptReply = chatData.choices?.[0]?.message?.content || "No reply";
+        if (!openaiKey || !discordWebhook) {
+            return {
+                statusCode: 500,
+                body: JSON.stringify({ error: "Missing environment variables" }),
+            };
+        }
 
-    // 2. Send reply to Discord webhook
-    const discordRes = await fetch(discordWebhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        content: `**User:** ${message}\n**ChatGPT:**\n${gptReply}`,
-      }),
-    });
+        // Call OpenAI Chat Completion
+        const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${openaiKey}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                messages: [{ role: "user", content: message }],
+            }),
+        });
 
-    if (!discordRes.ok) throw new Error("Failed to send to Discord");
+        if (!openaiResponse.ok) {
+            const errorBody = await openaiResponse.text();
+            return {
+                statusCode: openaiResponse.status,
+                body: JSON.stringify({ error: `OpenAI API error: ${errorBody}` }),
+            };
+        }
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ success: true, reply: gptReply }),
-    };
-  } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message }),
-    };
-  }
+        const chatData = await openaiResponse.json();
+
+        // Debug: return full OpenAI response if needed
+        // console.log("OpenAI response:", chatData);
+
+        const gptReply = chatData.choices?.[0]?.message?.content;
+
+        if (!gptReply) {
+            return {
+                statusCode: 500,
+                body: JSON.stringify({ error: "OpenAI response missing content", openaiResponse: chatData }),
+            };
+        }
+
+        // Send message to Discord via webhook
+        const discordResponse = await fetch(discordWebhook, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                content: `**User asked:** ${message}\n**ChatGPT replied:**\n${gptReply}`,
+            }),
+        });
+
+        if (!discordResponse.ok) {
+            const errorBody = await discordResponse.text();
+            return {
+                statusCode: discordResponse.status,
+                body: JSON.stringify({ error: `Discord webhook error: ${errorBody}` }),
+            };
+        }
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ success: true, reply: gptReply }),
+        };
+    } catch (err) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: err.message }),
+        };
+    }
 };

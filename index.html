@@ -3,48 +3,54 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ChatGPT to Discord Bot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ChatGPT Discord Bot Frontend</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: Arial, sans-serif;
             max-width: 600px;
-            margin: auto;
-            padding: 2rem;
+            margin: 2rem auto;
+            padding: 1rem;
         }
 
         textarea {
             width: 100%;
             height: 120px;
-            margin-bottom: 1rem;
         }
 
         button {
+            margin-top: 10px;
             padding: 10px 20px;
             font-size: 16px;
         }
 
         pre {
-            background: #f4f4f4;
+            background: #eee;
             padding: 1rem;
             white-space: pre-wrap;
-            word-wrap: break-word;
+            margin-top: 1rem;
         }
     </style>
 </head>
 
 <body>
-    <h1>Ask ChatGPT via Discord Bot</h1>
-    <textarea id="message" placeholder="Type your question..."></textarea>
-    <br>
+    <h1>ChatGPT → Discord Bot</h1>
+    <textarea id="message" placeholder="Type your message here..."></textarea>
+    <br />
     <button onclick="sendMessage()">Send</button>
     <pre id="response"></pre>
 
     <script>
         async function sendMessage() {
-            const message = document.getElementById("message").value;
+            const message = document.getElementById("message").value.trim();
             const responseBox = document.getElementById("response");
-            responseBox.textContent = "Thinking...";
+
+            if (!message) {
+                responseBox.textContent = "Please enter a message.";
+                return;
+            }
+
+            responseBox.textContent = "Waiting for response...";
 
             try {
                 const res = await fetch("/.netlify/functions/chatToDiscord", {
@@ -52,10 +58,17 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ message }),
                 });
-                const json = await res.json();
-                responseBox.textContent = JSON.stringify(json, null, 2);
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    responseBox.textContent = `Error: ${data.error || "Unknown error"}`;
+                    return;
+                }
+
+                responseBox.textContent = `Success! ChatGPT reply:\n\n${data.reply}`;
             } catch (err) {
-                responseBox.textContent = "Error: " + err.message;
+                responseBox.textContent = `Fetch error: ${err.message}`;
             }
         }
     </script>
