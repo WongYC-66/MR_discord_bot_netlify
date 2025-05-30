@@ -1,5 +1,3 @@
-const fetch = require("node-fetch");
-
 exports.handler = async (event) => {
   const { message } = JSON.parse(event.body || "{}");
 
@@ -14,7 +12,7 @@ exports.handler = async (event) => {
   const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
 
   try {
-    // 1. Ask OpenAI
+    // 1. Call OpenAI API
     const chatRes = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -23,21 +21,19 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
-        messages: [
-          { role: "user", content: message }
-        ],
+        messages: [{ role: "user", content: message }],
       }),
     });
 
     const chatData = await chatRes.json();
     const gptReply = chatData.choices?.[0]?.message?.content || "No reply";
 
-    // 2. Send to Discord via Webhook
+    // 2. Send reply to Discord webhook
     const discordRes = await fetch(discordWebhook, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        content: `**User asked:** ${message}\n**ChatGPT replied:**\n${gptReply}`
+        content: `**User:** ${message}\n**ChatGPT:**\n${gptReply}`,
       }),
     });
 
