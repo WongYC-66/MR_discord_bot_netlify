@@ -61,31 +61,35 @@ export const handleBotEvent = async (rawBody) => {
 
     let subCommand = body.data.options?.[0].name
     let options = body.data.options?.[0]
-    options = options?.options?.[0]
 
 
     // --------------------- /bot equip xxxx  ---------------------
     if (subCommand === "equip") {
+        options = options?.options?.[0]
         const query = options.value
         return getEquipQueryResponse(query)
     }
     // --------------------- /bot monster xxxx  ---------------------
     if (subCommand === 'monster') {
+        options = options?.options?.[0]
         const query = options.value
         return getMonsterQueryResponse(query)
     }
     // --------------------- /bot item xxxx  ---------------------
     if (subCommand === 'item') {
+        options = options?.options?.[0]
         const query = options.value
         return getItemQueryResponse(query)
     }
     // --------------------- /bot item xxxx  ---------------------
     if (subCommand === 'skill') {
+        options = options?.options?.[0]
         const query = options.value
         return getSkillQueryResponse(query)
     }
     // --------------------- /bot item xxxx  ---------------------
     if (subCommand === 'music') {
+        options = options?.options?.[0]
         const query = options.value
         return getMusicQueryResponse(query)
     }
@@ -104,13 +108,26 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
     if (subCommand === 'roll') {
-        console.log(options)
+        const minInput = options?.options?.[0].value
+        const maxInput = options?.options?.[1].value
+        let min = Number(minInput)
+        let max = Number(maxInput)
+        let content = null
+
+
+        const notInRange = (n) => !(-10000 <= n && n <= 10000)
+
+        if (isNaN(min) || isNaN(max) || notInRange(min) || notInRange(max)) {
+            content = 'Please Enter Valid Number between -10000, 10000'
+        } else {
+            content = pickNumber(min, max).toString()
+        }
         return {
             statusCode: 200,
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: `test`
+                    content: `${content}`
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
@@ -343,4 +360,12 @@ const getMusicQueryResponse = async (query) => {
         }),
         headers: { 'Content-Type': 'application/json' },
     }
+}
+
+const pickNumber = (minInput, maxInput) => {
+    const min = Math.min(minInput, maxInput)
+    const max = Math.max(minInput, maxInput)
+    const size = max - min + 1
+    const rand = Math.floor(Math.random() * size)
+    return min + rand
 }
