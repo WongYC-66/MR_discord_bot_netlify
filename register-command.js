@@ -33,7 +33,13 @@ const commands = [
       },
       {
         name: 'item',     // e.g. /bot item power elixir
-        description: 'Describe a monster or monster id',
+        description: 'Describe a item or item id',
+        type: 3, // STRING
+        required: false,
+      },
+      {
+        name: 'help',     // e.g. /bot help
+        description: 'Show help',
         type: 3, // STRING
         required: false,
       },
