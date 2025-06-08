@@ -20,6 +20,7 @@ VNHOES BOT HELP:
   /bot skill xxxx       : search and return 1st skill
   /bot music xxxx       : search and return 1st music
   /bot servertime       : show mapleroyals servertime
+  /bot roll min max     : roll a number between, up to -10000 ~ 10000
 `
 
 export const handleBotEvent = async (rawBody) => {
@@ -97,6 +98,19 @@ export const handleBotEvent = async (rawBody) => {
                 type: 4,
                 data: {
                     content: `mapleroyals servertime : ${GMT0DateTime}`
+                },
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        }
+    }
+    if (subCommand === 'roll') {
+        console.log(options)
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                type: 4,
+                data: {
+                    content: `test`
                 },
             }),
             headers: { 'Content-Type': 'application/json' },

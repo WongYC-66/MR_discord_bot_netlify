@@ -85,6 +85,25 @@ const commands = [
         ],
       },
       {
+        name: 'roll',
+        description: 'Roll a random number between min and max',
+        type: 1, // Subcommand
+        options: [
+          {
+            name: 'min',
+            description: '-10000 to 10000',
+            type: 4,  // Integer
+            required: true,
+          },
+          {
+            name: 'max',
+            description: '-10000 to 10000',
+            type: 4,  // Integer
+            required: true,
+          }
+        ]
+      },
+      {
         type: 1,
         name: 'help',
         description: 'Show help info',
