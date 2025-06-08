@@ -195,13 +195,13 @@ export const handleBotEvent = async (rawBody) => {
 
     if (subCommand === 'help') {
         const helpString = 
-        `
-            VNHOES BOT HELP:
-            /bot equip xxxx         : search and return 1st equip from unofficial library
-            /bot monster xxxx       : search and return 1st monster from unofficial library
-            /bot item xxxx          : search and return 1st item from unofficial library
-            /bot help               : show help
-        `
+`
+VNHOES BOT HELP:
+  /bot equip xxxx       : search and return 1st equip from unofficial library
+  /bot monster xxxx     : search and return 1st monster from unofficial library
+  /bot item xxxx        : search and return 1st item from unofficial library
+  /bot help             : show help
+`
 
         return {
             statusCode: 200,
