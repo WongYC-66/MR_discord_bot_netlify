@@ -1,3 +1,5 @@
+import { formatInTimeZone } from 'date-fns-tz'
+
 const LIBRARY_URL = 'https://royals-library.netlify.app';
 
 const urlPathToCategoryName = {
@@ -27,8 +29,8 @@ export const generateEquipURL = (data) => {
     } else {
         let itemCategory = data.category[2].toLowerCase()
         let category = 'undefined'
-        for(let urlPath in urlPathToCategoryName){
-            if(urlPathToCategoryName[urlPath].toLowerCase() === itemCategory){
+        for (let urlPath in urlPathToCategoryName) {
+            if (urlPathToCategoryName[urlPath].toLowerCase() === itemCategory) {
                 category = urlPath.slice(1,)    // remove '/.
                 break
             }
@@ -50,9 +52,25 @@ export const generateItemURL = (data) => {
         'etc': { min: 4000000, max: 4999999 },
     }
 
-    for(let category in categoryToItemRanges){
-        let {min, max} = categoryToItemRanges[category]
-            if(min <= itemId && itemId <= max) itemCategory = category
+    for (let category in categoryToItemRanges) {
+        let { min, max } = categoryToItemRanges[category]
+        if (min <= itemId && itemId <= max) itemCategory = category
     }
     return `${LIBRARY_URL}/${itemCategory}/id=${data.id}`
+}
+
+export async function getDatetimeFromRoyals() {
+    const url = 'http://worldclockapi.com/api/json/utc/now';
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const data = await res.json();
+
+    const isoString = data.currentDateTime;
+
+    // Format while staying in UTC timezone
+    const formatted = formatInTimeZone(new Date(isoString), 'UTC', "HH:mm:ss - MMMM do, yyyy")
+
+    // Output: 16:14:02 - June 9th, 2025
+    return formatted
 }

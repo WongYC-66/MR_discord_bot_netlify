@@ -62,7 +62,11 @@ const commands = [
         type: 1,
         name: 'help',
         description: 'Show help info',
-        // no options here!
+      },
+      {
+        type: 1,
+        name: 'servertime',
+        description: 'Show mapleroyals servertime',
       },
     ],
   },

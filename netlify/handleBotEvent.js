@@ -1,9 +1,8 @@
 import util from 'util'
 
-
 import { EmbedBuilder, codeBlock } from 'discord.js';
 
-import { generateEquipURL, generateMonsterURL, generateItemURL } from './utility.js'
+import { generateEquipURL, generateMonsterURL, generateItemURL, getDatetimeFromRoyals } from './utility.js'
 
 const API_URL = 'https://royals-library.netlify.app/api/v1';
 const LIBRARY_URL = 'https://royals-library.netlify.app';
@@ -23,8 +22,8 @@ export const handleBotEvent = async (rawBody) => {
     // refer to discord API, https://discord.com/developers/docs/interactions/receiving-and-responding
     const body = JSON.parse(rawBody)
     // console.log(body.data)
-    console.log(util.inspect(body.data, {showHidden: false, depth: null, colors: true}))
-    
+    console.log(util.inspect(body.data, { showHidden: false, depth: null, colors: true }))
+
     // Ping from Discord, DEFAULT, DON'T TOUCH ANYTHING!
     if (body.type === 1) {
         return {
@@ -34,8 +33,8 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
     // Ping from Discord, DEFAULT, DON'T TOUCH ANYTHING!
-    
-    
+
+
     // e.g. /bot equip maple gun
 
     if (body.data.name !== 'bot') {
@@ -191,16 +190,35 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
 
-    // --------------------- /bot item xxxx  ---------------------
+    // --------------------- /bot servertime  ---------------------
+
+    if (subCommand === 'servertime') {
+
+        const GMT0DateTime = await getDatetimeFromRoyals()
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                type: 4,
+                data: {
+                    content: `mapleroyals servertime : ${GMT0DateTime}`
+                },
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        }
+    }
+
+    // --------------------- /bot help  ---------------------
 
     if (subCommand === 'help') {
-        const helpString = 
-`
+        const helpString =
+            `
 VNHOES BOT HELP:
-  /bot equip xxxx       : search and return 1st equip from unofficial library
-  /bot monster xxxx     : search and return 1st monster from unofficial library
-  /bot item xxxx        : search and return 1st item from unofficial library
   /bot help             : show help
+  /bot equip xxxx       : search and return 1st equip
+  /bot item xxxx        : search and return 1st item
+  /bot monster xxxx     : search and return 1st monster
+  /bot servertime       : show mapleroyals servertime
 `
 
         return {
