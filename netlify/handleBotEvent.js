@@ -107,6 +107,7 @@ export const handleBotEvent = async (rawBody) => {
             headers: { 'Content-Type': 'application/json' },
         }
     }
+    // --------------------- /bot roll min max  ---------------------
     if (subCommand === 'roll') {
         const minInput = options?.options?.[0].value
         const maxInput = options?.options?.[1].value
@@ -120,7 +121,7 @@ export const handleBotEvent = async (rawBody) => {
         if (isNaN(min) || isNaN(max) || notInRange(min) || notInRange(max)) {
             content = 'Please Enter Valid Number between -10000, 10000'
         } else {
-            content = pickNumber(min, max).toString()
+            content = `${pickNumber(min, max)} . (${min} - ${max})`
         }
         return {
             statusCode: 200,
