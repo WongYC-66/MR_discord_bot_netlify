@@ -1,5 +1,6 @@
 import util from 'util'
 import { EmbedBuilder, codeBlock } from 'discord.js';
+import commaNumber from 'comma-number';
 
 import {
     generateEquipURL,
@@ -121,7 +122,7 @@ export const handleBotEvent = async (rawBody) => {
         if (isNaN(min) || isNaN(max) || notInRange(min) || notInRange(max)) {
             content = 'Please Enter Valid Number between -10b, 10b'
         } else {
-            content = `Between ${min} to ${max}, you rolled a ${pickNumber(min, max)}!`
+            content = `Between ${commaNumber(min)} to ${commaNumber(max)}, you rolled a ${commaNumber(pickNumber(min, max))}!`
         }
         return {
             statusCode: 200,
