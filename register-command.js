@@ -72,6 +72,19 @@ const commands = [
         ],
       },
       {
+        type: 1, // SUB_COMMAND
+        name: 'music',
+        description: 'Describe a music',
+        options: [
+          {
+            name: 'query',
+            description: 'Music name',
+            type: 3, // STRING
+            required: true,
+          },
+        ],
+      },
+      {
         type: 1,
         name: 'help',
         description: 'Show help info',

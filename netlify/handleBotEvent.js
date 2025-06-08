@@ -1,23 +1,24 @@
 import util from 'util'
 import { EmbedBuilder, codeBlock } from 'discord.js';
 
-import { 
-    generateEquipURL, 
-    generateMonsterURL, 
-    generateItemURL, 
-    generateSkillURL, 
-    getDatetimeFromRoyals 
+import {
+    generateEquipURL,
+    generateMonsterURL,
+    generateItemURL,
+    generateSkillURL,
+    getDatetimeFromRoyals
 } from './utility.js'
 
 const API_URL = 'https://royals-library.netlify.app/api/v1';
 const helpString =
-`
+    `
 VNHOES BOT HELP:
   /bot help             : show help
   /bot equip xxxx       : search and return 1st equip
   /bot item xxxx        : search and return 1st item
   /bot monster xxxx     : search and return 1st monster
   /bot skill xxxx       : search and return 1st skill
+  /bot music xxxx       : search and return 1st music
   /bot servertime       : show mapleroyals servertime
 `
 
@@ -77,10 +78,15 @@ export const handleBotEvent = async (rawBody) => {
         const query = options.value
         return getItemQueryResponse(query)
     }
-     // --------------------- /bot item xxxx  ---------------------
+    // --------------------- /bot item xxxx  ---------------------
     if (subCommand === 'skill') {
         const query = options.value
         return getSkillQueryResponse(query)
+    }
+    // --------------------- /bot item xxxx  ---------------------
+    if (subCommand === 'music') {
+        const query = options.value
+        return getMusicQueryResponse(query)
     }
     // --------------------- /bot servertime  ---------------------
     if (subCommand === 'servertime') {
@@ -138,6 +144,7 @@ const getEquipQueryResponse = async (query) => {
 
     if (!data) return NotFound()
 
+    const name = data?.name || 'undefined'
     const level = data?.reqLevel || '0'
     const category = data.category?.[2] || 'undefined'
     const upgradeSlot = data?.tuc || '0'
@@ -151,7 +158,7 @@ const getEquipQueryResponse = async (query) => {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(0x0099FF)
-                        .setTitle(data.name)
+                        .setTitle(name)
                         .setURL(equipURL)
                         // .setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
                         // .setDescription('Some description here')
@@ -184,6 +191,7 @@ const getMonsterQueryResponse = async (query) => {
 
     if (!data) return NotFound()
 
+    const name = data?.name || 'undefined'
     const level = data?.level || '0'
     const exp = data?.exp?.toString() || '0'
     const Hp = data?.maxHP || '0'
@@ -197,7 +205,7 @@ const getMonsterQueryResponse = async (query) => {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(0x0099FF)
-                        .setTitle(data.name)
+                        .setTitle(name)
                         .setURL(monsterURL)
                         .setThumbnail(data.imgURL)
                         .addFields(
@@ -235,7 +243,7 @@ const getItemQueryResponse = async (query) => {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(0x0099FF)
-                        .setTitle(data.name)
+                        .setTitle(name)
                         .setURL(itemURL)
                         .setThumbnail(data.imgURL)
                         .addFields(
@@ -261,7 +269,7 @@ const getSkillQueryResponse = async (query) => {
 
     const name = data?.name || 'no name'
     const desc = data?.desc?.replaceAll("\\n", " ") || 'no description'
-    const skillUrl = generateSkillURL(data)
+    const skilLURL = generateSkillURL(data)
     const job = data?.job
 
     return {
@@ -272,13 +280,49 @@ const getSkillQueryResponse = async (query) => {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(0x0099FF)
-                        .setTitle(data.name)
-                        .setURL(skillUrl)
+                        .setTitle(name)
+                        .setURL(skilLURL)
                         .setThumbnail(data.imgURL)
                         .addFields(
                             { name: 'Name', value: name, inline: true },
                             { name: 'Description', value: desc, inline: true },
                             { name: 'Job', value: job, inline: true },
+                        )
+                ]
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+const getMusicQueryResponse = async (query) => {
+    console.log(query)
+
+    let data = await fetch(`${API_URL}/music?search=${query}`)
+    data = await data.json()
+    data = data.data?.[0]       // get the first of returned array
+    console.log(data)
+
+    if (!data) return NotFound()
+
+    const name = data?.name || 'no name'
+    const length = (data?.length || 'undefined') + 's'
+    const bgm = data?.bgm || 'undefined'
+    const bgmURL = data?.bgmURL || 'undefined'
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle(name)
+                        .setURL(bgmURL)
+                        .addFields(
+                            { name: 'Name', value: bgm, inline: true },
+                            { name: 'Length', value: length, inline: true },
                         )
                 ]
             },
