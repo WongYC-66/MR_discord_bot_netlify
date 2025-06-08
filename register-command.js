@@ -91,13 +91,13 @@ const commands = [
         options: [
           {
             name: 'min',
-            description: '-10000 to 10000',
+            description: '-10b to 10b',
             type: 4,  // Integer
             required: true,
           },
           {
             name: 'max',
-            description: '-10000 to 10000',
+            description: '-10b to 10b',
             type: 4,  // Integer
             required: true,
           }

@@ -20,7 +20,7 @@ VNHOES BOT HELP:
   /bot skill xxxx       : search and return 1st skill
   /bot music xxxx       : search and return 1st music
   /bot servertime       : show mapleroyals servertime
-  /bot roll min max     : roll a number between, up to -10000 ~ 10000
+  /bot roll min max     : roll a number between, up to -10b ~ 10b
 `
 
 export const handleBotEvent = async (rawBody) => {
@@ -116,10 +116,10 @@ export const handleBotEvent = async (rawBody) => {
         let content = null
 
 
-        const notInRange = (n) => !(-10000 <= n && n <= 10000)
+        const notInRange = (n) => !(-1e10 <= n && n <= 1e10)
 
         if (isNaN(min) || isNaN(max) || notInRange(min) || notInRange(max)) {
-            content = 'Please Enter Valid Number between -10000, 10000'
+            content = 'Please Enter Valid Number between -10b, 10b'
         } else {
             content = `Between ${min} to ${max}, you rolled a ${pickNumber(min, max)}!`
         }
