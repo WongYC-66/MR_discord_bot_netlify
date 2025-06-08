@@ -68,6 +68,9 @@ export const handleBotEvent = async (rawBody) => {
 
         if (!data) return NotFound()
 
+        const level = data?.reqLevel || 'undefined'
+        const category = data.reqLevel?.[2] || 'undefined'
+        const upgradeSlot = data?.tuc || 'undefined'
         const equipURL = generateEquipURL(data)
 
         return {
@@ -86,9 +89,9 @@ export const handleBotEvent = async (rawBody) => {
                             .addFields(
                                 // { name: 'Regular field title', value: 'Some value here' },
                                 // { name: '\u200B', value: '\u200B' },
-                                { name: 'Level', value: data.reqLevel, inline: true },
-                                { name: 'Category', value: data.category[2], inline: true },
-                                { name: 'Upgrade', value: data.upgradeAvail, inline: true },
+                                { name: 'Level', value: level, inline: true },
+                                { name: 'Category', value: category, inline: true },
+                                { name: 'Upgrade', value: upgradeSlot, inline: true },
                                 // { name: 'Inline field title', value: 'Some value here', inline: true },
                             )
                         // .setImage('https://i.imgur.com/AfFp7pu.png')

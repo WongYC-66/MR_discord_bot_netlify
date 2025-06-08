@@ -21,7 +21,7 @@ const urlPathToCategoryName = {
 }
 
 export const generateEquipURL = (data) => {
-    const isWeapon = data.category[1].toLowerCase() === 'weapon'
+    const isWeapon = data.category[1].toLowerCase().includes('weapon')
     if (isWeapon) {
         return `${LIBRARY_URL}/weapon/id=${data.id}`
     } else {
