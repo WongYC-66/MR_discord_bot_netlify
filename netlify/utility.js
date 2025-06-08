@@ -1,4 +1,4 @@
-import { formatInTimeZone } from 'date-fns-tz'
+import * as cheerio from 'cheerio';
 
 const LIBRARY_URL = 'https://royals-library.netlify.app';
 
@@ -60,17 +60,22 @@ export const generateItemURL = (data) => {
 }
 
 export async function getDatetimeFromRoyals() {
-    const url = 'http://worldclockapi.com/api/json/utc/now';
+    const url = 'https://www.timeanddate.com/worldclock/timezone/utc';
 
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    const data = await res.json();
+    const html = await res.text();
 
-    const isoString = data.currentDateTime;
+    const $ = cheerio.load(html);
 
-    // Format while staying in UTC timezone
-    const formatted = formatInTimeZone(new Date(isoString), 'UTC', "HH:mm:ss - MMMM do, yyyy")
+    // The time is inside <span id="ct">, e.g. <span id="ct" class="h1">16:40:03</span>
+    const time = $('#ct').text().trim();
 
-    // Output: 16:14:02 - June 9th, 2025
-    return formatted
+    // The date is inside <div id="ctdat">, e.g. <div id="ctdat">Monday, 9 June 2025</div>
+    const date = $('#ctdat').text().trim()
+    const slicedDate = date.split(' ').slice(1,).join(' ')
+
+    // console.log(`UTC Time: ${time}`);
+    // console.log(`UTC Date: ${date}`);
+
+    return `${time} ${slicedDate}`
 }
