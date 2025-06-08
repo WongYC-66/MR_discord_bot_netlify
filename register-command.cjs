@@ -1,5 +1,6 @@
 // register-commands.js
 
+// FOR DEVELOPERS:
 // 1. Everytimes the bot is newly added to discord channel, run this
 // 2. If new command is created, run this with `node register-command.cjs`
 
