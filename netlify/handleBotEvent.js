@@ -58,11 +58,13 @@ export const handleBotEvent = async (rawBody) => {
     //     }
     // }
 
+    let subCommand = body.data.options?.[0].name
     let options = body.data.options?.[0]
+    options = options?.options?.[0]
 
 
     // --------------------- /bot equip xxxx  ---------------------
-    if (options.name === "equip") {
+    if (subCommand === "equip") {
         const query = options.value
         console.log(query)
 
@@ -111,7 +113,7 @@ export const handleBotEvent = async (rawBody) => {
 
     // --------------------- /bot monster xxxx  ---------------------
 
-    if (options.name === 'monster') {
+    if (subCommand === 'monster') {
         const query = options.value
         console.log(query)
 
@@ -152,7 +154,7 @@ export const handleBotEvent = async (rawBody) => {
 
     // --------------------- /bot item xxxx  ---------------------
 
-    if (options.name === 'item') {
+    if (subCommand === 'item') {
         const query = options.value
         console.log(query)
 
@@ -191,7 +193,7 @@ export const handleBotEvent = async (rawBody) => {
 
     // --------------------- /bot item xxxx  ---------------------
 
-    if (options.name === 'help') {
+    if (subCommand === 'help') {
         const helpString =
             `VNHOES BOT HELP:
             /bot equip xxxx         : search and return 1st equip from unofficial library
