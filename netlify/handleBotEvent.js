@@ -208,7 +208,7 @@ export const handleBotEvent = async (rawBody) => {
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    contents: helpString
+                    content: helpString
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
