@@ -5,6 +5,8 @@
 // 2. If new command is created, run this with `node register-command.cjs`
 
 const { REST, Routes } = require('discord.js');
+require('dotenv').config()
+
 
 const APP_TOKEN = process.env.APP_TOKEN;
 const APPLICATION_ID = process.env.APPLICATION_ID;
