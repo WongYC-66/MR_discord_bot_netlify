@@ -1,10 +1,7 @@
 const { verifyKey } = require('discord-interactions')
 
-const PUBLIC_KEY = '20ee356b0c6b8ee31c1c693df6d368a711a82e98f76f00801eee2b4d6ac09e14'
-
 exports.handler = async (event) => {
 
-  console.log('HEADERS:', event.headers)
   console.log('BODY:', event.body)
 
   const signature = event.headers['x-signature-ed25519']
@@ -13,7 +10,6 @@ exports.handler = async (event) => {
 
   try {
     const isValid = await verifyKey(rawBody, signature, timestamp, PUBLIC_KEY)
-    console.log({ isValid })
 
     if (!isValid) {
       return {
@@ -39,7 +35,8 @@ exports.handler = async (event) => {
       headers: { 'Content-Type': 'application/json' },
     }
   }
-
+  
+  // --------------- FOR DEVELOPERS --------------- :
   // Slash command (example)
   if (body.type === 2 && body.data.name === 'ping') {
     return {
@@ -51,6 +48,8 @@ exports.handler = async (event) => {
       headers: { 'Content-Type': 'application/json' },
     }
   }
+
+
 
   return {
     statusCode: 400,
