@@ -10,6 +10,8 @@ const APP_TOKEN = process.env.APP_TOKEN;
 const APPLICATION_ID = process.env.APPLICATION_ID;
 const DISCORD_GUILD_ID = process.env.DISCORD_GUILD_ID; // Optional: for testing in a specific guild
 
+console.log({ APP_TOKEN, APPLICATION_ID, DISCORD_GUILD_ID })   // debug
+
 const commands = [
   {
     name: 'ping',

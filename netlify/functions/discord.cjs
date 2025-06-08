@@ -9,6 +9,7 @@ exports.handler = async (event) => {
   const rawBody = event.body
   const APP_PUBLIC_KEY = process.env.APP_PUBLIC_KEY
 
+  console.log({APP_PUBLIC_KEY})   // debug
 
   try {
     const isValid = await verifyKey(rawBody, signature, timestamp, APP_PUBLIC_KEY)
