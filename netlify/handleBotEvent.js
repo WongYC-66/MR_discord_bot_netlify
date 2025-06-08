@@ -72,41 +72,31 @@ export const handleBotEvent = async (rawBody) => {
                     embeds: [
                         new EmbedBuilder()
                             .setColor(0x0099FF)
-                            .setTitle('Some title')
+                            .setTitle(data.name)
                             .setURL('https://discord.js.org/')
-                            .setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
-                            .setDescription('Some description here')
-                            .setThumbnail('https://i.imgur.com/AfFp7pu.png')
+                            // .setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
+                            // .setDescription('Some description here')
+                            .setThumbnail(data.imgURL)
                             .addFields(
                                 { name: 'Regular field title', value: 'Some value here' },
                                 { name: '\u200B', value: '\u200B' },
                                 { name: 'Inline field title', value: 'Some value here', inline: true },
                                 { name: 'Inline field title', value: 'Some value here', inline: true },
                             )
-                            .addFields({ name: 'Inline field title', value: 'Some value here', inline: true })
-                            .setImage('https://i.imgur.com/AfFp7pu.png')
-                            .setTimestamp()
-                            .setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' })
-                        // {
-                        //     title: data.name,                        // optional: name of the item
-                        //     description: 'description!',             // optional: additional text
-                        //     image: {
-                        //         url: data.imageURL                   // your image link here
-                        //     },
-                        //     url: data.imageURL,                    // optional: makes title clickable
-                        //     color: 0xffcc00                          // optional: embed border color
-                        // }
+                        // .setImage('https://i.imgur.com/AfFp7pu.png')
+                        // .setTimestamp()
+                        // .setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' })
                     ]
                 },
             }),
-headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json' },
         }
     }
 
-// Not registered command
-return {
-    statusCode: 400,
-    body: 'Un-registered command',
-}
+    // Not registered command
+    return {
+        statusCode: 400,
+        body: 'Un-registered command',
+    }
 }
 
