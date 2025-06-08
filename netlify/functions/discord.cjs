@@ -3,21 +3,35 @@ const { verifyKey } = require('discord-interactions')
 const PUBLIC_KEY = '20ee356b0c6b8ee31c1c693df6d368a711a82e98f76f00801eee2b4d6ac09e14'
 
 exports.handler = async (event) => {
+
+  console.log('HEADERS:', event.headers)
+  console.log('BODY:', event.body)
+
   const signature = event.headers['x-signature-ed25519']
   const timestamp = event.headers['x-signature-timestamp']
   const rawBody = event.body
 
-  const isValid = verifyKey(rawBody, signature, timestamp, PUBLIC_KEY)
+  try {
+    const isValid = await verifyKey(rawBody, signature, timestamp, PUBLIC_KEY)
+    console.log({ isValid })
 
-  if (!isValid) {
+    if (!isValid) {
+      return {
+        statusCode: 401,
+        body: 'Invalid request signature',
+      }
+    }
+  } catch (e) {
+    console.error('Signature verification threw:', e)
     return {
       statusCode: 401,
-      body: 'Invalid request signature',
+      body: 'Signature verification failed',
     }
   }
 
   const body = JSON.parse(rawBody)
 
+  // Ping from Discord
   if (body.type === 1) {
     return {
       statusCode: 200,
@@ -26,14 +40,13 @@ exports.handler = async (event) => {
     }
   }
 
+  // Slash command (example)
   if (body.type === 2 && body.data.name === 'ping') {
     return {
       statusCode: 200,
       body: JSON.stringify({
         type: 4,
-        data: {
-          content: '🏓 Pong!',
-        },
+        data: { content: '🏓 Pong!' },
       }),
       headers: { 'Content-Type': 'application/json' },
     }
