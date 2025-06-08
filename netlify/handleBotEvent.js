@@ -159,7 +159,7 @@ export const handleBotEvent = async (rawBody) => {
         if (!data) return NotFound()
 
         const name = data?.name || 'no name'
-        const desc = data?.desc || 'no description'
+        const desc = data?.desc?.replaceAll("\\n", " ") || 'no description'
         const itemURL = generateItemURL(data)
 
         return {
