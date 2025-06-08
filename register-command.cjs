@@ -16,10 +16,17 @@ console.log({ APP_TOKEN, APPLICATION_ID, DISCORD_GUILD_ID })   // debug
 
 const commands = [
   {
-    name: 'ping',
-    description: 'Replies with Pong!',
+    name: 'bot',
+    description: 'Bot command',
+    options: [
+      {
+        name: 'whatis',     // e.g. /bot whatis maple gun
+        description: 'Describe an item or concept',
+        type: 3, // STRING
+        required: true,
+      },
+    ],
   },
-  // Add more commands here
 ];
 
 const rest = new REST({ version: '10' }).setToken(APP_TOKEN);

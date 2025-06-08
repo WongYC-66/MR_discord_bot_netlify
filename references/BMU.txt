@@ -1,0 +1,53 @@
+​No Category:
+  HPwashInfo       Displays info for HP Washing
+  apqguide         Displays APQ Guide
+  attrange         Calculates the attack range given the weapon, str, dex, in...
+  author           About the author
+  avatar           Return avatar of the user
+  bigfoot          Displays Bigfoot Guide by Sparky95
+  boba             Give the user boba
+  bossexp          Displays Boss HP/EXP Info
+  bossinfo         Displays Various Boss Weaknesses
+  bosstimer        Displays Area Boss Timers
+  coinflip         Flips a 2 sided coin
+  craft            Displays the ingredients to craft the given item
+  credits          Lists contributors of this project
+  cs               Simulates a chaos scroll
+  csp              Simulates a successful chaos scroll
+  cwkguide         Displays CWK Guide
+  directory        Directory for Forums and Guides
+  dummy            Simulates a series of dummy scrolls
+  dummy30          Simulates a series of dummy 30%% scrolls
+  god              g0d
+  gpqguide         Displays GPQ Guide
+  help             Shows this message
+  hpquest          Displays HP Quest Info
+  hpwashing        Calculates how many times the character can wash based on ...
+  hyperpat         Hyperpat the user
+  kpqguide         Solutions to KPQ Stage 1 Questions
+  leech            Displays Leech Guide
+  mage1hit         Displays Mage Magic 1-hit Breakpoints
+  maple            Plays Wordle with words used in MapleRoyals
+  noodle           Give the user noodles
+  opqguide         Displays OPQ Guide
+  orbisetc         Displays Orbis Etc. Guide
+  pala             Displays Paladin Guide
+  palaCWK          Displays Paladin CWK Guide
+  palaHT           Displays Paladin HT Guide
+  palaZAK          Displays Paladin ZAK Guide
+  palant           Displays Paladin NT Guide
+  palatoad         Displays Toad Elemental Weaknesses
+  pat              Pat the user
+  priceguide       Displays link to Price Guide by Sylafia
+  roll             Rolls a dice give the number of sides
+  servertime       States the current servertime
+  slap             Slap!
+  splits           Calculates Splits
+  thirdjobguide    Gives solution sets to the 3rd Job Holy Stone Questions
+  uwu              uwu the user
+  whatdrops        Displays what monster drops a certain item
+  whatis           Displays mob information
+  whosthatroyalmon Play whos that pokemon? MapleRoyals Edition
+
+Type ~help command for more info on a command.
+You can also type ~help category for more info on a category.
