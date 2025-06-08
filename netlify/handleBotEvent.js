@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-import { generateEquipURL, generateMonsterURL } from './utility.js'
+import { generateEquipURL, generateMonsterURL, generateItemURL } from './utility.js'
 
 const API_URL = 'https://royals-library.netlify.app/api/v1';
 const LIBRARY_URL = 'https://royals-library.netlify.app';
@@ -56,7 +56,7 @@ export const handleBotEvent = async (rawBody) => {
 
     const options = body.data.options?.[0]
 
-    // 1. /bot equip maplegun
+    // --------------------- /bot equip xxxx  ---------------------
     if (options.name === "equip") {
         const query = options.value
         console.log(query)
@@ -104,6 +104,8 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
 
+    // --------------------- /bot monster xxxx  ---------------------
+
     if (options.name === 'monster') {
         const query = options.value
         console.log(query)
@@ -130,20 +132,51 @@ export const handleBotEvent = async (rawBody) => {
                             .setColor(0x0099FF)
                             .setTitle(data.name)
                             .setURL(monsterURL)
-                            // .setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
-                            // .setDescription('Some description here')
                             .setThumbnail(data.imgURL)
                             .addFields(
-                                // { name: 'Regular field title', value: 'Some value here' },
-                                // { name: '\u200B', value: '\u200B' },
                                 { name: 'Level', value: level, inline: true },
                                 { name: 'EXP', value: exp, inline: true },
                                 { name: 'HP', value: Hp, inline: true },
-                                // { name: 'Inline field title', value: 'Some value here', inline: true },
                             )
-                        // .setImage('https://i.imgur.com/AfFp7pu.png')
-                        // .setTimestamp()
-                        // .setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' })
+                    ]
+                },
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        }
+    }
+
+    // --------------------- /bot item xxxx  ---------------------
+
+    if (options.name === 'item') {
+        const query = options.value
+        console.log(query)
+
+        let data = await fetch(`${API_URL}/item?search=${query}`)
+        data = await data.json()
+        data = data.data?.[0]       // get the first of returned array
+        console.log(data)
+
+        if (!data) return NotFound()
+
+        const name = data?.name || 'no name'
+        const desc = data?.desc || 'no description'
+        const itemURL = generateItemURL(data)
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                type: 4,
+                data: {
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(0x0099FF)
+                            .setTitle(data.name)
+                            .setURL(itemURL)
+                            .setThumbnail(data.imgURL)
+                            .addFields(
+                                { name: 'Name', value: name, inline: true },
+                                { name: 'Description', value: desc, inline: true },
+                            )
                     ]
                 },
             }),

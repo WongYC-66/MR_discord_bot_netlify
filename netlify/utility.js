@@ -40,3 +40,19 @@ export const generateEquipURL = (data) => {
 export const generateMonsterURL = (data) => {
     return `${LIBRARY_URL}/monster/id=${data.id}`
 }
+
+export const generateItemURL = (data) => {
+    let itemCategory = 'undefined'
+    let itemId = Number(data.id)
+    const categoryToItemRanges = {
+        'use': { min: 2000000, max: 2999999 },
+        'setup': { min: 3000000, max: 3999999 },
+        'etc': { min: 4000000, max: 4999999 },
+    }
+
+    for(let category in categoryToItemRanges){
+        let {min, max} = categoryToItemRanges[category]
+            if(min <= itemId && itemId <= max) itemCategory = category
+    }
+    return `${LIBRARY_URL}/${itemCategory}/id=${data.id}`
+}
