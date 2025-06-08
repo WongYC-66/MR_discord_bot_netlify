@@ -121,7 +121,7 @@ export const handleBotEvent = async (rawBody) => {
         if (isNaN(min) || isNaN(max) || notInRange(min) || notInRange(max)) {
             content = 'Please Enter Valid Number between -10000, 10000'
         } else {
-            content = `${pickNumber(min, max)} . (${min} - ${max})`
+            content = `Between ${min} to ${max}, you rolled a ${pickNumber(min, max)}!`
         }
         return {
             statusCode: 200,
