@@ -38,10 +38,10 @@ export const handleBotEvent = async (rawBody) => {
     
     // e.g. /bot equip maple gun
 
-    if (body.data.name !== 'bot' && body.type !== 2) {
+    if (body.data.name !== 'bot') {
         return {
             statusCode: 400,
-            body: 'Invalid command, start with "/bot " and type must be 2',
+            body: 'Invalid command, start with "/bot "',
         }
     }
 
