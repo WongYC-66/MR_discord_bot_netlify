@@ -36,3 +36,7 @@ export const generateEquipURL = (data) => {
         return `${LIBRARY_URL}/${category}/id=${data.id}`
     }
 }
+
+export const generateMonsterURL = (data) => {
+    return `${LIBRARY_URL}/monster/id=${data.id}`
+}
