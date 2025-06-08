@@ -1,5 +1,9 @@
-const API_URL = 'https://royals-library.netlify.app/api/v1';
 import { EmbedBuilder } from 'discord.js';
+
+import { generateEquipURL } from './utility.js'
+
+const API_URL = 'https://royals-library.netlify.app/api/v1';
+const LIBRARY_URL = 'https://royals-library.netlify.app';
 
 const NotFound = () => {
     return {
@@ -64,6 +68,8 @@ export const handleBotEvent = async (rawBody) => {
 
         if (!data) return NotFound()
 
+        const equipURL = generateEquipURL(data)
+
         return {
             statusCode: 200,
             body: JSON.stringify({
@@ -73,15 +79,17 @@ export const handleBotEvent = async (rawBody) => {
                         new EmbedBuilder()
                             .setColor(0x0099FF)
                             .setTitle(data.name)
-                            .setURL('https://discord.js.org/')
+                            .setURL(equipURL)
                             // .setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
                             // .setDescription('Some description here')
                             .setThumbnail(data.imgURL)
                             .addFields(
-                                { name: 'Regular field title', value: 'Some value here' },
-                                { name: '\u200B', value: '\u200B' },
-                                { name: 'Inline field title', value: 'Some value here', inline: true },
-                                { name: 'Inline field title', value: 'Some value here', inline: true },
+                                // { name: 'Regular field title', value: 'Some value here' },
+                                // { name: '\u200B', value: '\u200B' },
+                                { name: 'Level', value: data.reqLevel, inline: true },
+                                { name: 'Category', value: data.category[2], inline: true },
+                                { name: 'Upgrade', value: data.upgradeAvail, inline: true },
+                                // { name: 'Inline field title', value: 'Some value here', inline: true },
                             )
                         // .setImage('https://i.imgur.com/AfFp7pu.png')
                         // .setTimestamp()
