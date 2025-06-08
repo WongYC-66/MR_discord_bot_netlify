@@ -22,11 +22,11 @@ const commands = [
       {
         type: 1, // SUB_COMMAND
         name: 'equip',
-        description: 'Describe an item or item id',
+        description: 'Describe an equip or equip id',
         options: [
           {
             name: 'query',
-            description: 'Item name or ID',
+            description: 'Equip name or ID',
             type: 3, // STRING
             required: true,
           },
@@ -48,11 +48,24 @@ const commands = [
       {
         type: 1, // SUB_COMMAND
         name: 'item',
-        description: 'Describe a misc item or item id',
+        description: 'Describe a item or item id',
         options: [
           {
             name: 'query',
             description: 'Item name or ID',
+            type: 3, // STRING
+            required: true,
+          },
+        ],
+      },
+      {
+        type: 1, // SUB_COMMAND
+        name: 'skill',
+        description: 'Describe a skill or skill id',
+        options: [
+          {
+            name: 'query',
+            description: 'Skill name or ID',
             type: 3, // STRING
             required: true,
           },

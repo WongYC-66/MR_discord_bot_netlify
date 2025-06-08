@@ -1,22 +1,25 @@
 import util from 'util'
-
 import { EmbedBuilder, codeBlock } from 'discord.js';
 
-import { generateEquipURL, generateMonsterURL, generateItemURL, getDatetimeFromRoyals } from './utility.js'
+import { 
+    generateEquipURL, 
+    generateMonsterURL, 
+    generateItemURL, 
+    generateSkillURL, 
+    getDatetimeFromRoyals 
+} from './utility.js'
 
 const API_URL = 'https://royals-library.netlify.app/api/v1';
-const LIBRARY_URL = 'https://royals-library.netlify.app';
-
-const NotFound = () => {
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            type: 4,
-            data: { content: 'Not found' },
-        }),
-        headers: { 'Content-Type': 'application/json' },
-    }
-}
+const helpString =
+`
+VNHOES BOT HELP:
+  /bot help             : show help
+  /bot equip xxxx       : search and return 1st equip
+  /bot item xxxx        : search and return 1st item
+  /bot monster xxxx     : search and return 1st monster
+  /bot skill xxxx       : search and return 1st skill
+  /bot servertime       : show mapleroyals servertime
+`
 
 export const handleBotEvent = async (rawBody) => {
     // refer to discord API, https://discord.com/developers/docs/interactions/receiving-and-responding
@@ -32,11 +35,8 @@ export const handleBotEvent = async (rawBody) => {
             headers: { 'Content-Type': 'application/json' },
         }
     }
-    // Ping from Discord, DEFAULT, DON'T TOUCH ANYTHING!
-
 
     // e.g. /bot equip maple gun
-
     if (body.data.name !== 'bot') {
         return {
             statusCode: 400,
@@ -65,137 +65,26 @@ export const handleBotEvent = async (rawBody) => {
     // --------------------- /bot equip xxxx  ---------------------
     if (subCommand === "equip") {
         const query = options.value
-        console.log(query)
-
-        let data = await fetch(`${API_URL}/equip?search=${query}`)
-        data = await data.json()
-        data = data.data?.[0]       // get the first of returned array
-        console.log(data)
-
-        if (!data) return NotFound()
-
-        const level = data?.reqLevel || '0'
-        const category = data.category?.[2] || 'undefined'
-        const upgradeSlot = data?.tuc || '0'
-        const equipURL = generateEquipURL(data)
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                type: 4,
-                data: {
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(0x0099FF)
-                            .setTitle(data.name)
-                            .setURL(equipURL)
-                            // .setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
-                            // .setDescription('Some description here')
-                            .setThumbnail(data.imgURL)
-                            .addFields(
-                                // { name: 'Regular field title', value: 'Some value here' },
-                                // { name: '\u200B', value: '\u200B' },
-                                { name: 'Level', value: level, inline: true },
-                                { name: 'Category', value: category, inline: true },
-                                { name: 'Upgrade', value: upgradeSlot, inline: true },
-                                // { name: 'Inline field title', value: 'Some value here', inline: true },
-                            )
-                        // .setImage('https://i.imgur.com/AfFp7pu.png')
-                        // .setTimestamp()
-                        // .setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' })
-                    ]
-                },
-            }),
-            headers: { 'Content-Type': 'application/json' },
-        }
+        return getEquipQueryResponse(query)
     }
-
     // --------------------- /bot monster xxxx  ---------------------
-
     if (subCommand === 'monster') {
         const query = options.value
-        console.log(query)
-
-        let data = await fetch(`${API_URL}/monster?search=${query}`)
-        data = await data.json()
-        data = data.data?.[0]       // get the first of returned array
-        console.log(data)
-
-        if (!data) return NotFound()
-
-        const level = data?.level || '0'
-        const exp = data?.exp?.toString() || '0'
-        const Hp = data?.maxHP || '0'
-        const monsterURL = generateMonsterURL(data)
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                type: 4,
-                data: {
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(0x0099FF)
-                            .setTitle(data.name)
-                            .setURL(monsterURL)
-                            .setThumbnail(data.imgURL)
-                            .addFields(
-                                { name: 'Level', value: level, inline: true },
-                                { name: 'EXP', value: exp, inline: true },
-                                { name: 'HP', value: Hp, inline: true },
-                            )
-                    ]
-                },
-            }),
-            headers: { 'Content-Type': 'application/json' },
-        }
+        return getMonsterQueryResponse(query)
     }
-
     // --------------------- /bot item xxxx  ---------------------
-
     if (subCommand === 'item') {
         const query = options.value
-        console.log(query)
-
-        let data = await fetch(`${API_URL}/item?search=${query}`)
-        data = await data.json()
-        data = data.data?.[0]       // get the first of returned array
-        console.log(data)
-
-        if (!data) return NotFound()
-
-        const name = data?.name || 'no name'
-        const desc = data?.desc?.replaceAll("\\n", " ") || 'no description'
-        const itemURL = generateItemURL(data)
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                type: 4,
-                data: {
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(0x0099FF)
-                            .setTitle(data.name)
-                            .setURL(itemURL)
-                            .setThumbnail(data.imgURL)
-                            .addFields(
-                                { name: 'Name', value: name, inline: true },
-                                { name: 'Description', value: desc, inline: true },
-                            )
-                    ]
-                },
-            }),
-            headers: { 'Content-Type': 'application/json' },
-        }
+        return getItemQueryResponse(query)
     }
-
+     // --------------------- /bot item xxxx  ---------------------
+    if (subCommand === 'skill') {
+        const query = options.value
+        return getSkillQueryResponse(query)
+    }
     // --------------------- /bot servertime  ---------------------
-
     if (subCommand === 'servertime') {
-
         const GMT0DateTime = await getDatetimeFromRoyals()
-
         return {
             statusCode: 200,
             body: JSON.stringify({
@@ -207,20 +96,8 @@ export const handleBotEvent = async (rawBody) => {
             headers: { 'Content-Type': 'application/json' },
         }
     }
-
     // --------------------- /bot help  ---------------------
-
     if (subCommand === 'help') {
-        const helpString =
-            `
-VNHOES BOT HELP:
-  /bot help             : show help
-  /bot equip xxxx       : search and return 1st equip
-  /bot item xxxx        : search and return 1st item
-  /bot monster xxxx     : search and return 1st monster
-  /bot servertime       : show mapleroyals servertime
-`
-
         return {
             statusCode: 200,
             body: JSON.stringify({
@@ -232,11 +109,180 @@ VNHOES BOT HELP:
             headers: { 'Content-Type': 'application/json' },
         }
     }
-
-    // Not registered command
+    // --------------------- Not registered command ---------------------
     return {
         statusCode: 400,
         body: 'Un-registered command',
     }
 }
 
+const NotFound = () => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: { content: 'Not found' },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+
+const getEquipQueryResponse = async (query) => {
+    console.log(query)
+
+    let data = await fetch(`${API_URL}/equip?search=${query}`)
+    data = await data.json()
+    data = data.data?.[0]       // get the first of returned array
+    console.log(data)
+
+    if (!data) return NotFound()
+
+    const level = data?.reqLevel || '0'
+    const category = data.category?.[2] || 'undefined'
+    const upgradeSlot = data?.tuc || '0'
+    const equipURL = generateEquipURL(data)
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle(data.name)
+                        .setURL(equipURL)
+                        // .setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
+                        // .setDescription('Some description here')
+                        .setThumbnail(data.imgURL)
+                        .addFields(
+                            // { name: 'Regular field title', value: 'Some value here' },
+                            // { name: '\u200B', value: '\u200B' },
+                            { name: 'Level', value: level, inline: true },
+                            { name: 'Category', value: category, inline: true },
+                            { name: 'Upgrade', value: upgradeSlot, inline: true },
+                            // { name: 'Inline field title', value: 'Some value here', inline: true },
+                        )
+                    // .setImage('https://i.imgur.com/AfFp7pu.png')
+                    // .setTimestamp()
+                    // .setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' })
+                ]
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+const getMonsterQueryResponse = async (query) => {
+    console.log(query)
+
+    let data = await fetch(`${API_URL}/monster?search=${query}`)
+    data = await data.json()
+    data = data.data?.[0]       // get the first of returned array
+    console.log(data)
+
+    if (!data) return NotFound()
+
+    const level = data?.level || '0'
+    const exp = data?.exp?.toString() || '0'
+    const Hp = data?.maxHP || '0'
+    const monsterURL = generateMonsterURL(data)
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle(data.name)
+                        .setURL(monsterURL)
+                        .setThumbnail(data.imgURL)
+                        .addFields(
+                            { name: 'Level', value: level, inline: true },
+                            { name: 'EXP', value: exp, inline: true },
+                            { name: 'HP', value: Hp, inline: true },
+                        )
+                ]
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+
+const getItemQueryResponse = async (query) => {
+    console.log(query)
+
+    let data = await fetch(`${API_URL}/item?search=${query}`)
+    data = await data.json()
+    data = data.data?.[0]       // get the first of returned array
+    console.log(data)
+
+    if (!data) return NotFound()
+
+    const name = data?.name || 'no name'
+    const desc = data?.desc?.replaceAll("\\n", " ") || 'no description'
+    const itemURL = generateItemURL(data)
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle(data.name)
+                        .setURL(itemURL)
+                        .setThumbnail(data.imgURL)
+                        .addFields(
+                            { name: 'Name', value: name, inline: true },
+                            { name: 'Description', value: desc, inline: true },
+                        )
+                ]
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+const getSkillQueryResponse = async (query) => {
+    console.log(query)
+
+    let data = await fetch(`${API_URL}/skill?search=${query}`)
+    data = await data.json()
+    data = data.data?.[0]       // get the first of returned array
+    console.log(data)
+
+    if (!data) return NotFound()
+
+    const name = data?.name || 'no name'
+    const desc = data?.desc?.replaceAll("\\n", " ") || 'no description'
+    const skillUrl = generateSkillURL(data)
+    const job = data?.job
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle(data.name)
+                        .setURL(skillUrl)
+                        .setThumbnail(data.imgURL)
+                        .addFields(
+                            { name: 'Name', value: name, inline: true },
+                            { name: 'Description', value: desc, inline: true },
+                            { name: 'Job', value: job, inline: true },
+                        )
+                ]
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}

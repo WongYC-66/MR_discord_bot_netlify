@@ -59,6 +59,10 @@ export const generateItemURL = (data) => {
     return `${LIBRARY_URL}/${itemCategory}/id=${data.id}`
 }
 
+export const generateSkillURL = (data) => {
+   return `${LIBRARY_URL}/skill/id=${data.id}`
+}
+
 export async function getDatetimeFromRoyals() {
     const url = 'https://www.timeanddate.com/worldclock/timezone/utc';
 
