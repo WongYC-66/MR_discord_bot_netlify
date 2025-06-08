@@ -1,77 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ChatGPT Discord Bot Frontend</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 1rem;
-        }
-
-        textarea {
-            width: 100%;
-            height: 120px;
-        }
-
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-
-        pre {
-            background: #eee;
-            padding: 1rem;
-            white-space: pre-wrap;
-            margin-top: 1rem;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VNHoes BOT</title>
 </head>
-
 <body>
-    <h1>ChatGPT → Discord Bot</h1>
-    <textarea id="message" placeholder="Type your message here..."></textarea>
-    <br />
-    <button onclick="sendMessage()">Send</button>
-    <pre id="response"></pre>
-
-    <script>
-        async function sendMessage() {
-            const message = document.getElementById("message").value.trim();
-            const responseBox = document.getElementById("response");
-
-            if (!message) {
-                responseBox.textContent = "Please enter a message.";
-                return;
-            }
-
-            responseBox.textContent = "Waiting for response...";
-
-            try {
-                const res = await fetch("/.netlify/functions/chatToDiscord", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message }),
-                });
-
-                const data = await res.json();
-
-                if (!res.ok) {
-                    responseBox.textContent = `Error: ${data.error || "Unknown error"}`;
-                    return;
-                }
-
-                responseBox.textContent = `Success! ChatGPT reply:\n\n${data.reply}`;
-            } catch (err) {
-                responseBox.textContent = `Fetch error: ${err.message}`;
-            }
-        }
-    </script>
+    <h2>https://vnhoes-bot.netlify.app/discord</h2>
 </body>
-
 </html>
