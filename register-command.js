@@ -4,9 +4,8 @@
 // 1. Everytimes the bot is newly added to discord channel, run this
 // 2. If new command is created, run this with `node register-command.cjs`
 
-const { REST, Routes } = require('discord.js');
-require('dotenv').config()
-
+import { REST, Routes } from 'discord.js';
+import 'dotenv/config';
 
 const APP_TOKEN = process.env.APP_TOKEN;
 const APPLICATION_ID = process.env.APPLICATION_ID;
@@ -20,8 +19,8 @@ const commands = [
     description: 'Bot command',
     options: [
       {
-        name: 'whatis',     // e.g. /bot whatis maple gun
-        description: 'Describe an item or concept',
+        name: 'equip',     // e.g. /bot whatis maple gun
+        description: 'Describe an item or item id',
         type: 3, // STRING
         required: true,
       },
