@@ -68,9 +68,9 @@ export const handleBotEvent = async (rawBody) => {
 
         if (!data) return NotFound()
 
-        const level = data?.reqLevel || 'undefined'
-        const category = data.reqLevel?.[2] || 'undefined'
-        const upgradeSlot = data?.tuc || 'undefined'
+        const level = data?.reqLevel || '0'
+        const category = data.category?.[2] || 'undefined'
+        const upgradeSlot = data?.tuc || '0'
         const equipURL = generateEquipURL(data)
 
         return {

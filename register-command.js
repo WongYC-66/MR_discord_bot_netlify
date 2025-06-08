@@ -34,7 +34,8 @@ const rest = new REST({ version: '10' }).setToken(APP_TOKEN);
   try {
     console.log('Registering slash commands...');
     await rest.put(
-      Routes.applicationGuildCommands(APPLICATION_ID, DISCORD_GUILD_ID),   // run this for discord test-server
+      Routes.applicationGuildCommands(APPLICATION_ID, DISCORD_GUILD_ID_1),   // run this for discord test-server
+      Routes.applicationGuildCommands(APPLICATION_ID, DISCORD_GUILD_ID_2),   // run this for discord VNHoes
       // Routes.applicationGuildCommands(APPLICATION_ID),                  // Use Routes.applicationCommands(CLIENT_ID) for global
       { body: commands }
     );
