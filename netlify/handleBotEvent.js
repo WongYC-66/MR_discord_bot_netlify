@@ -1,3 +1,6 @@
+import util from 'util'
+
+
 import { EmbedBuilder, codeBlock } from 'discord.js';
 
 import { generateEquipURL, generateMonsterURL, generateItemURL } from './utility.js'
@@ -19,8 +22,9 @@ const NotFound = () => {
 export const handleBotEvent = async (rawBody) => {
     // refer to discord API, https://discord.com/developers/docs/interactions/receiving-and-responding
     const body = JSON.parse(rawBody)
-    console.log(body.data)
-
+    // console.log(body.data)
+    console.log(util.inspect(body.data, {showHidden: false, depth: null, colors: true}))
+    
     // Ping from Discord, DEFAULT, DON'T TOUCH ANYTHING!
     if (body.type === 1) {
         return {
@@ -30,8 +34,8 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
     // Ping from Discord, DEFAULT, DON'T TOUCH ANYTHING!
-
-
+    
+    
     // e.g. /bot equip maple gun
 
     if (body.data.name !== 'bot' && body.type !== 2) {
@@ -54,7 +58,8 @@ export const handleBotEvent = async (rawBody) => {
     //     }
     // }
 
-    const options = body.data.options?.[0]
+    let options = body.data.options?.[0]
+
 
     // --------------------- /bot equip xxxx  ---------------------
     if (options.name === "equip") {

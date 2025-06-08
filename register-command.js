@@ -20,32 +20,54 @@ const commands = [
     description: 'Bot command',
     options: [
       {
-        name: 'equip',     // e.g. /bot equip maple shild
+        type: 1, // SUB_COMMAND
+        name: 'equip',
         description: 'Describe an item or item id',
-        type: 3, // STRING
-        required: false,
+        options: [
+          {
+            name: 'query',
+            description: 'Item name or ID',
+            type: 3, // STRING
+            required: true,
+          },
+        ],
       },
       {
-        name: 'monster',     // e.g. /bot monster zakum
+        type: 1, // SUB_COMMAND
+        name: 'monster',
         description: 'Describe a monster or monster id',
-        type: 3, // STRING
-        required: false,
+        options: [
+          {
+            name: 'query',
+            description: 'Monster name or ID',
+            type: 3, // STRING
+            required: true,
+          },
+        ],
       },
       {
-        name: 'item',     // e.g. /bot item power elixir
-        description: 'Describe a item or item id',
-        type: 3, // STRING
-        required: false,
+        type: 1, // SUB_COMMAND
+        name: 'item',
+        description: 'Describe a misc item or item id',
+        options: [
+          {
+            name: 'query',
+            description: 'Item name or ID',
+            type: 3, // STRING
+            required: true,
+          },
+        ],
       },
       {
-        name: 'help',     // e.g. /bot help
-        description: 'Show help',
-        type: 3, // STRING
-        required: false,
+        type: 1,
+        name: 'help',
+        description: 'Show help info',
+        // no options here!
       },
     ],
   },
 ];
+
 
 const rest = new REST({ version: '10' }).setToken(APP_TOKEN);
 
