@@ -7,7 +7,10 @@ import {
     generateMonsterURL,
     generateItemURL,
     generateSkillURL,
-    getDatetimeFromRoyals
+    getDatetimeFromRoyals,
+    pickNumber,
+    generateThumbnailUrl,
+
 } from './utility.js'
 
 const API_URL = 'https://royals-library.netlify.app/api/v1';
@@ -594,9 +597,7 @@ const getEquipDroppedByResponse = async (query) => {
         thumbnail: {
             url: data.imgURL,
         },
-        fields: mobs.map(({ id: mobId, name: mobName }) => {
-            return { name: 'Name', value: mobName, inline: true }
-        }),
+        fields: mobs.map(generateMiniMobEmbed)
     };
 
     return {
@@ -609,6 +610,16 @@ const getEquipDroppedByResponse = async (query) => {
         }),
         headers: { 'Content-Type': 'application/json' },
     }
+}
+
+const generateMiniMobEmbed = ({ id, name }) => {
+    const monsterURL = generateMonsterURL({ id })
+    const monsterThumbnailURL = generateThumbnailUrl('monsters', id)
+    return new EmbedBuilder()
+        .setColor(0x0099FF)
+        .setTitle(name)
+        .setURL(monsterURL)
+        .setThumbnail(monsterThumbnailURL)
 }
 
 const myOneLinerLinkResponse = (name, url) => {
@@ -648,12 +659,4 @@ const myOneLinerImageResponse = (name, url) => {
         }),
         headers: { 'Content-Type': 'application/json' },
     }
-}
-
-const pickNumber = (minInput, maxInput) => {
-    const min = Math.min(minInput, maxInput)
-    const max = Math.max(minInput, maxInput)
-    const size = max - min + 1
-    const rand = Math.floor(Math.random() * size)
-    return min + rand
 }

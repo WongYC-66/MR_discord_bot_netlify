@@ -22,6 +22,28 @@ const urlPathToCategoryName = {
     "/shoulder": "Shoulder Accessory",
 }
 
+const normalizedID = (type, id) => {
+    // console.log({ type, id })
+    switch (type) {
+        case 'maps':
+            return String(id).padStart(9, '0')
+        case 'characters':
+        case 'items':
+            return String(id).padStart(8, '0')
+        case 'monsters':
+        case 'skills':
+        case 'npcs':
+            return String(id).padStart(7, '0')
+        default:
+            return id
+    }
+}
+
+export const generateThumbnailUrl = (type, id) => {
+    id = normalizedID(type, id)
+    return `${LIBRARY_URL}/images/${type}/${id}.png`
+}
+
 export const generateEquipURL = (data) => {
     const isWeapon = data.category[1].toLowerCase().includes('weapon')
     if (isWeapon) {
@@ -60,7 +82,7 @@ export const generateItemURL = (data) => {
 }
 
 export const generateSkillURL = (data) => {
-   return `${LIBRARY_URL}/skill/id=${data.id}`
+    return `${LIBRARY_URL}/skill/id=${data.id}`
 }
 
 export async function getDatetimeFromRoyals() {
@@ -82,4 +104,12 @@ export async function getDatetimeFromRoyals() {
     // console.log(`UTC Date: ${date}`);
 
     return `${time} ${slicedDate}`
+}
+
+export const pickNumber = (minInput, maxInput) => {
+    const min = Math.min(minInput, maxInput)
+    const max = Math.max(minInput, maxInput)
+    const size = max - min + 1
+    const rand = Math.floor(Math.random() * size)
+    return min + rand
 }
