@@ -597,7 +597,6 @@ const getEquipDroppedByResponse = async (query) => {
         thumbnail: {
             url: data.imgURL,
         },
-        fields: mobs.map(generateMiniMobEmbed)
     };
 
     return {
@@ -605,7 +604,7 @@ const getEquipDroppedByResponse = async (query) => {
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: [embedObj]
+                embeds: [embedObj, mobs.map(generateMiniMobEmbed)]
             },
         }),
         headers: { 'Content-Type': 'application/json' },
