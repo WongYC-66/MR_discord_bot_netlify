@@ -579,7 +579,7 @@ const getEquipDroppedByResponse = async (query) => {
     let data = await fetch(`${API_URL}/equip?search=${query}`)
     data = await data.json()
     data = data.data?.[0]       // get the first of returned array
-    // console.log(data)
+    console.log(data)
 
     if (!data) return NotFound()
 
@@ -628,7 +628,7 @@ const getItemDroppedByResponse = async (query) => {
     let data = await fetch(`${API_URL}/item?search=${query}`)
     data = await data.json()
     data = data.data?.[0]       // get the first of returned array
-    // console.log(data)
+    console.log(data)
 
     if (!data) return NotFound()
 
@@ -639,14 +639,16 @@ const getItemDroppedByResponse = async (query) => {
     // ready to output
     const name = data?.name || 'undefined'
     const itemURL = generateItemURL(data)
-    const mobs = itemInfo.droppedBy
+    const mobs = itemInfo?.droppedBy || []
 
     console.log(name, mobs) // item names, and array of mobs
 
-    const mobStrings = mobs.map(({ id, name }) => {
+    let mobStrings = mobs.map(({ id, name }) => {
         const mobURL = generateMonsterURL({ id })
         return `[${name}](${mobURL})`
     })
+
+    if(!mobStrings.length) mobStrings = [['Nothing dropped it']]
 
     const embeddedObj = {
         color: 0x0099ff,
