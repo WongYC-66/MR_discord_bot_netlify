@@ -671,20 +671,30 @@ const getItemDroppedByResponse = async (query) => {
 }
 
 const splitLongStringIntoArray = (strArr) => {
-    // split long string and fit into fields(max of 25), each field max of 1024 char
-    const totalLen = strArr.join('\n').length
-    const fieldNeeded = Math.ceil(totalLen / 1024)
-    const stringPerField = strArr.length / fieldNeeded
+    const result = [];
+    let current = [];
+    let currentLen = 0;
 
-    // divide equally then
-    const arr = []
+    for (let i = 0; i < strArr.length; i++) {
+        const str = strArr[i];
+        const strLen = str.length + 1; // +1 for the '\n'
 
-    for (let i = 0; i < strArr.length; i += stringPerField) {
-        let sliced = strArr.slice(i, i + stringPerField + 1)
-        arr.push(sliced.join('\n'))
+        if (currentLen + strLen > 1024) {
+            result.push(current.join('\n'));
+            current = [str];
+            currentLen = str.length + 1;
+        } else {
+            current.push(str);
+            currentLen += strLen;
+        }
     }
-    return arr
-}
+
+    if (current.length) {
+        result.push(current.join('\n'));
+    }
+
+    return result.slice(0, 25); // Discord max fields
+};
 
 const myOneLinerLinkResponse = (name, url) => {
     return {
