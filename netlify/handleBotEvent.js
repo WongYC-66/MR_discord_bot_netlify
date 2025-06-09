@@ -587,24 +587,26 @@ const getEquipDroppedByResponse = async (query) => {
     const name = data?.name || 'undefined'
     const equipURL = generateEquipURL(data)
     const mobs = equipInfo.droppedBy
-
     console.log(mobs)
 
-    const embedObj = {
-        color: 0x0099FF,
-        title: name,
-        url: equipURL,
-        thumbnail: {
-            url: data.imgURL,
-        },
-    };
+    const mobString = mobs.map(({ id, name }) => `${name},${id}`).join('\n')
+    console.log(mobString)
 
     return {
         statusCode: 200,
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: [embedObj, ...mobs.map(generateMiniMobEmbed)]
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle(name)
+                        .setURL(equipURL)
+                        .setThumbnail(data.imgURL)
+                        .addFields(
+                            { name: 'Dropped By', value: mobString, inline: true },
+                        )
+                ]
             },
         }),
         headers: { 'Content-Type': 'application/json' },
