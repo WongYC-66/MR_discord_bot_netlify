@@ -63,7 +63,6 @@ const commands = [
           },
         ],
       },
-
       {
         type: 1, // SUB_COMMAND
         name: 'skill',
@@ -128,12 +127,72 @@ const commands = [
       {
         type: 1,    // SUB_COMMAND
         name: 'apqguide',
-        description: 'show link to apqguide',
+        description: 'show link to apq guide',
       },
       {
         type: 1,    // SUB_COMMAND
         name: 'apqbon',
         description: 'show image of apq bonus map',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'cwkguide',
+        description: 'show link to cwkpq guide',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'cwkbon',
+        description: 'show image of cwkpq bonus map',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'gpqguide',
+        description: 'show link to gpq guide',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'gpqbon',
+        description: 'show image of gpq bonus map',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'opqguide',
+        description: 'show link to opq guide',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'lpqguide',
+        description: 'show link to lpq guide',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'mage1hit',
+        description: 'show image of mage 1 hit tma',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'reuel',
+        description: 'show link to reuel hp quest',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'leech',
+        description: 'show image of leech info',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'priceguide',
+        description: 'show link to sylafia price guide',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'jobadvance',
+        description: 'show link to job advancement guide',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'hpwashinfo',
+        description: 'show image of hp wash info',
       },
       //  ------- TROLL -------
       {

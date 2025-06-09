@@ -33,7 +33,7 @@ VNHOES BOT HELP:
   /bot gpqguide         : link to gpq guide
   /bot gpqbon           : show gpq bonus map
   /bot opqguide         : link to opq guide
-  /bot kpqguide         : link to kpq guide
+  /bot lpqguide         : link to lpq guide
   /bot mage1hit         : show mage1hit table
   /bot reuel            : link to Reuel hp quest
   /bot leech            : show leech picture
@@ -198,8 +198,69 @@ export const handleBotEvent = async (rawBody) => {
         let response = myOneLinerLinkResponse('APQ Guide', 'https://royals.ms/forum/threads/comprehensive-apq-guide-updated-feb-2021.172942/')
         return response
     }
+    // --------------------- /bot apqbon  ---------------------
     if (subCommand === 'apqbon') {
         let response = myOneLinerImageResponse('APQ Bonus Map', 'https://royals.ms/forum/attachments/3z07lbj-png.189083/')
+        return response
+    }
+    // --------------------- /bot cwkguide  ---------------------
+    if (subCommand === 'cwkguide') {
+        let response = myOneLinerLinkResponse('CWKPQ Guide', 'https://royals.ms/forum/threads/crimsonwood-party-quest-prequisite-guide-2020-cwpq.153541/')
+        return response
+    }
+    // --------------------- /bot cwkbon  ---------------------
+    if (subCommand === 'cwkbon') {
+        let response = myOneLinerImageResponse('CWKPQ Bonus Map', 'https://imgur.com/KED684z')
+        return response
+    }
+    // --------------------- /bot gpqguide  ---------------------
+    if (subCommand === 'gpqguide') {
+        let response = myOneLinerLinkResponse('GPQ Guide', 'https://royals.ms/forum/threads/%E2%9C%AF-hollywood-presents-a-comprehensive-guide-to-guild-party-quest-gpq.27299/')
+        return response
+    }
+    // --------------------- /bot gpqbon  ---------------------
+    if (subCommand === 'gpqbon') {
+        let response = myOneLinerImageResponse('GPQ Bonus Map', 'https://i.imgur.com/EcaEybL.png')
+        return response
+    }
+    // --------------------- /bot opqguide  ---------------------
+    if (subCommand === 'opqguide') {
+        let response = myOneLinerLinkResponse('OPQ Guide', 'https://royals.ms/forum/threads/orbis-pq-guide.174277/')
+        return response
+    }
+    // --------------------- /bot lpqguide  ---------------------
+    if (subCommand === 'lpqguide') {
+        let response = myOneLinerLinkResponse('LPQ Guide', 'https://royals.ms/forum/threads/ludibrium-party-quest-lpq-guide.108791/')
+        return response
+    }
+    // --------------------- /bot mage1hit  ---------------------
+    if (subCommand === 'mage1hit') {
+        let response = myOneLinerImageResponse('Mage 1 hit', 'https://imgur.com/a/UZbW1Hk')
+        return response
+    }
+    // --------------------- /bot reuel  ---------------------
+    if (subCommand === 'reuel') {
+        let response = myOneLinerLinkResponse('Reuel HP Quest', 'https://royals.ms/forum/threads/comprehensive-search-for-the-elixir-of-life-reuel-hp-quest-guide-lv120.178648/')
+        return response
+    }
+    // --------------------- /bot leech  ---------------------
+    if (subCommand === 'leech') {
+        let response = myOneLinerImageResponse('Leech', 'https://imgur.com/a/SFucr4l')
+        return response
+    }
+    // --------------------- /bot priceguide  ---------------------
+    if (subCommand === 'leech') {
+        let response = myOneLinerLinkResponse('Sylafia price guide', 'https://docs.google.com/spreadsheets/d/1B3sxmpaW7RGrQAAxAyeR-xS4mdKCTTs_DzgV0qo2p_8/edit?gid=0#gid=0')
+        return response
+    }
+    // --------------------- /bot jobadvance  ---------------------
+    if (subCommand === 'jobadvance') {
+        let response = myOneLinerLinkResponse('Job Advancement', 'https://royals.ms/forum/threads/new-source-job-advancement-guide.110142/')
+        return response
+    }
+    // --------------------- /bot hpwashinfo  ---------------------
+    if (subCommand === 'hpwashinfo') {
+        let response = myOneLinerLinkResponse('Hp Wash Info', 'https://imgur.com/a/s2xNvh3/')
         return response
     }
     // ######## TROLL ######## 
@@ -208,7 +269,7 @@ export const handleBotEvent = async (rawBody) => {
         let min = 0
         let max = 100000000
         let toWho = subCommand === 'pavoweme' ? 'me' : 'everyone'
-        let content = `Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}!. A Random number from 0-100m. PS:this a troll`
+        let content = `Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll`
         return {
             statusCode: 200,
             body: JSON.stringify({
@@ -220,7 +281,6 @@ export const handleBotEvent = async (rawBody) => {
             headers: { 'Content-Type': 'application/json' },
         }
     }
-    // # TROLL 
     // --------------------- /bot pavfeeling  ---------------------
     if (subCommand === 'pavfeels') {
         const choices = [
@@ -262,7 +322,7 @@ export const handleBotEvent = async (rawBody) => {
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: codeBlock(`Pav feels **${result}** today!`)
+                    content: codeBlock(`Pav feels **${result}** today! Doesn't he ?`)
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
