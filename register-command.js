@@ -130,6 +130,11 @@ const commands = [
         name: 'apqguide',
         description: 'show link to apqguide',
       },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'apqbon',
+        description: 'show image of apq bonus map',
+      },
       //  ------- TROLL -------
       {
         type: 1,    // SUB_COMMAND

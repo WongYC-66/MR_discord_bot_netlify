@@ -192,13 +192,17 @@ export const handleBotEvent = async (rawBody) => {
         let response = myOneLinerLinkResponse('ScottY5C', 'https://royals-library.netlify.app/about-me')
         return response
     }
-    // # Guess
+    // ######## GUIDE ########
     // --------------------- /bot apqguide  ---------------------
     if (subCommand === 'apqguide') {
         let response = myOneLinerLinkResponse('APQ Guide', 'https://royals.ms/forum/threads/comprehensive-apq-guide-updated-feb-2021.172942/')
         return response
     }
-    // # TROLL 
+    if (subCommand === 'apqbon') {
+        let response = myOneLinerImageResponse('APQ Bonus Map', 'https://royals.ms/forum/attachments/3z07lbj-png.189083/')
+        return response
+    }
+    // ######## TROLL ######## 
     // --------------------- /bot pavoweme  ---------------------
     if (subCommand === 'pavoweme' || subCommand === 'pavoweeveryone') {
         let min = 0
@@ -489,6 +493,27 @@ const myOneLinerLinkResponse = (name, url) => {
                 embeds: [
                     {
                         description: `[${name}](${url})`,
+                        color: 0x00b0f4
+                    }
+                ]
+            }
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+const myOneLinerImageResponse = (name, url) => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [
+                    {
+                        title: name,
+                        image: {
+                            url: url // must be a public URL
+                        },
                         color: 0x00b0f4
                     }
                 ]
