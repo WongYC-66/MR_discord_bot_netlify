@@ -127,6 +127,52 @@ const commands = [
 
     ]
   },
+  //  ------- DROP -------
+  {
+    name: 'drop',
+    description: 'drop commands',
+    options: [
+      {
+        type: 1, // SUB_COMMAND
+        name: 'equip',
+        description: 'show which mobs drop the equip',
+        options: [
+          {
+            name: 'query',
+            description: 'Equip name or ID',
+            type: 3, // STRING
+            required: true,
+          },
+        ],
+      },
+      {
+        type: 1, // SUB_COMMAND
+        name: 'item',
+        description: 'show which mobs drop the item',
+        options: [
+          {
+            name: 'query',
+            description: 'Item name or ID',
+            type: 3, // STRING
+            required: true,
+          },
+        ],
+      },
+      {
+        type: 1, // SUB_COMMAND
+        name: 'mob',
+        description: 'show drops of a mob',
+        options: [
+          {
+            name: 'query',
+            description: 'Mob name or ID',
+            type: 3, // STRING
+            required: true,
+          },
+        ],
+      },
+    ],
+  },
   //  ------- GUIDE -------
   {
     name: 'guide',

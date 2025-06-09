@@ -25,6 +25,11 @@ VNHOES BOT HELP:
   /bot flipcoin         : flip a coin
   /bot author           : show author
 
+  # drop
+  /drop equip xxxx      : show which mobs drop the equip (todo)
+  /drop item xxxx       : show which mobs drop the item (todo)
+  /drop mob xxxx        : show drops of a mob (todo)
+
   # guide
   /guide apq            : link to apq guide
   /guide apqbon         : show apq bonus map
@@ -62,8 +67,9 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
 
-    const allowedMainCommand = ['bot', 'guide', 'troll']
-    if (allowedMainCommand.every(allowed => body.data.name !== allowed)) {
+    const allowedMainCommand = ['bot', 'drop', 'guide', 'troll']
+    const mainCommand = body.data.name
+    if (allowedMainCommand.every(allowed => mainCommand !== allowed)) {
         return {
             statusCode: 400,
             body: 'Invalid command, start with /bot or /guide or /troll',
@@ -84,10 +90,13 @@ export const handleBotEvent = async (rawBody) => {
     // }
 
     let subCommand = body.data.options?.[0].name
+    let command = `/${mainCommand} ${subCommand}`
+    console.log(command)
+
     let options = body.data.options?.[0]
 
     // --------------------- /bot help  ---------------------
-    if (subCommand === 'help') {
+    if (command === '/bot help') {
         return {
             statusCode: 200,
             body: JSON.stringify({
@@ -100,37 +109,37 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
     // --------------------- /bot equip xxxx  ---------------------
-    if (subCommand === "equip") {
+    if (command === "/bot equip") {
         options = options?.options?.[0]
         const query = options.value
         return getEquipQueryResponse(query)
     }
     // --------------------- /bot item xxxx  ---------------------
-    if (subCommand === 'item') {
+    if (command === '/bot item') {
         options = options?.options?.[0]
         const query = options.value
         return getItemQueryResponse(query)
     }
     // --------------------- /bot monster xxxx  ---------------------
-    if (subCommand === 'monster') {
+    if (command === '/bot monster') {
         options = options?.options?.[0]
         const query = options.value
         return getMonsterQueryResponse(query)
     }
-    // --------------------- /bot item xxxx  ---------------------
-    if (subCommand === 'skill') {
+    // --------------------- /bot skill xxxx  ---------------------
+    if (command === '/bot skill') {
         options = options?.options?.[0]
         const query = options.value
         return getSkillQueryResponse(query)
     }
-    // --------------------- /bot item xxxx  ---------------------
-    if (subCommand === 'music') {
+    // --------------------- /bot music xxxx  ---------------------
+    if (command === '/bot music') {
         options = options?.options?.[0]
         const query = options.value
         return getMusicQueryResponse(query)
     }
     // --------------------- /bot servertime  ---------------------
-    if (subCommand === 'servertime') {
+    if (command === '/bot servertime') {
         const GMT0DateTime = await getDatetimeFromRoyals()
         return {
             statusCode: 200,
@@ -144,7 +153,7 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
     // --------------------- /bot roll min max  ---------------------
-    if (subCommand === 'roll') {
+    if (command === '/bot roll') {
         const minInput = options?.options?.[0].value
         const maxInput = options?.options?.[1].value
         let min = Number(minInput)
@@ -171,7 +180,7 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
     // --------------------- /bot flipcoin  ---------------------
-    if (subCommand === 'flipcoin') {
+    if (command === '/bot flipcoin') {
         const choices = ['Head', 'Tail']
         const randIdx = Math.floor(Math.random() * (choices.length))
         const result = choices[randIdx]
@@ -188,87 +197,99 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
     // --------------------- /bot author  ---------------------
-    if (subCommand === 'author') {
+    if (command === '/bot author') {
         let response = myOneLinerLinkResponse('ScottY5C', 'https://royals-library.netlify.app/about-me')
         return response
     }
+    // ######## DROP ########
+    if (command === '/drop equip') {
+        options = options?.options?.[0]
+        const query = options.value
+        return getEquipDroppedByResponse(query)
+    }
+    if (command === '/drop item') {
+        return NotFound()
+    }
+    if (command === '/drop mob') {
+        return NotFound()
+    }
     // ######## GUIDE ########
     // --------------------- /guide apq  ---------------------
-    if (subCommand === 'apq') {
+    if (command === '/guide apq') {
         let response = myOneLinerLinkResponse('APQ Guide', 'https://royals.ms/forum/threads/comprehensive-apq-guide-updated-feb-2021.172942/')
         return response
     }
     // --------------------- /guide apqbon  ---------------------
-    if (subCommand === 'apqbon') {
+    if (command === '/guide apqbon') {
         let response = myOneLinerImageResponse('APQ Bonus Map', 'https://royals.ms/forum/attachments/3z07lbj-png.189083/')
         return response
     }
     // --------------------- /guide cwkguide  ---------------------
-    if (subCommand === 'cwk') {
+    if (command === '/guide cwk') {
         let response = myOneLinerLinkResponse('CWKPQ Guide', 'https://royals.ms/forum/threads/crimsonwood-party-quest-prequisite-guide-2020-cwpq.153541/')
         return response
     }
     // --------------------- /guide cwkbon  ---------------------
-    if (subCommand === 'cwkbon') {
+    if (command === '/guide cwkbon') {
         let response = myOneLinerImageResponse('CWKPQ Bonus Map', 'https://i.imgur.com/KED684z.png')
         return response
     }
     // --------------------- /guide gpqguide  ---------------------
-    if (subCommand === 'gpq') {
+    if (command === '/guide gpq') {
         let response = myOneLinerLinkResponse('GPQ Guide', 'https://royals.ms/forum/threads/%E2%9C%AF-hollywood-presents-a-comprehensive-guide-to-guild-party-quest-gpq.27299/')
         return response
     }
     // --------------------- /guide gpqbon  ---------------------
-    if (subCommand === 'gpqbon') {
+    if (command === '/guide gpqbon') {
         let response = myOneLinerImageResponse('GPQ Bonus Map', 'https://i.imgur.com/EcaEybL.png/')
         return response
     }
     // --------------------- /guide opqguide  ---------------------
-    if (subCommand === 'opq') {
+    if (command === '/guide opq') {
         let response = myOneLinerLinkResponse('OPQ Guide', 'https://royals.ms/forum/threads/orbis-pq-guide.174277/')
         return response
     }
     // --------------------- /guide lpqguide  ---------------------
-    if (subCommand === 'lpq') {
+    if (command === '/guide lpq') {
         let response = myOneLinerLinkResponse('LPQ Guide', 'https://royals.ms/forum/threads/ludibrium-party-quest-lpq-guide.108791/')
         return response
     }
     // --------------------- /guide mage1hit  ---------------------
-    if (subCommand === 'mage1hit') {
+    if (command === '/guide mage1hit') {
         let response = myOneLinerImageResponse('Mage 1 hit', 'https://i.gyazo.com/0f145192abae7abc4bd3e14073e7c9e1.png/')
         return response
     }
     // --------------------- /guide reuel  ---------------------
-    if (subCommand === 'reuel') {
+    if (command === '/guide reuel') {
         let response = myOneLinerLinkResponse('Reuel HP Quest', 'https://royals.ms/forum/threads/comprehensive-search-for-the-elixir-of-life-reuel-hp-quest-guide-lv120.178648/')
         return response
     }
     // --------------------- /guide leech  ---------------------
-    if (subCommand === 'leech') {
+    if (command === '/guide leech') {
         let response = myOneLinerImageResponse('Leech', 'https://i.imgur.com/MNEDFOd_d.webp?maxwidth=1520&fidelity=grand')
         return response
     }
     // --------------------- /guide priceguide  ---------------------
-    if (subCommand === 'price') {
+    if (command === '/guide price') {
         let response = myOneLinerLinkResponse('Sylafia price guide', 'https://docs.google.com/spreadsheets/d/1B3sxmpaW7RGrQAAxAyeR-xS4mdKCTTs_DzgV0qo2p_8/edit?gid=0#gid=0/')
         return response
     }
     // --------------------- /guide jobadvance  ---------------------
-    if (subCommand === 'jobadvance') {
+    if (command === '/guide jobadvance') {
         let response = myOneLinerLinkResponse('Job Advancement', 'https://royals.ms/forum/threads/new-source-job-advancement-guide.110142/')
         return response
     }
     // --------------------- /guide hpwashinfo  ---------------------
-    if (subCommand === 'hpwashinfo') {
+    if (command === '/guide hpwashinfo') {
         let response = myOneLinerImageResponse('Hp Wash Info', 'https://i.imgur.com/pckfDK8.jpeg')
         return response
     }
     // ######## TROLL ######## 
     // --------------------- /bot pavoweme  ---------------------
-    if (subCommand === 'pavoweme' || subCommand === 'pavoweeveryone') {
+    if (command === '/troll pavoweme' || command === '/troll pavoweeveryone') {
         let min = 0
         let max = 100000000
-        let toWho = subCommand === 'pavoweme' ? 'me' : 'everyone'
+        let toWho = command === 'pavoweme' ? 'me' : 'everyone'
         let content = `Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll`
         return {
             statusCode: 200,
@@ -282,7 +303,7 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
     // --------------------- /bot pavfeeling  ---------------------
-    if (subCommand === 'pavfeels') {
+    if (command === '/troll pavfeels') {
         const choices = [
             "happy",
             "sad",
@@ -538,6 +559,52 @@ const getMusicQueryResponse = async (query) => {
                             { name: 'Length', value: length, inline: true },
                         )
                 ]
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+const getEquipDroppedByResponse = async (query) => {
+    console.log(query)
+
+    // 1. fetch the query to get the 1st Equip that matches
+    let data = await fetch(`${API_URL}/equip?search=${query}`)
+    data = await data.json()
+    data = data.data?.[0]       // get the first of returned array
+    console.log(data)
+
+    if (!data) return NotFound()
+
+    // 2. fetch the detail
+    let equipInfo = await fetch(`${API_URL}/equip?id=${data.id}`)
+    equipInfo = await equipInfo.json()
+
+    // 
+    const name = data?.name || 'undefined'
+    const equipURL = generateEquipURL(data)
+    const mobs = equipInfo.droppedBy
+
+    console.log(mobs)
+
+    const embedObj = {
+        color: 0x0099FF,
+        title: name,
+        url: equipURL,
+        thumbnail: {
+            url: data.imgURL,
+        },
+        fields: mobs.map(({ id: mobId, name: mobName }) => {
+            return { name: 'Name', value: mobName, inline: true }
+        }),
+    };
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [embedObj]
             },
         }),
         headers: { 'Content-Type': 'application/json' },
