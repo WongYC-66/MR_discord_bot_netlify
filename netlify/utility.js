@@ -113,3 +113,64 @@ export const pickNumber = (minInput, maxInput) => {
     const rand = Math.floor(Math.random() * size)
     return min + rand
 }
+
+export const decideMobStrings = (mobs) => {
+    let mobStringsWithURL = formatToArrOfNameWithURL(mobs)
+    let mobStringsWithoutURL = formatToArrOfName(mobs)
+    return mobStringsWithURL.join('\n').length < 6000 ? mobStringsWithURL : mobStringsWithoutURL
+}
+
+const formatToArrOfNameWithURL = (mobs) => {
+    return mobs.map(({ id, name }) => {
+        const mobURL = generateMonsterURL({ id })
+        return `[${name}](${mobURL})`
+    })
+}
+
+const formatToArrOfName = (mobs) => {
+    return mobs.map(({ name }) => name)
+}
+
+export const splitLongMobStringIntoArray = (strArr) => {
+    const MAX_FIELDS = 6;
+    const MAX_FIELD_CHARS = 1024;
+
+    // Calculate total characters (including '\n' after each line)
+    const totalLength = strArr.reduce((acc, str) => acc + str.length + 1, 0);
+    const idealFields = Math.min(MAX_FIELDS, strArr.length);
+    const idealChunkSize = Math.ceil(totalLength / idealFields);
+
+    const result = [];
+    let current = [];
+    let currentLen = 0;
+    let fieldCount = 1;
+
+    for (let i = 0; i < strArr.length; i++) {
+        const str = strArr[i];
+        const strLen = str.length + 1; // +1 for newline
+
+        // Start new field if we exceed ideal chunk size or hard limit
+        if ((currentLen + strLen > idealChunkSize && result.length < MAX_FIELDS - 1) || currentLen + strLen > MAX_FIELD_CHARS) {
+            result.push({
+                name: `Dropped By (${fieldCount})`,
+                value: current.join('\n'),
+                inline: true,
+            });
+            fieldCount++;
+            current = [str];
+            currentLen = strLen;
+        } else {
+            current.push(str);
+            currentLen += strLen;
+        }
+    }
+
+    if (current.length) {
+        result.push({
+            name: `Dropped By (${fieldCount})`,
+            value: current.join('\n'),
+            inline: true,
+        });
+    }
+    return result;
+};
