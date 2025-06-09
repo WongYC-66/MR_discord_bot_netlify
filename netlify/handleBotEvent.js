@@ -687,6 +687,14 @@ const formatToArrOfName = (mobs) => {
 }
 
 const splitLongMobStringIntoArray = (strArr) => {
+    const MAX_FIELDS = 6;
+    const MAX_FIELD_CHARS = 1024;
+
+    // Calculate total characters (including '\n' after each line)
+    const totalLength = strArr.reduce((acc, str) => acc + str.length + 1, 0);
+    const idealFields = Math.min(MAX_FIELDS, strArr.length);
+    const idealChunkSize = Math.ceil(totalLength / idealFields);
+
     const result = [];
     let current = [];
     let currentLen = 0;
@@ -694,17 +702,18 @@ const splitLongMobStringIntoArray = (strArr) => {
 
     for (let i = 0; i < strArr.length; i++) {
         const str = strArr[i];
-        const strLen = str.length + 1; // +1 for the '\n'
+        const strLen = str.length + 1; // +1 for newline
 
-        if (currentLen + strLen > 1024) {
+        // Start new field if we exceed ideal chunk size or hard limit
+        if ((currentLen + strLen > idealChunkSize && result.length < MAX_FIELDS - 1) || currentLen + strLen > MAX_FIELD_CHARS) {
             result.push({
                 name: `Dropped By (${fieldCount})`,
                 value: current.join('\n'),
                 inline: true,
             });
-            current = [str];
-            currentLen = str.length + 1;
             fieldCount++;
+            current = [str];
+            currentLen = strLen;
         } else {
             current.push(str);
             currentLen += strLen;
@@ -719,7 +728,7 @@ const splitLongMobStringIntoArray = (strArr) => {
         });
     }
 
-    return result.slice(0, 25); // max 25 fields
+    return result;
 };
 
 const myOneLinerLinkResponse = (name, url) => {
