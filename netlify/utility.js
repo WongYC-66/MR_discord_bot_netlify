@@ -22,6 +22,62 @@ const urlPathToCategoryName = {
     "/shoulder": "Shoulder Accessory",
 }
 
+const catogeryRangeList = {
+    // info used from https://maplestory.io/api/GMS/64/item/category
+    // also, https://maplestory.io/api/GMS/196/item/category
+    "Gun": { min: 1490000, max: 1500000, category: "Two-Handed Weapon" },
+    "Knuckle": { min: 1480000, max: 1490000, category: "Two-Handed Weapon" },
+    "Claw": { min: 1470000, max: 1480000, category: "Two-Handed Weapon" },
+    "Dagger": { min: 1330000, max: 1340000, category: "One-Handed Weapon" },
+    "Bow": { min: 1450000, max: 1460000, category: "Two-Handed Weapon" },
+    "CrossBow": { min: 1460000, max: 1470000, category: "Two-Handed Weapon" },
+    "Staff": { min: 1380000, max: 1390000, category: "One-Handed Weapon" },
+    "Wand": { min: 1370000, max: 1380000, category: "One-Handed Weapon" },
+    "One-Handed Sword": { min: 1300000, max: 1310000, category: "One-Handed Weapon" },
+    "Two-Handed Sword": { min: 1400000, max: 1410000, category: "Two-Handed Weapon" },
+    "One-Handed Blunt Weapon": { min: 1320000, max: 1330000, category: "One-Handed Weapon" },
+    "Two-Handed Blunt Weapon": { min: 1420000, max: 1430000, category: "Two-Handed Weapon" },
+    "One-Handed Axe": { min: 1310000, max: 1320000, category: "One-Handed Weapon" },
+    "Two-Handed Axe": { min: 1410000, max: 1420000, category: "Two-Handed Weapon" },
+    "Spear": { min: 1430000, max: 1440000, category: "Two-Handed Weapon" },
+    "Pole Arm": { min: 1440000, max: 1450000, category: "Two-Handed Weapon" },
+
+    "Cash": { min: 1701000, max: 1704000, category: "One-Handed Weapon" },
+
+    "Hat": { min: 1000000, max: 1009999, category: "Armor" },
+    "Face Accessory": { min: 1010000, max: 1019999, category: "Accessory" },
+    "Eye Decoration": { min: 1020000, max: 1029999, category: "Accessory" },
+    "Glove": { min: 1080000, max: 1089999, category: "Armor" },
+    "Pendant": { min: 1120000, max: 1129999, category: "Accessory" },
+    "Belt": { min: 1130000, max: 1139999, category: "Accessory" },
+    "Medal": { min: 1140000, max: 1149999, category: "Accessory" },
+    "Cape": { min: 1100000, max: 1109999, category: "Armor" },
+    "Earrings": { min: 1030000, max: 1039999, category: "Accessory" },
+    "Ring": { min: 1110000, max: 1119999, category: "Accessory" },
+    "Shield": { min: 1090000, max: 1099999, category: "Armor" },
+    "Overall": { min: 1050000, max: 1059999, category: "Armor" },
+    "Top": { min: 1040000, max: 1049999, category: "Armor" },
+    "Bottom": { min: 1060000, max: 1069999, category: "Armor" },
+    "Shoes": { min: 1070000, max: 1079999, category: "Armor" },
+    "Test Armor": { min: 1690100, max: 1690200, category: "Armor" },
+
+    "Badge": { min: 1180000, max: 1189999, category: "Accessory" },
+    "Emblem": { min: 1190000, max: 1190500, category: "Accessory" },
+    "Pocket Item": { min: 1160000, max: 1169999, category: "Accessory" },
+    "Power Source": { min: 1190200, max: 1190300, category: "Accessory" },
+    "Shoulder Accessory": { min: 1150000, max: 1159999, category: "Accessory" },
+    "Totem": { min: 1202000, max: 1202200, category: "Accessory" },
+}
+
+const toCategoryURL = (subCategory) => {
+    for(let urlPath in urlPathToCategoryName){
+        if(urlPathToCategoryName[urlPath] === subCategory){
+            return urlPath.slice(1,)
+        }
+    }
+    return 'undefined'
+}
+
 const normalizedID = (type, id) => {
     // console.log({ type, id })
     switch (type) {
@@ -59,6 +115,27 @@ export const generateEquipURL = (data) => {
         }
         return `${LIBRARY_URL}/${category}/id=${data.id}`
     }
+}
+
+const generateEquipURLWithOnlyId = (id) => {
+    let foundSubCategory = 'undefined'
+    let foundCategory = 'undefined'
+    for (let subCategory in catogeryRangeList) {
+        let { min, max, category } = catogeryRangeList[subCategory]
+        if (min <= id && id <= max) {
+            foundSubCategory = subCategory
+            foundCategory = category
+            break
+        }
+    }
+    const isWeapon = foundCategory.includes('weapon')
+    const categoryURL = toCategoryURL(foundSubCategory)
+
+    let returnURL = isWeapon
+        ? `${LIBRARY_URL}/weapon/id=${id}`
+        : `${LIBRARY_URL}/${categoryURL}/id=${id}`
+
+    return returnURL
 }
 
 export const generateMonsterURL = (data) => {
@@ -129,8 +206,9 @@ const formatToArrOfMobNameWithURL = (arrayOfElWithIdAndName) => {
 
 const formatToArrOfItemNameWithURL = (arrayOfElWithIdAndName) => {
     return arrayOfElWithIdAndName.map(({ id, name }) => {
-        const mobURL = generateMonsterURL({ id })
-        return `[${name}](${mobURL})`
+        const isEquip = Number(id) < 2000000
+        const itemURL = isEquip ? generateEquipURLWithOnlyId(id) : generateItemURL({ id })
+        return `[${name}](${itemURL})`
     })
 }
 
