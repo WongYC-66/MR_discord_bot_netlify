@@ -589,7 +589,11 @@ const getEquipDroppedByResponse = async (query) => {
     const mobs = equipInfo.droppedBy
     console.log(mobs)
 
-    const mobString = mobs.map(({ id, name }) => `${name},${id}`).join('\n')
+    const mobString = mobs.map(({ id, name }) => {
+        const mobURL = generateMonsterURL({ id })
+        return `[${name}](${mobURL})`
+    }).join('\n')
+
     console.log(mobString)
 
     return {
