@@ -44,7 +44,7 @@ VNHOES BOT HELP:
   # troll
   /bot pavoweme         : show how much pav owes me
   /bot pavoweeveryone   : show how much pav owes everyone
-  /bot pavfeeling       : show pav feeling today (todo)
+  /bot pavfeels         : show pav feeling today (todo)
   /bot author           : show author   (todo)
 `
 
@@ -201,6 +201,54 @@ export const handleBotEvent = async (rawBody) => {
                 type: 4,
                 data: {
                     content: `${content}`
+                },
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        }
+    }
+    // # TROLL 
+    // --------------------- /bot pavfeeling  ---------------------
+    if (subCommand === 'pavfeels') {
+        const choices = [
+            "happy",
+            "sad",
+            "angry",
+            "excited",
+            "nervous",
+            "anxious",
+            "lonely",
+            "hopeful",
+            "jealous",
+            "grateful",
+            "confused",
+            "embarrassed",
+            "proud",
+            "guilty",
+            "bored",
+            "frustrated",
+            "relaxed",
+            "scared",
+            "content",
+            "ashamed",
+            "curious",
+            "overwhelmed",
+            "surprised",
+            "peaceful",
+            "disappointed",
+            "enthusiastic",
+            "loved",
+            "resentful",
+            "confident",
+            "indifferent"
+        ];
+        const randIdx = Math.floor(Math.random() * (choices.length))
+        const result = choices[randIdx]
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                type: 4,
+                data: {
+                    content: `Pav feels **${result}** today!`
                 },
             }),
             headers: { 'Content-Type': 'application/json' },

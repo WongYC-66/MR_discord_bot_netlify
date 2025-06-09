@@ -129,6 +129,11 @@ const commands = [
         name: 'pavoweeveryone',
         description: 'show how much pav owed me, a troll feature',
       },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'pavfeels',
+        description: 'show what pav feels today, a troll feature',
+      },
     ],
   },
 ];
