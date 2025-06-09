@@ -614,7 +614,7 @@ const getEquipDroppedByResponse = async (query) => {
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: splitEmbed(embeddedObj, 5) // max 5 fields per embed  
+                embeds: splitEmbed(embeddedObj, 2) // max 5 fields per embed  
             },
         }),
         headers: { 'Content-Type': 'application/json' },
@@ -663,7 +663,7 @@ const getItemDroppedByResponse = async (query) => {
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: splitEmbed(embeddedObj, 5) // max 5 fields per embed     
+                embeds: splitEmbed(embeddedObj, 2) // max 5 fields per embed     
             },
         }),
         headers: { 'Content-Type': 'application/json' },
