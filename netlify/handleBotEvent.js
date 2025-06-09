@@ -211,10 +211,14 @@ export const handleBotEvent = async (rawBody) => {
         return getEquipDroppedByResponse(query)
     }
     if (command === '/drop item') {
-        return NotFound()
+        options = options?.options?.[0]
+        const query = options.value
+        return getItemDroppedByResponse(query)
     }
     if (command === '/drop mob') {
-        return NotFound()
+        options = options?.options?.[0]
+        const query = options.value
+        return getEquipDroppedByResponse(query)
     }
     // ######## GUIDE ########
     // --------------------- /guide apq  ---------------------
@@ -575,7 +579,7 @@ const getEquipDroppedByResponse = async (query) => {
     let data = await fetch(`${API_URL}/equip?search=${query}`)
     data = await data.json()
     data = data.data?.[0]       // get the first of returned array
-    console.log(data)
+    // console.log(data)
 
     if (!data) return NotFound()
 
@@ -583,49 +587,103 @@ const getEquipDroppedByResponse = async (query) => {
     let equipInfo = await fetch(`${API_URL}/equip?id=${data.id}`)
     equipInfo = await equipInfo.json()
 
-    // 
+    // ready to output
     const name = data?.name || 'undefined'
     const equipURL = generateEquipURL(data)
     const mobs = equipInfo.droppedBy
-    console.log(mobs)
+
+    console.log(name, mobs) // item names, and array of mobs
 
     const mobString = mobs.map(({ id, name }) => {
         const mobURL = generateMonsterURL({ id })
         return `[${name}](${mobURL})`
-    }).join('\n')
+    })
 
-    console.log(mobString)
+    const embeddedObj = {
+        color: '0x0099ff',
+        title: name,
+        url: equipURL,
+        thumbnail: {
+            url: data.imgURL,
+        },
+        fields: splitLongStringIntoArray(mobString)
+    };
 
     return {
         statusCode: 200,
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor(0x0099FF)
-                        .setTitle(name)
-                        .setURL(equipURL)
-                        .setThumbnail(data.imgURL)
-                        .addFields(
-                            { name: 'Dropped By', value: mobString, inline: true },
-                        )
-                ]
+                embeds: [new EmbedBuilder(embeddedObj)]     // repeitive contructor here to check within size
             },
         }),
         headers: { 'Content-Type': 'application/json' },
     }
 }
 
-const generateMiniMobEmbed = ({ id, name }) => {
-    const monsterURL = generateMonsterURL({ id })
-    const monsterThumbnailURL = generateThumbnailUrl('monsters', id)
-    return new EmbedBuilder()
-        .setColor(0x0099FF)
-        .setTitle(name)
-        .setURL(monsterURL)
-        .setThumbnail(monsterThumbnailURL)
-        .toJSON()
+const getItemDroppedByResponse = async (query) => {
+    console.log(query)
+
+    // 1. fetch the query to get the 1st Item that matches
+    let data = await fetch(`${API_URL}/item?search=${query}`)
+    data = await data.json()
+    data = data.data?.[0]       // get the first of returned array
+    // console.log(data)
+
+    if (!data) return NotFound()
+
+    // 2. fetch the detail
+    let itemInfo = await fetch(`${API_URL}/item?id=${data.id}`)
+    itemInfo = await itemInfo.json()
+
+    // ready to output
+    const name = data?.name || 'undefined'
+    const itemURL = generateItemURL(data)
+    const mobs = itemInfo.droppedBy
+
+    console.log(name, mobs) // item names, and array of mobs
+
+    const mobString = mobs.map(({ id, name }) => {
+        const mobURL = generateMonsterURL({ id })
+        return `[${name}](${mobURL})`
+    })
+
+    const embeddedObj = {
+        color: '0x0099ff',
+        title: name,
+        url: itemURL,
+        thumbnail: {
+            url: data.imgURL,
+        },
+        fields: splitLongStringIntoArray(mobString)
+    };
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [new EmbedBuilder(embeddedObj)]     // repeitive contructor here to check within size
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+const splitLongStringIntoArray = (strArr) => {
+    // split long string and fit into fields(max of 25), each field max of 1024 char
+    const totalLen = strArr.join('\n').length
+    const fieldNeeded = Math.ceil(totalLen / 1024)
+    const stringPerField = strArr.length / fieldNeeded
+
+    // divide equally then
+    const arr = []
+
+    for (let i = 0; i < strArr.length; i += stringPerField) {
+        let sliced = strArr.slice(i, i + stringPerField + 1)
+        arr.push(sliced.join('\n'))
+    }
+    return arr
 }
 
 const myOneLinerLinkResponse = (name, url) => {
