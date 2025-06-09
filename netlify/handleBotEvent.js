@@ -11,6 +11,8 @@ import {
     pickNumber,
     decideMobStrings,
     splitLongMobStringIntoArray,
+    decideDropStrings,
+    splitLongDropStringIntoArray,
 
 } from './utility.js'
 
@@ -164,7 +166,6 @@ export const handleBotEvent = async (rawBody) => {
         let max = Number(maxInput)
         let content = null
 
-
         const notInRange = (n) => !(-1e10 <= n && n <= 1e10)
 
         if (isNaN(min) || isNaN(max) || notInRange(min) || notInRange(max)) {
@@ -219,7 +220,7 @@ export const handleBotEvent = async (rawBody) => {
     if (command === '/drop mob') {
         options = options?.options?.[0]
         const query = options.value
-        return NotFound()
+        return getMobDropResponse(query)
     }
     // ######## GUIDE ########
     // --------------------- /guide apq  ---------------------
@@ -656,6 +657,53 @@ const getItemDroppedByResponse = async (query) => {
             url: data.imgURL,
         },
         fields: splitLongMobStringIntoArray(mobStrings)
+    };
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [embeddedObj]
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+const getMobDropResponse = async (query) => {
+    console.log(query)
+
+    // 1. fetch the query to get the 1st Item that matches
+    let data = await fetch(`${API_URL}/monster?search=${query}`)
+    data = await data.json()
+    data = data.data?.[0]       // get the first of returned array
+    console.log(data)
+
+    if (!data) return NotFound()
+
+    // 2. fetch the detail
+    let mobInfo = await fetch(`${API_URL}/monster?id=${data.id}`)
+    mobInfo = await mobInfo.json()
+
+    // ready to output
+    const name = data?.name || 'undefined'
+    const monsterURL = generateMonsterURL(data)
+    const drops = mobInfo.drops
+
+    console.log(name, drops) // item names, and array of mobs
+
+    let dropStrings = decideDropStrings(drops)
+    console.log(dropStrings)
+
+    const embeddedObj = {
+        color: 0x0099ff,
+        title: name,
+        url: monsterURL,
+        thumbnail: {
+            url: data.imgURL,
+        },
+        fields: splitLongDropStringIntoArray(dropStrings)
     };
 
     return {

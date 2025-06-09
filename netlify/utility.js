@@ -115,20 +115,27 @@ export const pickNumber = (minInput, maxInput) => {
 }
 
 export const decideMobStrings = (mobs) => {
-    let mobStringsWithURL = formatToArrOfNameWithURL(mobs)
+    let mobStringsWithURL = formatToArrOfMobNameWithURL(mobs)
     let mobStringsWithoutURL = formatToArrOfName(mobs)
     return mobStringsWithURL.join('\n').length < 6000 ? mobStringsWithURL : mobStringsWithoutURL
 }
 
-const formatToArrOfNameWithURL = (mobs) => {
-    return mobs.map(({ id, name }) => {
+const formatToArrOfMobNameWithURL = (arrayOfElWithIdAndName) => {
+    return arrayOfElWithIdAndName.map(({ id, name }) => {
         const mobURL = generateMonsterURL({ id })
         return `[${name}](${mobURL})`
     })
 }
 
-const formatToArrOfName = (mobs) => {
-    return mobs.map(({ name }) => name)
+const formatToArrOfItemNameWithURL = (arrayOfElWithIdAndName) => {
+    return arrayOfElWithIdAndName.map(({ id, name }) => {
+        const mobURL = generateMonsterURL({ id })
+        return `[${name}](${mobURL})`
+    })
+}
+
+const formatToArrOfName = (arrayOfElWithIdAndName) => {
+    return arrayOfElWithIdAndName.map(({ name }) => name)
 }
 
 export const splitLongMobStringIntoArray = (strArr) => {
@@ -172,5 +179,58 @@ export const splitLongMobStringIntoArray = (strArr) => {
             inline: true,
         });
     }
+    return result;
+};
+
+export const decideDropStrings = (drops) => {
+    const dropStringsWithURL = processDropsWithURL(drops)
+    const dropStringsWithoutURL = processDropsWithoutURL(drops)
+    const lenWithURL = Object.values(dropStringsWithURL).flat().join('\n').length
+    console.log({ lenWithURL })
+    return lenWithURL < 6000 ? dropStringsWithURL : dropStringsWithoutURL
+}
+
+const processDropsWithURL = (drops) => {
+    let returnObj = {}
+    for (let key in drops) {
+        returnObj[key] = formatToArrOfItemNameWithURL(drops[key])
+    }
+    return returnObj
+}
+
+const processDropsWithoutURL = (drops) => {
+    let returnObj = {}
+    for (let key in drops) {
+        returnObj[key] = formatToArrOfName(drops[key])
+    }
+    return returnObj
+}
+
+export const splitLongDropStringIntoArray = (drops) => {
+    const MAX_FIELD_CHARS = 1024;
+    let result = []
+    for (let dropCategory in drops) {
+        let dropArr = drops[dropCategory]
+        if(!dropArr.length) dropArr = ['none']
+        dropCategory = dropCategory.replace('Drops', '')
+        let fieldCount = 1
+
+        const totalLen = dropArr.join('\n').length
+        const fieldNeeded = Math.ceil(totalLen / MAX_FIELD_CHARS)
+        const itemPerField = Math.ceil(dropArr.length / fieldNeeded)
+
+        for (let i = 0; i < fieldNeeded; i++) {
+            let sliced = dropArr.slice(i * itemPerField, (i + 1) * itemPerField)
+
+            result.push({
+                name: `${dropCategory} (${fieldCount})`,
+                value: sliced.join('\n'),
+                inline: true,
+            });
+
+            fieldCount += 1
+        }
+    }
+
     return result;
 };
