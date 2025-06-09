@@ -606,7 +606,7 @@ const getEquipDroppedByResponse = async (query) => {
         thumbnail: {
             url: data.imgURL,
         },
-        fields: splitLongStringIntoArray(mobStrings)
+        fields: splitLongMobStringIntoArray(mobStrings)
     };
 
     return {
@@ -655,7 +655,7 @@ const getItemDroppedByResponse = async (query) => {
         thumbnail: {
             url: data.imgURL,
         },
-        fields: splitLongStringIntoArray(mobStrings)
+        fields: splitLongMobStringIntoArray(mobStrings)
     };
 
     return {
@@ -670,19 +670,25 @@ const getItemDroppedByResponse = async (query) => {
     }
 }
 
-const splitLongStringIntoArray = (strArr) => {
+const splitLongMobStringIntoArray = (strArr) => {
     const result = [];
     let current = [];
     let currentLen = 0;
+    let fieldCount = 1;
 
     for (let i = 0; i < strArr.length; i++) {
         const str = strArr[i];
         const strLen = str.length + 1; // +1 for the '\n'
 
         if (currentLen + strLen > 1024) {
-            result.push(current.join('\n'));
+            result.push({
+                name: `Dropped By (${fieldCount})`,
+                value: current.join('\n'),
+                inline: false,
+            });
             current = [str];
             currentLen = str.length + 1;
+            fieldCount++;
         } else {
             current.push(str);
             currentLen += strLen;
@@ -690,10 +696,14 @@ const splitLongStringIntoArray = (strArr) => {
     }
 
     if (current.length) {
-        result.push(current.join('\n'));
+        result.push({
+            name: `Dropped By (${fieldCount})`,
+            value: current.join('\n'),
+            inline: false,
+        });
     }
 
-    return result.slice(0, 25); // Discord max fields
+    return result.slice(0, 25); // max 25 fields
 };
 
 const myOneLinerLinkResponse = (name, url) => {
