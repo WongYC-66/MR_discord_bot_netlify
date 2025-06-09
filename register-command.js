@@ -20,6 +20,11 @@ const commands = [
     description: 'Bot command',
     options: [
       {
+        type: 1,    // SUB_COMMAND
+        name: 'help',
+        description: 'Show help info',
+      },
+      {
         type: 1, // SUB_COMMAND
         name: 'equip',
         description: 'Describe an equip or equip id',
@@ -27,19 +32,6 @@ const commands = [
           {
             name: 'query',
             description: 'Equip name or ID',
-            type: 3, // STRING
-            required: true,
-          },
-        ],
-      },
-      {
-        type: 1, // SUB_COMMAND
-        name: 'monster',
-        description: 'Describe a monster or monster id',
-        options: [
-          {
-            name: 'query',
-            description: 'Monster name or ID',
             type: 3, // STRING
             required: true,
           },
@@ -58,6 +50,20 @@ const commands = [
           },
         ],
       },
+      {
+        type: 1, // SUB_COMMAND
+        name: 'monster',
+        description: 'Describe a monster or monster id',
+        options: [
+          {
+            name: 'query',
+            description: 'Monster name or ID',
+            type: 3, // STRING
+            required: true,
+          },
+        ],
+      },
+
       {
         type: 1, // SUB_COMMAND
         name: 'skill',
@@ -85,6 +91,11 @@ const commands = [
         ],
       },
       {
+        type: 1,    // SUB_COMMAND
+        name: 'servertime',
+        description: 'Show mapleroyals servertime',
+      },
+      {
         name: 'roll',
         description: 'Roll a random number between min and max',
         type: 1, // Subcommand
@@ -104,14 +115,9 @@ const commands = [
         ]
       },
       {
-        type: 1,
-        name: 'help',
-        description: 'Show help info',
-      },
-      {
-        type: 1,
-        name: 'servertime',
-        description: 'Show mapleroyals servertime',
+        type: 1,    // SUB_COMMAND
+        name: 'flipcoin',
+        description: 'show result of a coin flip',
       },
     ],
   },

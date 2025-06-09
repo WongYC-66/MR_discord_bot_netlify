@@ -22,6 +22,30 @@ VNHOES BOT HELP:
   /bot music xxxx       : search and return 1st music
   /bot servertime       : show mapleroyals servertime
   /bot roll min max     : roll a number between, up to -10b ~ 10b
+  /bot flipcoin         : flip a coin
+
+  # guide (todo)
+  /bot apqguide         : link to apq guide
+  /bot apqbon           : show apq bonus map
+  /bot cwkguide         : link to cwkpq guide
+  /bot cwkbon           : show cwkpq bonus map
+  /bot gpqguide         : link to gpq guide
+  /bot gpqbon           : show gpq bonus map
+  /bot opqguide         : link to opq guide
+  /bot kpqguide         : link to kpq guide
+  /bot mage1hit         : show mage1hit table
+  /bot reuel            : link to Reuel hp quest
+  /bot leech            : show leech picture
+  /bot priceguide       : link to Sylafia price guide
+  /bot jobadvance       : link to job advance guide
+  /bot hpwashinfo       : show hp wash info table
+
+  
+  # troll (todo)
+  /bot pavoweme         : show how much pav owes me
+  /bot pavoweeveryone   : show how much pav owes everyone
+  /bot pavfeeling       : show pav feeling today
+  /bot author           : show author
 `
 
 export const handleBotEvent = async (rawBody) => {
@@ -63,24 +87,36 @@ export const handleBotEvent = async (rawBody) => {
     let subCommand = body.data.options?.[0].name
     let options = body.data.options?.[0]
 
-
+    // --------------------- /bot help  ---------------------
+    if (subCommand === 'help') {
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                type: 4,
+                data: {
+                    content: codeBlock(helpString)
+                },
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        }
+    }
     // --------------------- /bot equip xxxx  ---------------------
     if (subCommand === "equip") {
         options = options?.options?.[0]
         const query = options.value
         return getEquipQueryResponse(query)
     }
-    // --------------------- /bot monster xxxx  ---------------------
-    if (subCommand === 'monster') {
-        options = options?.options?.[0]
-        const query = options.value
-        return getMonsterQueryResponse(query)
-    }
     // --------------------- /bot item xxxx  ---------------------
     if (subCommand === 'item') {
         options = options?.options?.[0]
         const query = options.value
         return getItemQueryResponse(query)
+    }
+    // --------------------- /bot monster xxxx  ---------------------
+    if (subCommand === 'monster') {
+        options = options?.options?.[0]
+        const query = options.value
+        return getMonsterQueryResponse(query)
     }
     // --------------------- /bot item xxxx  ---------------------
     if (subCommand === 'skill') {
@@ -135,19 +171,23 @@ export const handleBotEvent = async (rawBody) => {
             headers: { 'Content-Type': 'application/json' },
         }
     }
-    // --------------------- /bot help  ---------------------
-    if (subCommand === 'help') {
+    if (subCommand === 'flipcoin') {
+        const choices = ['Head', 'Tail']
+        const randIdx = Math.floor(Math.random() * (choices.length))
+        const result = choices[randIdx]
+
         return {
             statusCode: 200,
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: codeBlock(helpString)
+                    content: `You flipped a ${result}!`
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
         }
     }
+
     // --------------------- Not registered command ---------------------
     return {
         statusCode: 400,
