@@ -34,7 +34,7 @@ VNHOES BOT HELP:
   # drop
   /drop equip xxxx      : show which mobs drop the equip
   /drop item xxxx       : show which mobs drop the item
-  /drop mob xxxx        : show drops of a mob (todo)
+  /drop mob xxxx        : show drops of a mob 
 
   # guide
   /guide apq            : link to apq guide
@@ -694,7 +694,7 @@ const getMobDropResponse = async (query) => {
     console.log(name, drops) // item names, and array of mobs
 
     let dropStrings = decideDropStrings(drops)
-    console.log(dropStrings)
+    // console.log(dropStrings)
 
     const embeddedObj = {
         color: 0x0099ff,

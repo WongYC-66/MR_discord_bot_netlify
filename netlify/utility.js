@@ -186,7 +186,7 @@ export const decideDropStrings = (drops) => {
     const dropStringsWithURL = processDropsWithURL(drops)
     const dropStringsWithoutURL = processDropsWithoutURL(drops)
     const lenWithURL = Object.values(dropStringsWithURL).flat().join('\n').length
-    console.log({ lenWithURL })
+    // console.log({ lenWithURL })
     return lenWithURL < 6000 ? dropStringsWithURL : dropStringsWithoutURL
 }
 
@@ -211,7 +211,7 @@ export const splitLongDropStringIntoArray = (drops) => {
     let result = []
     for (let dropCategory in drops) {
         let dropArr = drops[dropCategory]
-        if(!dropArr.length) dropArr = ['none']
+        if (!dropArr.length) dropArr = ['none']
         dropCategory = dropCategory.replace('Drops', '')
         let fieldCount = 1
 
