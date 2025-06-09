@@ -594,10 +594,7 @@ const getEquipDroppedByResponse = async (query) => {
 
     console.log(name, mobs) // equip names, and array of mobs
 
-    let mobStrings = mobs.map(({ id, name }) => {
-        const mobURL = generateMonsterURL({ id })
-        return `[${name}](${mobURL})`
-    })
+    let mobStrings = decideMobStrings(mobs)
 
     if (!mobStrings.length) mobStrings = ['Nothing dropped it']
 
@@ -617,7 +614,7 @@ const getEquipDroppedByResponse = async (query) => {
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: splitEmbed(embeddedObj, 2) // max 5 fields per embed  
+                embeds: [embeddedObj]
             },
         }),
         headers: { 'Content-Type': 'application/json' },
@@ -646,10 +643,7 @@ const getItemDroppedByResponse = async (query) => {
 
     console.log(name, mobs) // item names, and array of mobs
 
-    let mobStrings = mobs.map(({ id, name }) => {
-        const mobURL = generateMonsterURL({ id })
-        return `[${name}](${mobURL})`
-    })
+    let mobStrings = decideMobStrings(mobs)
 
     if (!mobStrings.length) mobStrings = ['Nothing dropped it']
 
@@ -668,11 +662,28 @@ const getItemDroppedByResponse = async (query) => {
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: splitEmbed(embeddedObj, 2) // max 5 fields per embed     
+                embeds: [embeddedObj]
             },
         }),
         headers: { 'Content-Type': 'application/json' },
     }
+}
+
+const decideMobStrings = (mobs) => {
+    let mobStringsWithURL = formatToArrOfNameWithURL(mobs)
+    let mobStringsWithoutURL = formatToArrOfName(mobs)
+    return mobStringsWithURL.join('\n').length < 6000 ? mobStringsWithURL : mobStringsWithoutURL
+}
+
+const formatToArrOfNameWithURL = (mobs) => {
+    return mobs.map(({ id, name }) => {
+        const mobURL = generateMonsterURL({ id })
+        return `[${name}](${mobURL})`
+    })
+}
+
+const formatToArrOfName = (mobs) => {
+    return mobs.map(({ name }) => name)
 }
 
 const splitLongMobStringIntoArray = (strArr) => {
@@ -710,30 +721,6 @@ const splitLongMobStringIntoArray = (strArr) => {
 
     return result.slice(0, 25); // max 25 fields
 };
-
-function splitEmbed(embed, maxFieldsPerEmbed = 2) {
-    const { title, url, color, thumbnail, fields = [] } = embed;
-
-    const chunks = [];
-    for (let i = 0; i < fields.length; i += maxFieldsPerEmbed) {
-        const fieldChunk = fields.slice(i, i + maxFieldsPerEmbed);
-        const chunkEmbed = {
-            fields: fieldChunk
-        };
-
-        // Only the first embed keeps meta info
-        if (i === 0) {
-            chunkEmbed.title = title;
-            chunkEmbed.url = url;
-            chunkEmbed.color = color;
-            chunkEmbed.thumbnail = thumbnail;
-        }
-
-        chunks.push(chunkEmbed);
-    }
-
-    return chunks;
-}
 
 const myOneLinerLinkResponse = (name, url) => {
     return {
