@@ -590,14 +590,16 @@ const getEquipDroppedByResponse = async (query) => {
     // ready to output
     const name = data?.name || 'undefined'
     const equipURL = generateEquipURL(data)
-    const mobs = equipInfo.droppedBy
+    const mobs = equipInfo.droppedBy || []
 
     console.log(name, mobs) // equip names, and array of mobs
 
-    const mobStrings = mobs.map(({ id, name }) => {
+    let mobStrings = mobs.map(({ id, name }) => {
         const mobURL = generateMonsterURL({ id })
         return `[${name}](${mobURL})`
     })
+
+    if (!mobStrings.length) mobStrings = ['Nothing dropped it']
 
     const embeddedObj = {
         color: 0x0099ff,
@@ -608,6 +610,7 @@ const getEquipDroppedByResponse = async (query) => {
         },
         fields: splitLongMobStringIntoArray(mobStrings)
     };
+
 
     return {
         statusCode: 200,
@@ -648,7 +651,7 @@ const getItemDroppedByResponse = async (query) => {
         return `[${name}](${mobURL})`
     })
 
-    if(!mobStrings.length) mobStrings = [['Nothing dropped it']]
+    if (!mobStrings.length) mobStrings = ['Nothing dropped it']
 
     const embeddedObj = {
         color: 0x0099ff,
