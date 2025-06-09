@@ -260,7 +260,7 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot hpwashinfo  ---------------------
     if (subCommand === 'hpwashinfo') {
-        let response = myOneLinerLinkResponse('Hp Wash Info', 'https://i.imgur.com/pckfDK8.jpeg')
+        let response = myOneLinerImageResponse('Hp Wash Info', 'https://i.imgur.com/pckfDK8.jpeg')
         return response
     }
     // ######## TROLL ######## 
