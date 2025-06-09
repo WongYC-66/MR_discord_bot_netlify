@@ -619,6 +619,7 @@ const generateMiniMobEmbed = ({ id, name }) => {
         .setTitle(name)
         .setURL(monsterURL)
         .setThumbnail(monsterThumbnailURL)
+        .toJSON()
 }
 
 const myOneLinerLinkResponse = (name, url) => {
