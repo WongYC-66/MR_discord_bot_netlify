@@ -41,11 +41,11 @@ VNHOES BOT HELP:
   /bot hpwashinfo       : show hp wash info table
 
   
-  # troll (todo)
+  # troll
   /bot pavoweme         : show how much pav owes me
   /bot pavoweeveryone   : show how much pav owes everyone
-  /bot pavfeeling       : show pav feeling today
-  /bot author           : show author
+  /bot pavfeeling       : show pav feeling today (todo)
+  /bot author           : show author   (todo)
 `
 
 export const handleBotEvent = async (rawBody) => {
@@ -171,6 +171,7 @@ export const handleBotEvent = async (rawBody) => {
             headers: { 'Content-Type': 'application/json' },
         }
     }
+    // --------------------- /bot flipcoin  ---------------------
     if (subCommand === 'flipcoin') {
         const choices = ['Head', 'Tail']
         const randIdx = Math.floor(Math.random() * (choices.length))
@@ -187,7 +188,24 @@ export const handleBotEvent = async (rawBody) => {
             headers: { 'Content-Type': 'application/json' },
         }
     }
-
+    // # TROLL 
+    // --------------------- /bot pavoweme  ---------------------
+    if (subCommand === 'pavoweme' || subCommand === 'pavoweeveryone') {
+        let min = 0
+        let max = 100000000
+        let toWho = subCommand === 'pavoweme' ? 'me' : 'everyone'
+        let content = `Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}!. A Random number from 0-100m. PS:this a troll`
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                type: 4,
+                data: {
+                    content: `${content}`
+                },
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        }
+    }
     // --------------------- Not registered command ---------------------
     return {
         statusCode: 400,

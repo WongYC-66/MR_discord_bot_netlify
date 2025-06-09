@@ -119,6 +119,16 @@ const commands = [
         name: 'flipcoin',
         description: 'show result of a coin flip',
       },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'pavoweme',
+        description: 'show how much pav owed me, a troll feature',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'pavoweeveryone',
+        description: 'show how much pav owed me, a troll feature',
+      },
     ],
   },
 ];
