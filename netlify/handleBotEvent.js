@@ -25,7 +25,7 @@ VNHOES BOT HELP:
   /bot flipcoin         : flip a coin
   /bot author           : show author
 
-  # guide (todo)
+  # guide
   /bot apqguide         : link to apq guide
   /bot apqbon           : show apq bonus map
   /bot cwkguide         : link to cwkpq guide
@@ -42,9 +42,9 @@ VNHOES BOT HELP:
   /bot hpwashinfo       : show hp wash info table
   
   # troll
-  /bot pavoweme         : show how much pav owes me
-  /bot pavoweeveryone   : show how much pav owes everyone
-  /bot pavfeels         : show pav feeling today
+  /troll pavoweme         : show how much pav owes me
+  /troll pavoweeveryone   : show how much pav owes everyone
+  /troll pavfeels         : show pav feeling today
 `
 
 export const handleBotEvent = async (rawBody) => {
@@ -63,10 +63,10 @@ export const handleBotEvent = async (rawBody) => {
     }
 
     // e.g. /bot equip maple gun
-    if (body.data.name !== 'bot') {
+    if (body.data.name !== 'bot' && body.data.name !== 'troll') {
         return {
             statusCode: 400,
-            body: 'Invalid command, start with "/bot "',
+            body: 'Invalid command, start with "/bot " or "/troll "',
         }
     }
 

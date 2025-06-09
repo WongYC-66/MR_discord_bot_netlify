@@ -187,14 +187,19 @@ const commands = [
       {
         type: 1,    // SUB_COMMAND
         name: 'jobadvance',
-        description: 'show link to job advancement guide',
+        description: 'show link to job advance guide',
       },
       {
         type: 1,    // SUB_COMMAND
         name: 'hpwashinfo',
         description: 'show image of hp wash info',
       },
-      //  ------- TROLL -------
+    ]
+  },
+  {
+    name: 'troll',
+    description: 'Troll commands',
+    options: [
       {
         type: 1,    // SUB_COMMAND
         name: 'pavoweme',
