@@ -54,6 +54,7 @@ VNHOES BOT HELP:
   /troll pavoweeveryone : show how much pav owes everyone
   /troll pavfeels       : show pav feeling today
 `
+const allowedMainCommand = new Set(['bot', 'drop', 'guide', 'troll'])
 
 export const handleBotEvent = async (rawBody) => {
     // refer to discord API, https://discord.com/developers/docs/interactions/receiving-and-responding
@@ -70,9 +71,8 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
 
-    const allowedMainCommand = ['bot', 'drop', 'guide', 'troll']
     const mainCommand = body.data.name
-    if (allowedMainCommand.every(allowed => mainCommand !== allowed)) {
+    if (!allowedMainCommand.has(mainCommand)) {
         return {
             statusCode: 400,
             body: 'Invalid command, start with /bot or /guide or /troll',
@@ -218,7 +218,7 @@ export const handleBotEvent = async (rawBody) => {
     if (command === '/drop mob') {
         options = options?.options?.[0]
         const query = options.value
-        return getEquipDroppedByResponse(query)
+        return NotFound()
     }
     // ######## GUIDE ########
     // --------------------- /guide apq  ---------------------
@@ -592,9 +592,9 @@ const getEquipDroppedByResponse = async (query) => {
     const equipURL = generateEquipURL(data)
     const mobs = equipInfo.droppedBy
 
-    console.log(name, mobs) // item names, and array of mobs
+    // console.log(name, mobs) // equip names, and array of mobs
 
-    const mobString = mobs.map(({ id, name }) => {
+    const mobStrings = mobs.map(({ id, name }) => {
         const mobURL = generateMonsterURL({ id })
         return `[${name}](${mobURL})`
     })
@@ -606,7 +606,7 @@ const getEquipDroppedByResponse = async (query) => {
         thumbnail: {
             url: data.imgURL,
         },
-        fields: splitLongStringIntoArray(mobString)
+        fields: splitLongStringIntoArray(mobStrings)
     };
 
     return {
@@ -614,7 +614,7 @@ const getEquipDroppedByResponse = async (query) => {
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: [new EmbedBuilder(embeddedObj)]     // repeitive contructor here to check within size
+                embeds: [embeddedObj]     // repeitive contructor here to check within size
             },
         }),
         headers: { 'Content-Type': 'application/json' },
@@ -641,9 +641,9 @@ const getItemDroppedByResponse = async (query) => {
     const itemURL = generateItemURL(data)
     const mobs = itemInfo.droppedBy
 
-    console.log(name, mobs) // item names, and array of mobs
+    // console.log(name, mobs) // item names, and array of mobs
 
-    const mobString = mobs.map(({ id, name }) => {
+    const mobStrings = mobs.map(({ id, name }) => {
         const mobURL = generateMonsterURL({ id })
         return `[${name}](${mobURL})`
     })
@@ -655,7 +655,7 @@ const getItemDroppedByResponse = async (query) => {
         thumbnail: {
             url: data.imgURL,
         },
-        fields: splitLongStringIntoArray(mobString)
+        fields: splitLongStringIntoArray(mobStrings)
     };
 
     return {
@@ -663,7 +663,7 @@ const getItemDroppedByResponse = async (query) => {
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: [new EmbedBuilder(embeddedObj)]     // repeitive contructor here to check within size
+                embeds: [embeddedObj]     // repeitive contructor here to check within size
             },
         }),
         headers: { 'Content-Type': 'application/json' },
