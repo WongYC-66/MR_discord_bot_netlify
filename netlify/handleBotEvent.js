@@ -23,6 +23,7 @@ VNHOES BOT HELP:
   /bot servertime       : show mapleroyals servertime
   /bot roll min max     : roll a number between, up to -10b ~ 10b
   /bot flipcoin         : flip a coin
+  /bot author           : show author
 
   # guide (todo)
   /bot apqguide         : link to apq guide
@@ -39,13 +40,11 @@ VNHOES BOT HELP:
   /bot priceguide       : link to Sylafia price guide
   /bot jobadvance       : link to job advance guide
   /bot hpwashinfo       : show hp wash info table
-
   
   # troll
   /bot pavoweme         : show how much pav owes me
   /bot pavoweeveryone   : show how much pav owes everyone
-  /bot pavfeels         : show pav feeling today (todo)
-  /bot author           : show author   (todo)
+  /bot pavfeels         : show pav feeling today
 `
 
 export const handleBotEvent = async (rawBody) => {
@@ -138,7 +137,7 @@ export const handleBotEvent = async (rawBody) => {
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: `mapleroyals servertime : ${GMT0DateTime}`
+                    content: codeBlock(`mapleroyals servertime : ${GMT0DateTime}`)
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
@@ -165,7 +164,7 @@ export const handleBotEvent = async (rawBody) => {
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: `${content}`
+                    content: codeBlock(content)
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
@@ -182,8 +181,27 @@ export const handleBotEvent = async (rawBody) => {
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: `You flipped a ${result}!`
+                    content: codeBlock(`You flipped a ${result}!`)
                 },
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        }
+    }
+    // --------------------- /bot author  ---------------------
+    if (subCommand === 'author') {
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                type: 4,
+                data: {
+                    embeds: [
+                        {
+                            title: "ScottY5C",
+                            description: "[Click here to visit](https://royals-library.netlify.app/about-me)",
+                            color: 0x00b0f4
+                        }
+                    ]
+                }
             }),
             headers: { 'Content-Type': 'application/json' },
         }
@@ -200,7 +218,7 @@ export const handleBotEvent = async (rawBody) => {
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: `${content}`
+                    content: codeBlock(content)
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
@@ -248,7 +266,7 @@ export const handleBotEvent = async (rawBody) => {
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: `Pav feels **${result}** today!`
+                    content: codeBlock(`Pav feels **${result}** today!`)
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
