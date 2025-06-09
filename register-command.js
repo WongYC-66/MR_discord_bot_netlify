@@ -12,7 +12,7 @@ const APPLICATION_ID = process.env.APPLICATION_ID;
 const DISCORD_GUILD_ID_1 = process.env.DISCORD_GUILD_ID_1; // Optional: for testing in a specific guild
 const DISCORD_GUILD_ID_2 = process.env.DISCORD_GUILD_ID_2; // Optional: for testing in a specific guild
 
-console.log({ APP_TOKEN, APPLICATION_ID })   // debug
+console.log({ APP_TOKEN, APPLICATION_ID, DISCORD_GUILD_ID_1, DISCORD_GUILD_ID_2 })   // debug
 
 const commands = [
   {
@@ -121,6 +121,18 @@ const commands = [
       },
       {
         type: 1,    // SUB_COMMAND
+        name: 'author',
+        description: 'show link to author',
+      },
+      //  ------- GUIDE -------
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'apqguide',
+        description: 'show link to apqguide',
+      },
+      //  ------- TROLL -------
+      {
+        type: 1,    // SUB_COMMAND
         name: 'pavoweme',
         description: 'show how much pav owed me, a troll feature',
       },
@@ -145,7 +157,12 @@ const rest = new REST({ version: '10' }).setToken(APP_TOKEN);
   try {
     console.log('Registering slash commands...');
     await rest.put(
-      // Routes.applicationGuildCommands(APPLICATION_ID, DISCORD_GUILD_ID_1),   // run this for discord test-server
+      Routes.applicationGuildCommands(APPLICATION_ID, DISCORD_GUILD_ID_1),   // run this for discord test-server
+      // Routes.applicationGuildCommands(APPLICATION_ID),                  // Use Routes.applicationCommands(CLIENT_ID) for global
+      { body: commands }
+    );
+
+    await rest.put(
       Routes.applicationGuildCommands(APPLICATION_ID, DISCORD_GUILD_ID_2),   // run this for discord VNHoes
       // Routes.applicationGuildCommands(APPLICATION_ID),                  // Use Routes.applicationCommands(CLIENT_ID) for global
       { body: commands }

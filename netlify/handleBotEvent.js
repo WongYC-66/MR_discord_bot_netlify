@@ -189,22 +189,14 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot author  ---------------------
     if (subCommand === 'author') {
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                type: 4,
-                data: {
-                    embeds: [
-                        {
-                            title: "ScottY5C",
-                            description: "[Click here to visit](https://royals-library.netlify.app/about-me)",
-                            color: 0x00b0f4
-                        }
-                    ]
-                }
-            }),
-            headers: { 'Content-Type': 'application/json' },
-        }
+        let response = myOneLinerLinkResponse('ScottY5C', 'https://royals-library.netlify.app/about-me')
+        return response
+    }
+    // # Guess
+    // --------------------- /bot apqguide  ---------------------
+    if (subCommand === 'apqguide') {
+        let response = myOneLinerLinkResponse('APQ Guide', 'https://royals.ms/forum/threads/comprehensive-apq-guide-updated-feb-2021.172942/')
+        return response
     }
     // # TROLL 
     // --------------------- /bot pavoweme  ---------------------
@@ -483,6 +475,24 @@ const getMusicQueryResponse = async (query) => {
                         )
                 ]
             },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+const myOneLinerLinkResponse = (name, url) => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [
+                    {
+                        description: `[${name}](${url})`,
+                        color: 0x00b0f4
+                    }
+                ]
+            }
         }),
         headers: { 'Content-Type': 'application/json' },
     }
