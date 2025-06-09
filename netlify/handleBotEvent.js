@@ -604,7 +604,7 @@ const getEquipDroppedByResponse = async (query) => {
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: [embedObj, mobs.map(generateMiniMobEmbed)]
+                embeds: [embedObj, ...mobs.map(generateMiniMobEmbed)]
             },
         }),
         headers: { 'Content-Type': 'application/json' },
