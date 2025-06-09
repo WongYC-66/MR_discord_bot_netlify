@@ -15,9 +15,10 @@ const DISCORD_GUILD_ID_2 = process.env.DISCORD_GUILD_ID_2; // Optional: for test
 console.log({ APP_TOKEN, APPLICATION_ID, DISCORD_GUILD_ID_1, DISCORD_GUILD_ID_2 })   // debug
 
 const commands = [
+  //  ------- BOT ------- 
   {
     name: 'bot',
-    description: 'Bot command',
+    description: 'bot command',
     options: [
       {
         type: 1,    // SUB_COMMAND
@@ -123,10 +124,17 @@ const commands = [
         name: 'author',
         description: 'show link to author',
       },
-      //  ------- GUIDE -------
+
+    ]
+  },
+  //  ------- GUIDE -------
+  {
+    name: 'guide',
+    description: 'guide commands',
+    options: [
       {
         type: 1,    // SUB_COMMAND
-        name: 'apqguide',
+        name: 'apq',
         description: 'show link to apq guide',
       },
       {
@@ -136,7 +144,7 @@ const commands = [
       },
       {
         type: 1,    // SUB_COMMAND
-        name: 'cwkguide',
+        name: 'cwk',
         description: 'show link to cwkpq guide',
       },
       {
@@ -146,7 +154,7 @@ const commands = [
       },
       {
         type: 1,    // SUB_COMMAND
-        name: 'gpqguide',
+        name: 'gpq',
         description: 'show link to gpq guide',
       },
       {
@@ -156,12 +164,12 @@ const commands = [
       },
       {
         type: 1,    // SUB_COMMAND
-        name: 'opqguide',
+        name: 'opq',
         description: 'show link to opq guide',
       },
       {
         type: 1,    // SUB_COMMAND
-        name: 'lpqguide',
+        name: 'lpq',
         description: 'show link to lpq guide',
       },
       {
@@ -181,7 +189,7 @@ const commands = [
       },
       {
         type: 1,    // SUB_COMMAND
-        name: 'priceguide',
+        name: 'price',
         description: 'show link to sylafia price guide',
       },
       {
@@ -194,11 +202,13 @@ const commands = [
         name: 'hpwashinfo',
         description: 'show image of hp wash info',
       },
+
     ]
   },
+  //  ------- TROLL -------
   {
     name: 'troll',
-    description: 'Troll commands',
+    description: 'troll commands',
     options: [
       {
         type: 1,    // SUB_COMMAND

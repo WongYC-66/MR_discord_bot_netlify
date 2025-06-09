@@ -26,25 +26,25 @@ VNHOES BOT HELP:
   /bot author           : show author
 
   # guide
-  /bot apqguide         : link to apq guide
-  /bot apqbon           : show apq bonus map
-  /bot cwkguide         : link to cwkpq guide
-  /bot cwkbon           : show cwkpq bonus map
-  /bot gpqguide         : link to gpq guide
-  /bot gpqbon           : show gpq bonus map
-  /bot opqguide         : link to opq guide
-  /bot lpqguide         : link to lpq guide
-  /bot mage1hit         : show mage1hit table
-  /bot reuel            : link to Reuel hp quest
-  /bot leech            : show leech picture
-  /bot priceguide       : link to Sylafia price guide
-  /bot jobadvance       : link to job advance guide
-  /bot hpwashinfo       : show hp wash info table
+  /guide apq            : link to apq guide
+  /guide apqbon         : show apq bonus map
+  /guide cwk            : link to cwkpq guide
+  /guide cwkbon         : show cwkpq bonus map
+  /guide gpq            : link to gpq guide
+  /guide gpqbon         : show gpq bonus map
+  /guide opq            : link to opq guide
+  /guide lpq            : link to lpq guide
+  /guide mage1hit       : show mage1hit table
+  /guide reuel          : link to Reuel hp quest
+  /guide leech          : show leech picture
+  /guide price          : link to Sylafia price guide
+  /guide jobadvance     : link to job advance guide
+  /guide hpwashinfo     : show hp wash info table
   
   # troll
-  /troll pavoweme         : show how much pav owes me
-  /troll pavoweeveryone   : show how much pav owes everyone
-  /troll pavfeels         : show pav feeling today
+  /troll pavoweme       : show how much pav owes me
+  /troll pavoweeveryone : show how much pav owes everyone
+  /troll pavfeels       : show pav feeling today
 `
 
 export const handleBotEvent = async (rawBody) => {
@@ -62,11 +62,11 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
 
-    // e.g. /bot equip maple gun
-    if (body.data.name !== 'bot' && body.data.name !== 'troll') {
+    const allowedMainCommand = ['bot', 'guide', 'troll']
+    if (allowedMainCommand.every(allowed => body.data.name !== allowed)) {
         return {
             statusCode: 400,
-            body: 'Invalid command, start with "/bot " or "/troll "',
+            body: 'Invalid command, start with /bot or /guide or /troll',
         }
     }
 
@@ -193,72 +193,72 @@ export const handleBotEvent = async (rawBody) => {
         return response
     }
     // ######## GUIDE ########
-    // --------------------- /bot apqguide  ---------------------
-    if (subCommand === 'apqguide') {
+    // --------------------- /guide apq  ---------------------
+    if (subCommand === 'apq') {
         let response = myOneLinerLinkResponse('APQ Guide', 'https://royals.ms/forum/threads/comprehensive-apq-guide-updated-feb-2021.172942/')
         return response
     }
-    // --------------------- /bot apqbon  ---------------------
+    // --------------------- /guide apqbon  ---------------------
     if (subCommand === 'apqbon') {
         let response = myOneLinerImageResponse('APQ Bonus Map', 'https://royals.ms/forum/attachments/3z07lbj-png.189083/')
         return response
     }
-    // --------------------- /bot cwkguide  ---------------------
-    if (subCommand === 'cwkguide') {
+    // --------------------- /guide cwkguide  ---------------------
+    if (subCommand === 'cwk') {
         let response = myOneLinerLinkResponse('CWKPQ Guide', 'https://royals.ms/forum/threads/crimsonwood-party-quest-prequisite-guide-2020-cwpq.153541/')
         return response
     }
-    // --------------------- /bot cwkbon  ---------------------
+    // --------------------- /guide cwkbon  ---------------------
     if (subCommand === 'cwkbon') {
         let response = myOneLinerImageResponse('CWKPQ Bonus Map', 'https://i.imgur.com/KED684z.png')
         return response
     }
-    // --------------------- /bot gpqguide  ---------------------
-    if (subCommand === 'gpqguide') {
+    // --------------------- /guide gpqguide  ---------------------
+    if (subCommand === 'gpq') {
         let response = myOneLinerLinkResponse('GPQ Guide', 'https://royals.ms/forum/threads/%E2%9C%AF-hollywood-presents-a-comprehensive-guide-to-guild-party-quest-gpq.27299/')
         return response
     }
-    // --------------------- /bot gpqbon  ---------------------
+    // --------------------- /guide gpqbon  ---------------------
     if (subCommand === 'gpqbon') {
         let response = myOneLinerImageResponse('GPQ Bonus Map', 'https://i.imgur.com/EcaEybL.png/')
         return response
     }
-    // --------------------- /bot opqguide  ---------------------
-    if (subCommand === 'opqguide') {
+    // --------------------- /guide opqguide  ---------------------
+    if (subCommand === 'opq') {
         let response = myOneLinerLinkResponse('OPQ Guide', 'https://royals.ms/forum/threads/orbis-pq-guide.174277/')
         return response
     }
-    // --------------------- /bot lpqguide  ---------------------
-    if (subCommand === 'lpqguide') {
+    // --------------------- /guide lpqguide  ---------------------
+    if (subCommand === 'lpq') {
         let response = myOneLinerLinkResponse('LPQ Guide', 'https://royals.ms/forum/threads/ludibrium-party-quest-lpq-guide.108791/')
         return response
     }
-    // --------------------- /bot mage1hit  ---------------------
+    // --------------------- /guide mage1hit  ---------------------
     if (subCommand === 'mage1hit') {
-        let response = myOneLinerImageResponse('Mage 1 hit', 'https://i.imgur.com/aCaTeoX_d.webp?maxwidth=760&fidelity=grand')
+        let response = myOneLinerImageResponse('Mage 1 hit', 'https://i.gyazo.com/0f145192abae7abc4bd3e14073e7c9e1.png/')
         return response
     }
-    // --------------------- /bot reuel  ---------------------
+    // --------------------- /guide reuel  ---------------------
     if (subCommand === 'reuel') {
         let response = myOneLinerLinkResponse('Reuel HP Quest', 'https://royals.ms/forum/threads/comprehensive-search-for-the-elixir-of-life-reuel-hp-quest-guide-lv120.178648/')
         return response
     }
-    // --------------------- /bot leech  ---------------------
+    // --------------------- /guide leech  ---------------------
     if (subCommand === 'leech') {
         let response = myOneLinerImageResponse('Leech', 'https://i.imgur.com/MNEDFOd_d.webp?maxwidth=1520&fidelity=grand')
         return response
     }
-    // --------------------- /bot priceguide  ---------------------
-    if (subCommand === 'priceguide') {
+    // --------------------- /guide priceguide  ---------------------
+    if (subCommand === 'price') {
         let response = myOneLinerLinkResponse('Sylafia price guide', 'https://docs.google.com/spreadsheets/d/1B3sxmpaW7RGrQAAxAyeR-xS4mdKCTTs_DzgV0qo2p_8/edit?gid=0#gid=0/')
         return response
     }
-    // --------------------- /bot jobadvance  ---------------------
+    // --------------------- /guide jobadvance  ---------------------
     if (subCommand === 'jobadvance') {
         let response = myOneLinerLinkResponse('Job Advancement', 'https://royals.ms/forum/threads/new-source-job-advancement-guide.110142/')
         return response
     }
-    // --------------------- /bot hpwashinfo  ---------------------
+    // --------------------- /guide hpwashinfo  ---------------------
     if (subCommand === 'hpwashinfo') {
         let response = myOneLinerImageResponse('Hp Wash Info', 'https://i.imgur.com/pckfDK8.jpeg')
         return response
