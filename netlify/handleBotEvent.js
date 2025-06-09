@@ -210,7 +210,7 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot cwkbon  ---------------------
     if (subCommand === 'cwkbon') {
-        let response = myOneLinerImageResponse('CWKPQ Bonus Map', 'https://imgur.com/KED684z')
+        let response = myOneLinerImageResponse('CWKPQ Bonus Map', 'https://imgur.com/KED684z/')
         return response
     }
     // --------------------- /bot gpqguide  ---------------------
@@ -220,7 +220,7 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot gpqbon  ---------------------
     if (subCommand === 'gpqbon') {
-        let response = myOneLinerImageResponse('GPQ Bonus Map', 'https://i.imgur.com/EcaEybL.png')
+        let response = myOneLinerImageResponse('GPQ Bonus Map', 'https://i.imgur.com/EcaEybL.png/')
         return response
     }
     // --------------------- /bot opqguide  ---------------------
@@ -235,7 +235,7 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot mage1hit  ---------------------
     if (subCommand === 'mage1hit') {
-        let response = myOneLinerImageResponse('Mage 1 hit', 'https://imgur.com/a/UZbW1Hk')
+        let response = myOneLinerImageResponse('Mage 1 hit', 'https://imgur.com/a/UZbW1Hk/')
         return response
     }
     // --------------------- /bot reuel  ---------------------
@@ -245,12 +245,12 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot leech  ---------------------
     if (subCommand === 'leech') {
-        let response = myOneLinerImageResponse('Leech', 'https://imgur.com/a/SFucr4l')
+        let response = myOneLinerImageResponse('Leech', 'https://imgur.com/a/SFucr4l/')
         return response
     }
     // --------------------- /bot priceguide  ---------------------
     if (subCommand === 'leech') {
-        let response = myOneLinerLinkResponse('Sylafia price guide', 'https://docs.google.com/spreadsheets/d/1B3sxmpaW7RGrQAAxAyeR-xS4mdKCTTs_DzgV0qo2p_8/edit?gid=0#gid=0')
+        let response = myOneLinerLinkResponse('Sylafia price guide', 'https://docs.google.com/spreadsheets/d/1B3sxmpaW7RGrQAAxAyeR-xS4mdKCTTs_DzgV0qo2p_8/edit?gid=0#gid=0/')
         return response
     }
     // --------------------- /bot jobadvance  ---------------------
