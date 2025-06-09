@@ -592,7 +592,7 @@ const getEquipDroppedByResponse = async (query) => {
     const equipURL = generateEquipURL(data)
     const mobs = equipInfo.droppedBy
 
-    // console.log(name, mobs) // equip names, and array of mobs
+    console.log(name, mobs) // equip names, and array of mobs
 
     const mobStrings = mobs.map(({ id, name }) => {
         const mobURL = generateMonsterURL({ id })
@@ -600,7 +600,7 @@ const getEquipDroppedByResponse = async (query) => {
     })
 
     const embeddedObj = {
-        color: '0x0099ff',
+        color: 0x0099ff,
         title: name,
         url: equipURL,
         thumbnail: {
@@ -641,7 +641,7 @@ const getItemDroppedByResponse = async (query) => {
     const itemURL = generateItemURL(data)
     const mobs = itemInfo.droppedBy
 
-    // console.log(name, mobs) // item names, and array of mobs
+    console.log(name, mobs) // item names, and array of mobs
 
     const mobStrings = mobs.map(({ id, name }) => {
         const mobURL = generateMonsterURL({ id })
@@ -649,7 +649,7 @@ const getItemDroppedByResponse = async (query) => {
     })
 
     const embeddedObj = {
-        color: '0x0099ff',
+        color: 0x0099ff,
         title: name,
         url: itemURL,
         thumbnail: {
@@ -684,7 +684,7 @@ const splitLongMobStringIntoArray = (strArr) => {
             result.push({
                 name: `Dropped By (${fieldCount})`,
                 value: current.join('\n'),
-                inline: false,
+                inline: true,
             });
             current = [str];
             currentLen = str.length + 1;
@@ -699,7 +699,7 @@ const splitLongMobStringIntoArray = (strArr) => {
         result.push({
             name: `Dropped By (${fieldCount})`,
             value: current.join('\n'),
-            inline: false,
+            inline: true,
         });
     }
 
