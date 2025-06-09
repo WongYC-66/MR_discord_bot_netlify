@@ -249,7 +249,7 @@ export const handleBotEvent = async (rawBody) => {
         return response
     }
     // --------------------- /bot priceguide  ---------------------
-    if (subCommand === 'leech') {
+    if (subCommand === 'priceguide') {
         let response = myOneLinerLinkResponse('Sylafia price guide', 'https://docs.google.com/spreadsheets/d/1B3sxmpaW7RGrQAAxAyeR-xS4mdKCTTs_DzgV0qo2p_8/edit?gid=0#gid=0/')
         return response
     }
