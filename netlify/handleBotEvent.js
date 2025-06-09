@@ -210,7 +210,7 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot cwkbon  ---------------------
     if (subCommand === 'cwkbon') {
-        let response = myOneLinerImageResponse('CWKPQ Bonus Map', 'https://imgur.com/KED684z/')
+        let response = myOneLinerImageResponse('CWKPQ Bonus Map', 'https://i.imgur.com/KED684z.png')
         return response
     }
     // --------------------- /bot gpqguide  ---------------------
@@ -235,7 +235,7 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot mage1hit  ---------------------
     if (subCommand === 'mage1hit') {
-        let response = myOneLinerImageResponse('Mage 1 hit', 'https://imgur.com/a/UZbW1Hk/')
+        let response = myOneLinerImageResponse('Mage 1 hit', 'https://i.imgur.com/aCaTeoX_d.webp?maxwidth=760&fidelity=grand')
         return response
     }
     // --------------------- /bot reuel  ---------------------
@@ -245,7 +245,7 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot leech  ---------------------
     if (subCommand === 'leech') {
-        let response = myOneLinerImageResponse('Leech', 'https://imgur.com/a/SFucr4l/')
+        let response = myOneLinerImageResponse('Leech', 'https://i.imgur.com/MNEDFOd_d.webp?maxwidth=1520&fidelity=grand')
         return response
     }
     // --------------------- /bot priceguide  ---------------------
@@ -260,7 +260,7 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot hpwashinfo  ---------------------
     if (subCommand === 'hpwashinfo') {
-        let response = myOneLinerLinkResponse('Hp Wash Info', 'https://imgur.com/a/s2xNvh3/')
+        let response = myOneLinerLinkResponse('Hp Wash Info', 'https://i.imgur.com/pckfDK8.jpeg')
         return response
     }
     // ######## TROLL ######## 
