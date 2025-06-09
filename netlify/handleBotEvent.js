@@ -614,7 +614,7 @@ const getEquipDroppedByResponse = async (query) => {
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: [embeddedObj]     // repeitive contructor here to check within size
+                embeds: splitEmbed(embeddedObj, 5) // max 5 fields per embed  
             },
         }),
         headers: { 'Content-Type': 'application/json' },
@@ -663,7 +663,7 @@ const getItemDroppedByResponse = async (query) => {
         body: JSON.stringify({
             type: 4,
             data: {
-                embeds: [embeddedObj]     // repeitive contructor here to check within size
+                embeds: splitEmbed(embeddedObj, 5) // max 5 fields per embed     
             },
         }),
         headers: { 'Content-Type': 'application/json' },
@@ -705,6 +705,30 @@ const splitLongMobStringIntoArray = (strArr) => {
 
     return result.slice(0, 25); // max 25 fields
 };
+
+function splitEmbed(embed, maxFieldsPerEmbed = 2) {
+    const { title, url, color, thumbnail, fields = [] } = embed;
+
+    const chunks = [];
+    for (let i = 0; i < fields.length; i += maxFieldsPerEmbed) {
+        const fieldChunk = fields.slice(i, i + maxFieldsPerEmbed);
+        const chunkEmbed = {
+            fields: fieldChunk
+        };
+
+        // Only the first embed keeps meta info
+        if (i === 0) {
+            chunkEmbed.title = title;
+            chunkEmbed.url = url;
+            chunkEmbed.color = color;
+            chunkEmbed.thumbnail = thumbnail;
+        }
+
+        chunks.push(chunkEmbed);
+    }
+
+    return chunks;
+}
 
 const myOneLinerLinkResponse = (name, url) => {
     return {
