@@ -128,7 +128,7 @@ const generateEquipURLWithOnlyId = (id) => {
             break
         }
     }
-    const isWeapon = foundCategory.includes('weapon')
+    const isWeapon = foundCategory.toLowerCase().includes('weapon')
     const categoryURL = toCategoryURL(foundSubCategory)
 
     let returnURL = isWeapon
