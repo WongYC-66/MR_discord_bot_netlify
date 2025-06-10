@@ -1,5 +1,5 @@
 import util from 'util'
-import { EmbedBuilder, codeBlock } from 'discord.js';
+import { EmbedBuilder, codeBlock, userMention } from 'discord.js';
 import commaNumber from 'comma-number';
 
 import {
@@ -65,9 +65,10 @@ const allowedMainCommand = new Set(['bot', 'drop', 'guide', 'troll'])
 export const handleBotEvent = async (rawBody) => {
     // refer to discord API, https://discord.com/developers/docs/interactions/receiving-and-responding
     const body = JSON.parse(rawBody)
-    // console.log(body.data)
-    console.log(util.inspect(body, { showHidden: false, depth: null, colors: true }))
+    // console.log(util.inspect(body, { showHidden: false, depth: null, colors: true }))
     console.log(util.inspect(body.data, { showHidden: false, depth: null, colors: true }))
+
+    const triggeredUser = body?.member?.user
 
     // Ping from Discord, DEFAULT, DON'T TOUCH ANYTHING!
     if (body.type === 1) {
@@ -298,11 +299,11 @@ export const handleBotEvent = async (rawBody) => {
         return response
     }
     // ######## TROLL ######## 
-    // --------------------- /bot pavoweme  ---------------------
+    // --------------------- /troll pavoweme  ---------------------
     if (command === '/troll pavoweme' || command === '/troll pavoweeveryone') {
         let min = 0
         let max = 100000000
-        let toWho = command === '/troll pavoweme' ? 'me' : 'everyone'
+        let toWho = command === '/troll pavoweme' ? `<@${triggeredUser.id}>` : 'everyone'
         let content = `Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll`
         return {
             statusCode: 200,
@@ -315,7 +316,7 @@ export const handleBotEvent = async (rawBody) => {
             headers: { 'Content-Type': 'application/json' },
         }
     }
-    // --------------------- /bot pavfeeling  ---------------------
+    // --------------------- /troll pavfeeling  ---------------------
     if (command === '/troll pavfeels') {
         const feeling = getFeeling()
         return {
@@ -329,6 +330,7 @@ export const handleBotEvent = async (rawBody) => {
             headers: { 'Content-Type': 'application/json' },
         }
     }
+    // --------------------- /troll sackpav  ---------------------
     if (command === '/troll sackpav') {
         const page = pickNumber(1, 8)    // boss monster has 8 pages
         let data = await fetch(`${API_URL}/monster?filter=boss&page=${page}`)
