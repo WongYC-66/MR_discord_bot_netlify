@@ -351,13 +351,13 @@ export const handleBotEvent = async (rawBody) => {
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: `You spawned a ${name}! Pav feels **${feeling}** now.`,
+                    content: `You spawned a **${name}**! Pav feels **${feeling}** now.`,
                     embeds: [
                         new EmbedBuilder()
                             .setColor(0x0099FF)
                             .setTitle(name)
                             .setURL(monsterURL)
-                            .setThumbnail(data.imgURL)
+                            .setThumbnail(randomBoss.imgURL)
                             .addFields(
                                 { name: 'Level', value: level, inline: true },
                                 { name: 'EXP', value: exp, inline: true },
