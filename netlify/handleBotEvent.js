@@ -66,6 +66,7 @@ export const handleBotEvent = async (rawBody) => {
     // refer to discord API, https://discord.com/developers/docs/interactions/receiving-and-responding
     const body = JSON.parse(rawBody)
     // console.log(body.data)
+    console.log(util.inspect(body, { showHidden: false, depth: null, colors: true }))
     console.log(util.inspect(body.data, { showHidden: false, depth: null, colors: true }))
 
     // Ping from Discord, DEFAULT, DON'T TOUCH ANYTHING!
@@ -301,7 +302,7 @@ export const handleBotEvent = async (rawBody) => {
     if (command === '/troll pavoweme' || command === '/troll pavoweeveryone') {
         let min = 0
         let max = 100000000
-        let toWho = command === 'pavoweme' ? 'me' : 'everyone'
+        let toWho = command === '/troll pavoweme' ? 'me' : 'everyone'
         let content = `Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll`
         return {
             statusCode: 200,
