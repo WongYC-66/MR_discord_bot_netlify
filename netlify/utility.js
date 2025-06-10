@@ -264,8 +264,8 @@ export const decideDropStrings = (drops) => {
     const dropStringsWithURL = processDropsWithURL(drops)
     const dropStringsWithoutURL = processDropsWithoutURL(drops)
     const lenWithURL = Object.values(dropStringsWithURL).flat().join('\n').length
-    // console.log({ lenWithURL })
-    return lenWithURL < 6000 ? dropStringsWithURL : dropStringsWithoutURL
+    console.log({ lenWithURL })
+    return lenWithURL < 5500 ? dropStringsWithURL : dropStringsWithoutURL
 }
 
 const processDropsWithURL = (drops) => {
