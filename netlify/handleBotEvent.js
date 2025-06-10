@@ -306,7 +306,7 @@ export const handleBotEvent = async (rawBody) => {
         let toWho = command === '/troll pavoweme' ? 'you' : 'everyone'
         let content = `\`\`\`
 Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll
-\`\`\`` + '\n' + commaNumber === 'troll pavoweme' ? `<@${triggeredUser.id}>` : ''
+\`\`\`\n${command === '/troll pavoweme' ? `<@${triggeredUser?.id}>` : ''}`
         return {
             statusCode: 200,
             body: JSON.stringify({
