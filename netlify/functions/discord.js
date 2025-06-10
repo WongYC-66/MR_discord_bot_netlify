@@ -1,5 +1,5 @@
 import { verifyKey } from 'discord-interactions';
-import { handleBotEvent } from '../handleBotEvent';
+import { handleEvents } from '../handleEvents';
 
 export const handler = async (event) => {
 
@@ -22,7 +22,7 @@ export const handler = async (event) => {
   }
 
   try {
-    let response = await handleBotEvent(rawBody)  // handle command
+    let response = await handleEvents(rawBody)  // handle command
     return response
   } catch (e) {
     console.error(e)

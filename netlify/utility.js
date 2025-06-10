@@ -1,6 +1,9 @@
 import * as cheerio from 'cheerio';
+import { codeBlock } from 'discord.js';
+import util from 'util'
 
-const LIBRARY_URL = 'https://royals-library.netlify.app';
+export const LIBRARY_URL = 'https://royals-library.netlify.app';
+export const API_URL = 'https://royals-library.netlify.app/api/v1';
 
 const urlPathToCategoryName = {
     "/weapon": "weapon",
@@ -356,4 +359,117 @@ export const getFeeling = () => {
     ];
     const randIdx = Math.floor(Math.random() * (choices.length))
     return choices[randIdx]
+}
+
+export const fetchURLAndReturnFirst = async (url) => {
+    let data = await fetch(url)
+    data = await data.json()
+    return data.data?.[0]       // get the first of returned array
+}
+
+export const fetchURLAndReturnArr = async (url) => {
+    let data = await fetch(url)
+    data = await data.json()
+    return data.data      // get the first of returned array
+}
+
+export const fetchURL = async (url) => {
+    let detailInfo = await fetch(url)
+    return await detailInfo.json()
+}
+
+export const makeEmbed = ({ name, url, thumbnailURL }) => {
+    return {
+        color: 0x0099ff,
+        title: name,
+        url,
+        thumbnail: {
+            url: thumbnailURL
+        },
+        fields: [],
+    };
+}
+
+export const addFieldsToEmbed = (fieldArr, embed) => {
+    for (let { name, value, inline } of fieldArr) {
+        embed.fields.push({ name, value, inline })
+    }
+    return embed
+}
+
+export const NotFound = () => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: { content: 'Not found' },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+export const UnRegisteredCommand = () => {
+    return {
+        statusCode: 400,
+        body: 'Un-registered command',
+    }
+}
+
+export const print = (obj) => {
+    console.log(util.inspect(obj, { showHidden: false, depth: null, colors: true }))
+}
+
+export const myOneLinerLinkResponse = (name, url) => {
+    const Embed = makeEmbed({})
+    Embed.color = 0x00b0f4
+    Embed.description = `[${name}](${url})`
+    return generateEmbedResponse(Embed)
+}
+
+export const myOneLinerImageResponse = (name, url) => {
+    const Embed = makeEmbed({ name })
+    Embed.image = { url }
+    Embed.color = 0x00b0f4
+    Embed.description = `[${name}](${url})`
+    return generateEmbedResponse(Embed)
+}
+
+export const generateCodeBlockResponse = (content) => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                content: codeBlock(content)
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+export const generateEmbedResponse = (embed) => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [embed]
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+export const generateCodeBlockAndEmbedResponse = (content, embed) => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                content: codeBlock(content),
+                embeds: [embed],
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
 }
