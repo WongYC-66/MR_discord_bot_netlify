@@ -329,13 +329,15 @@ export const handleBotEvent = async (rawBody) => {
         }
     }
     if (command === '/troll sackpav') {
-        let data = await fetch(`${API_URL}/monster?filter=boss`)
+        const page = pickNumber(1, 8)    // boss monster has 8 pages
+        let data = await fetch(`${API_URL}/monster?filter=boss&page=${page}`)
         data = await data.json()
-        data = data.data       // get the first of returned array
+        data = data.data
 
         if (!data) return NotFound()
+        const bosses = data.filter(boss => boss.hpRecovery >= 2)  // the boss with hpRecovery property seems to be legit boss
 
-        const randomBoss = data[Math.floor(Math.random() * data.length)]
+        const randomBoss = bosses[Math.floor(Math.random() * bosses.length)]
         console.log(randomBoss)
 
         const name = randomBoss?.name || 'undefined'
