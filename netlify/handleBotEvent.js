@@ -351,7 +351,7 @@ export const handleBotEvent = async (rawBody) => {
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: `**SACKING WARNING** : You spawned a **${name}** onto Pav's face ! Pav feels **${feeling}** now.`,
+                    content: codeBlock(`SACKING WARNING : You spawned a **${name}** onto Pav's face ! Pav feels **${feeling}** now.`),
                     embeds: [
                         new EmbedBuilder()
                             .setColor(0x0099FF)
