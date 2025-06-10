@@ -303,14 +303,16 @@ export const handleBotEvent = async (rawBody) => {
     if (command === '/troll pavoweme' || command === '/troll pavoweeveryone') {
         let min = 0
         let max = 100000000
-        let toWho = command === '/troll pavoweme' ? `<@${triggeredUser.id}>` : 'everyone'
-        let content = `Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll`
+        let toWho = command === '/troll pavoweme' ? 'you' : 'everyone'
+        let content = `\`\`\`
+Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll
+\`\`\`` + '\n' + commaNumber === 'troll pavoweme' ? `<@${triggeredUser.id}>` : ''
         return {
             statusCode: 200,
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: codeBlock(content)
+                    content: content
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
