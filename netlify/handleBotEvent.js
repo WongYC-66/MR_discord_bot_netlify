@@ -553,35 +553,30 @@ const getMusicQueryResponse = async (query) => {
     const bgm = data?.bgm || 'undefined'
     const bgmURL = data?.bgmURL || 'undefined'
 
-    // send a button for user to copy paste manually
-    const html = playButtonHTMLBuilder(bgmURL)
-    console.log(html)
+    const commandString = `📋 Copy this and paste into chat: \n/play https://github.com/scotty66f/royals-ost/raw/refs/heads/main/audio/amoria.mp3`
+    const recommendedMusicBot = `[FlaviBot](https://flavibot.xyz/invite)`
+
     return {
         statusCode: 200,
-        headers: { 'Content-Type': 'text/html' },
-        body: html,
-    };
-
-    // OLD RESPONSE WHICH RETURN EMBED
-    // return {
-    //     statusCode: 200,
-    //     body: JSON.stringify({
-    //         type: 4,
-    //         data: {
-    //             embeds: [
-    //                 new EmbedBuilder()
-    //                     .setColor(0x0099FF)
-    //                     .setTitle(name)
-    //                     .setURL(bgmURL)
-    //                     .addFields(
-    //                         { name: 'Name', value: bgm, inline: true },
-    //                         { name: 'Length', value: length, inline: true },
-    //                     )
-    //             ]
-    //         },
-    //     }),
-    //     headers: { 'Content-Type': 'application/json' },
-    // }
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle(name)
+                        .setURL(bgmURL)
+                        .addFields(
+                            { name: 'Name', value: bgm, inline: true },
+                            { name: 'Length', value: length, inline: true },
+                            { name: 'Music Bot', value: recommendedMusicBot, inline: true },
+                            { name: 'trigger Music Bot', value: commandString, inline: true },
+                        )
+                ]
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
 }
 
 const getEquipDroppedByResponse = async (query) => {
@@ -767,57 +762,5 @@ const myOneLinerImageResponse = (name, url) => {
         }),
         headers: { 'Content-Type': 'application/json' },
     }
-}
-
-const playButtonHTMLBuilder = (bgmURL) => {
-    const html = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Play MapleRoyals OST</title>
-    <style>
-    body {
-        font-family: sans-serif;
-        text-align: center;
-        margin-top: 100px;
-    }
-    button {
-        padding: 12px 24px;
-        font-size: 16px;
-        border-radius: 8px;
-        border: none;
-        background-color: #5865F2;
-        color: white;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #4752C4;
-    }
-    .note {
-        margin-top: 20px;
-        color: gray;
-    }
-    </style>
-</head>
-<body>
-    <h1>🎵 MapleRoyals OST Player</h1>
-    <p>Click to copy the Discord play command:</p>
-    <button onclick="copyPlayCommand()">▶️ Copy /play command</button>
-    <div class="note">Then paste it into your Discord chat box manually.</div>
-
-    <script>
-    function copyPlayCommand() {
-        const command = '/play ${bgmURL}';
-        navigator.clipboard.writeText(command)
-        .then(() => alert('✅ Copied to clipboard! Paste it into Discord 💬'))
-        .catch(err => alert('❌ Failed to copy: ' + err));
-    }
-    </script>
-</body>
-</html>
-`
-    return html
 }
 
