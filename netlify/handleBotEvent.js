@@ -555,6 +555,7 @@ const getMusicQueryResponse = async (query) => {
 
     // send a button for user to copy paste manually
     const html = playButtonHTMLBuilder(bgmURL)
+    console.log(html)
     return {
         statusCode: 200,
         headers: { 'Content-Type': 'text/html' },
@@ -817,5 +818,6 @@ const playButtonHTMLBuilder = (bgmURL) => {
 </body>
 </html>
 `
+    return html
 }
 
