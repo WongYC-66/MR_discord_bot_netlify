@@ -554,8 +554,10 @@ const getMusicQueryResponse = async (query) => {
     const bgmURL = data?.bgmURL || 'undefined'
 
     const commandString = `📋 Copy this and paste into chat: \n/play ${bgmURL}`
-    const recommendedMusicBot = `[FlaviBot](https://discord.com/oauth2/authorize?client_id=684773505157431347&permissions=36701184&scope=bot+applications.commands
-)`      // modified by chatgpt about the access grant request
+    
+    // const recommendedMusicBot = `[FlaviBot](https://discord.com/oauth2/authorize?client_id=684773505157431347&permissions=36701184&scope=bot+applications.commands)`      
+    const recommendedMusicBot = `[CakeyBot](https://discord.com/oauth2/authorize?client_id=288163958022471680&permissions=3147776&redirect_uri=https://cakey.bot/success_invite.html&response_type=code&scope=bot+applications.commands)`      
+    // modified by chatgpt about the access grant request
 
     return {
         statusCode: 200,
