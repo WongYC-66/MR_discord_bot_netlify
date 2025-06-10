@@ -553,8 +553,9 @@ const getMusicQueryResponse = async (query) => {
     const bgm = data?.bgm || 'undefined'
     const bgmURL = data?.bgmURL || 'undefined'
 
-    const commandString = `📋 Copy this and paste into chat: \n/play https://github.com/scotty66f/royals-ost/raw/refs/heads/main/audio/amoria.mp3`
-    const recommendedMusicBot = `[FlaviBot](https://flavibot.xyz/invite)`
+    const commandString = `📋 Copy this and paste into chat: \n/play ${bgmURL}`
+    const recommendedMusicBot = `[FlaviBot](https://discord.com/oauth2/authorize?client_id=684773505157431347&permissions=36701184&scope=bot+applications.commands
+)`      // modified by chatgpt about the access grant request
 
     return {
         statusCode: 200,
