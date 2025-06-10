@@ -13,6 +13,8 @@ import {
     splitLongMobStringIntoArray,
     decideDropStrings,
     splitLongDropStringIntoArray,
+    toMinute,
+    getFeeling,
 
 } from './utility.js'
 
@@ -56,6 +58,7 @@ VNHOES BOT HELP:
   /troll pavoweme       : show how much pav owes me
   /troll pavoweeveryone : show how much pav owes everyone
   /troll pavfeels       : show pav feeling today
+  /troll sackpav        : sack a random BOSS on Pav (todo)
 `
 const allowedMainCommand = new Set(['bot', 'drop', 'guide', 'troll'])
 
@@ -313,50 +316,59 @@ export const handleBotEvent = async (rawBody) => {
     }
     // --------------------- /bot pavfeeling  ---------------------
     if (command === '/troll pavfeels') {
-        const choices = [
-            "happy",
-            "sad",
-            "angry",
-            "excited",
-            "nervous",
-            "anxious",
-            "lonely",
-            "hopeful",
-            "jealous",
-            "grateful",
-            "confused",
-            "embarrassed",
-            "proud",
-            "guilty",
-            "bored",
-            "frustrated",
-            "relaxed",
-            "scared",
-            "content",
-            "ashamed",
-            "curious",
-            "overwhelmed",
-            "surprised",
-            "peaceful",
-            "disappointed",
-            "enthusiastic",
-            "loved",
-            "resentful",
-            "confident",
-            "indifferent"
-        ];
-        const randIdx = Math.floor(Math.random() * (choices.length))
-        const result = choices[randIdx]
+        const feeling = getFeeling()
         return {
             statusCode: 200,
             body: JSON.stringify({
                 type: 4,
                 data: {
-                    content: codeBlock(`Pav feels **${result}** today! Doesn't he ?`)
+                    content: codeBlock(`Pav feels **${feeling}** today! Doesn't he ?`)
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
         }
+    }
+    if (command === '/troll sackpav') {
+        let data = await fetch(`${API_URL}/monster?filter=boss`)
+        data = await data.json()
+        data = data.data       // get the first of returned array
+
+        if (!data) return NotFound()
+
+        const randomBoss = data[Math.floor(Math.random() * data.length)]
+        console.log(randomBoss)
+
+        const name = randomBoss?.name || 'undefined'
+        const level = randomBoss?.level || '0'
+        const exp = randomBoss?.exp?.toString() || '0'
+        const Hp = randomBoss?.maxHP || '0'
+        const monsterURL = generateMonsterURL(randomBoss)
+
+        const feeling = getFeeling()
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                type: 4,
+                data: {
+                    content: `You spawned a ${name}! Pav feels **${feeling}** now.`,
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(0x0099FF)
+                            .setTitle(name)
+                            .setURL(monsterURL)
+                            .setThumbnail(data.imgURL)
+                            .addFields(
+                                { name: 'Level', value: level, inline: true },
+                                { name: 'EXP', value: exp, inline: true },
+                                { name: 'HP', value: Hp, inline: true },
+                            )
+                    ]
+                },
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        }
+
     }
     // --------------------- Not registered command ---------------------
     return {
@@ -549,14 +561,14 @@ const getMusicQueryResponse = async (query) => {
     if (!data) return NotFound()
 
     const name = data?.name || 'no name'
-    const length = (data?.length || 'undefined') + 's'
+    const length = toMinute(data.length)
     const bgm = data?.bgm || 'undefined'
     const bgmURL = data?.bgmURL || 'undefined'
 
     const commandString = `📋 Copy this and paste into chat: \n/play ${bgmURL}`
-    
+
     // const recommendedMusicBot = `[FlaviBot](https://discord.com/oauth2/authorize?client_id=684773505157431347&permissions=36701184&scope=bot+applications.commands)`      
-    const recommendedMusicBot = `[CakeyBot](https://discord.com/oauth2/authorize?client_id=288163958022471680&permissions=3147776&redirect_uri=https://cakey.bot/success_invite.html&response_type=code&scope=bot+applications.commands)`      
+    const recommendedMusicBot = `[CakeyBot](https://discord.com/oauth2/authorize?client_id=288163958022471680&permissions=3147776&redirect_uri=https://cakey.bot/success_invite.html&response_type=code&scope=bot+applications.commands)`
     // modified by chatgpt about the access grant request
 
     return {

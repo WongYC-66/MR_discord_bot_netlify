@@ -70,8 +70,8 @@ const catogeryRangeList = {
 }
 
 const toCategoryURL = (subCategory) => {
-    for(let urlPath in urlPathToCategoryName){
-        if(urlPathToCategoryName[urlPath] === subCategory){
+    for (let urlPath in urlPathToCategoryName) {
+        if (urlPathToCategoryName[urlPath] === subCategory) {
             return urlPath.slice(1,)
         }
     }
@@ -98,6 +98,14 @@ const normalizedID = (type, id) => {
 export const generateThumbnailUrl = (type, id) => {
     id = normalizedID(type, id)
     return `${LIBRARY_URL}/images/${type}/${id}.png`
+}
+
+export const toMinute = (audioLength) => {
+    if (!audioLength) return 'undefined'
+    const sec = Number(audioLength)
+    const min = Math.floor(sec / 60).toString().padStart(2, '0')
+    const remainSec = (sec % 60).toFixed().padStart(2, '0')
+    return `${min}:${remainSec}`
 }
 
 export const generateEquipURL = (data) => {
@@ -312,3 +320,40 @@ export const splitLongDropStringIntoArray = (drops) => {
 
     return result;
 };
+
+export const getFeeling = () => {
+    const choices = [
+        "happy",
+        "sad",
+        "angry",
+        "excited",
+        "nervous",
+        "anxious",
+        "lonely",
+        "hopeful",
+        "jealous",
+        "grateful",
+        "confused",
+        "embarrassed",
+        "proud",
+        "guilty",
+        "bored",
+        "frustrated",
+        "relaxed",
+        "scared",
+        "content",
+        "ashamed",
+        "curious",
+        "overwhelmed",
+        "surprised",
+        "peaceful",
+        "disappointed",
+        "enthusiastic",
+        "loved",
+        "resentful",
+        "confident",
+        "indifferent"
+    ];
+    const randIdx = Math.floor(Math.random() * (choices.length))
+    return choices[randIdx]
+}

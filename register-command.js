@@ -264,12 +264,17 @@ const commands = [
       {
         type: 1,    // SUB_COMMAND
         name: 'pavoweeveryone',
-        description: 'show how much pav owed me, a troll feature',
+        description: 'show how much pav owed everyone, a troll feature',
       },
       {
         type: 1,    // SUB_COMMAND
         name: 'pavfeels',
         description: 'show what pav feels today, a troll feature',
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'sackpav',
+        description: 'sack a random BOSS on Pav',
       },
     ],
   },
