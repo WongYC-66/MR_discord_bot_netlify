@@ -2,7 +2,6 @@ import commaNumber from "comma-number"
 import {
     addFieldsToEmbed,
     API_URL,
-    fetchURL,
     fetchURLAndReturnArr,
     generateCodeBlockAndEmbedResponse,
     generateCodeBlockResponse,

@@ -7,5 +7,10 @@
     "discord.js": "^14.19.3",
     "dotenv": "^16.5.0"
   },
-  "scripts": {}
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
 }
