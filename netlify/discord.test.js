@@ -258,14 +258,14 @@ export async function runSelfTests() {
         } catch (err) {
             res = (`❌ ${name} → ${err.message}`);
         }
-        console.log(res)
+        // console.log(res)
         return res
     })
 
     results = await Promise.all(results)
 
+    console.log(results)
     console.log(`\n✅ Passed ${pass}/${allTests.length} tests`);
-    // console.log(results)
 
     return results
 }
