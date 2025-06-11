@@ -1,3 +1,4 @@
+import { runSelfTests } from './discord.test.js'
 import {
     addFieldsToEmbed,
     API_URL,
@@ -14,6 +15,8 @@ import {
     pickNumber,
     toMinute
 } from './utility.js'
+
+
 
 import commaNumber from 'comma-number'
 
@@ -169,5 +172,10 @@ export const getCoinFlipResponse = () => {
     const randIdx = Math.floor(Math.random() * (choices.length))
     const result = choices[randIdx]
     const content = (`You flipped a ${result}!`)
+    return generateCodeBlockResponse(content)
+}
+
+export const getSelfTestResponse = async () => {
+    const content = await runSelfTests()
     return generateCodeBlockResponse(content)
 }

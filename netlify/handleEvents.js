@@ -22,6 +22,7 @@ VNHOES BOT HELP:
   /bot servertime       : show mapleroyals servertime
   /bot roll min max     : roll a number between, up to -10b ~ 10b
   /bot flipcoin         : flip a coin
+  /bot selftest         : healthcheck if this BOT is OK (todo)
   /bot author           : show author
 
   # drop
@@ -141,6 +142,9 @@ export const handleEvents = async (rawBody) => {
 
         case '/bot flipcoin':
             return bot.getCoinFlipResponse()
+            
+        case '/bot selftest':
+            return bot.getSelfTestResponse()
 
         case '/bot author':
             return myOneLinerLinkResponse('ScottY5C', 'https://royals-library.netlify.app/about-me')

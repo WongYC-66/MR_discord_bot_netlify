@@ -8,9 +8,6 @@
     "dotenv": "^16.5.0"
   },
   "scripts": {
-    "test": "jest"
-  },
-  "devDependencies": {
-    "jest": "^29.7.0"
+    "test": "node test.js"
   }
 }
