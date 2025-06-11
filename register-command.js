@@ -121,6 +121,11 @@ const commands = [
       },
       {
         type: 1,    // SUB_COMMAND
+        name: 'selftest',
+        description: 'healthcheck if this BOT is OK',
+      },
+      {
+        type: 1,    // SUB_COMMAND
         name: 'author',
         description: 'show link to author',
       },
