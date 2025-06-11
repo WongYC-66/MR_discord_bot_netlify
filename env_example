@@ -1,0 +1,12 @@
+# YOUR DISCORD APP INFO, REFER TO https://discord.com/developers/applications
+APP_PUBLIC_KEY = 
+APPLICATION_ID = 
+## GET TOKEN FROM : BOT APP -> BOT TAB -> GET NEW TOKEN
+APP_TOKEN =     
+
+# DISCORD CHANNEL ID, RIGHT CLICK DISCORD SERVER -> COPY SERVER ID
+DISCORD_GUILD_ID_1 =             
+
+# FOR TEST & SELF TEST
+# eg. https://vnhoes-bot.netlify.app
+DOMAIN_URL = http://localhost:8888
