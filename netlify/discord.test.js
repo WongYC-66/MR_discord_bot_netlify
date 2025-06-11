@@ -40,7 +40,6 @@ async function postToHandler(payload) {
         body: JSON.stringify(payload)
     });
     const json = await res.json();
-    console.log(json)
     return { status: res.status, json };
 }
 
@@ -264,7 +263,6 @@ export async function runSelfTests() {
     })
 
     results = await Promise.all(results)
-    results.sort()
 
     console.log(`\n✅ Passed ${pass}/${allTests.length} tests`);
     // console.log(results)
