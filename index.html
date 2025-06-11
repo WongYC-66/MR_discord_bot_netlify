@@ -6,14 +6,15 @@
   <title>DISCORD BOT netlify page</title>
 </head>
 <body>
-  <h2 id="endpoint">API ENDPOINT: Loading...</h2>
+  <h2>Your Interaction Endpoint URL</h2>
+  <p id="endpoint">API ENDPOINT: Loading...</p>
 
   <script>
     const currentHost = window.location.host;
     const currentProtocol = window.location.protocol;
     const endpoint = `${currentProtocol}//${currentHost}/.netlify/functions/discord`;
 
-    document.getElementById('endpoint').textContent = `API ENDPOINT: ${endpoint}`;
+    document.getElementById('endpoint').textContent = `${endpoint}`;
   </script>
 </body>
 </html>
