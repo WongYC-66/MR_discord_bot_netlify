@@ -61,7 +61,8 @@ export const getTrollSackPavResponse = async () => {
 
 export const getTrollPatResponse = (triggeredUser, targetUser) => {
     console.log(triggeredUser, targetUser)
-    let content = `<@${triggeredUser?.id}> pats <@${targetUser}>`
+    const feeling = getFeeling()
+    let content = `<@${triggeredUser?.id}> pats <@${targetUser}>'s head ! <@${targetUser}> feels ${feeling} now !`
     return generatePlainTextResponse(content)
 }
 
