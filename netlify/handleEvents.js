@@ -63,6 +63,9 @@ export const handleEvents = async (rawBody) => {
     print(body.data)
 
     // Ping from Discord, DEFAULT, DON'T TOUCH ANYTHING!
+    // 1. acknowledge PING
+    // 2. verifyKey passed
+    // https://discord.com/developers/docs/interactions/overview#configuring-an-interactions-endpoint-url
     if (body.type === 1) {
         return {
             statusCode: 200,
@@ -84,11 +87,11 @@ export const handleEvents = async (rawBody) => {
     //     }
     // }
 
-    const mainCommand = body.data.name
-    const subCommand = body.data.options?.[0].name
+    const mainCommand = body?.data?.name
+    const subCommand = body?.data?.options?.[0]?.name
     const command = `/${mainCommand} ${subCommand}`   // '/bot equip'
     const triggeredUser = body?.member?.user
-    let options = body.data.options?.[0]
+    let options = body?.data?.options?.[0]
 
     console.log(command)
 
@@ -142,7 +145,7 @@ export const handleEvents = async (rawBody) => {
 
         case '/bot flipcoin':
             return bot.getCoinFlipResponse()
-            
+
         case '/bot selftest':
             return bot.getSelfTestResponse()
 

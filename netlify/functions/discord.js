@@ -7,16 +7,16 @@ export const handler = async (event) => {
   const timestamp = event.headers['x-signature-timestamp']
   const rawBody = event.body || "{}"
   const APP_PUBLIC_KEY = process.env.APP_PUBLIC_KEY
-  const DOMAIN_URL = process.env.DOMAIN_URL?.replace(/https?:\/\//, '')
 
   // console.log({ APP_PUBLIC_KEY })   // debug
   // console.log(event) // debug
   // console.log(DOMAIN_URL) // debug
 
   const isLocalTestServer = event.headers.host.includes('localhost')
-  const isFromHostedSelf = event.headers.host == DOMAIN_URL
+  const isInternalCall = event.headers['x-internal-bypass'] === 'true';
+  const bypassVerification = isLocalTestServer || isInternalCall
 
-  if (!isLocalTestServer && !isFromHostedSelf) {
+  if (!bypassVerification) {
     // for public release discord bot, must verify input from discord
     let response = await verifyFromDiscord(rawBody, signature, timestamp, APP_PUBLIC_KEY)
     if (response.statusCode !== 200) {

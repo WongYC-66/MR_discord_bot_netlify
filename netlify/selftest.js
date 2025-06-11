@@ -36,7 +36,10 @@ export function generatePayload(command, subcommand, options = []) {
 export async function postToHandler(payload) {
     const res = await fetch(BASE_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Internal-Bypass': 'true', // <- custom header
+        },
         body: JSON.stringify(payload)
     });
     const json = await res.json();
