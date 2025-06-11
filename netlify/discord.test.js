@@ -238,8 +238,8 @@ export async function runSelfTests() {
         }
     ]
 
-    // const allTests = [...botCommandTests, ...dropCommandTests, ...guideCommandTests, ...trollCommandTests]
-    const allTests = [botCommandTests[0]]
+    const allTests = [...botCommandTests, ...dropCommandTests, ...guideCommandTests, ...trollCommandTests]
+    // const allTests = [botCommandTests[0]]
 
     console.log(`Running ${allTests.length} Discord command self-tests...\n`);
 
