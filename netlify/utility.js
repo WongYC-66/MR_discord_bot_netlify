@@ -434,6 +434,19 @@ export const myOneLinerImageResponse = (name, url) => {
     return generateEmbedResponse(Embed)
 }
 
+export const generatePlainTextResponse = (content) => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                content: content
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
 export const generateCodeBlockResponse = (content) => {
     return {
         statusCode: 200,

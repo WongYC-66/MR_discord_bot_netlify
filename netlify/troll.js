@@ -6,6 +6,7 @@ import {
     generateCodeBlockAndEmbedResponse,
     generateCodeBlockResponse,
     generateMonsterURL,
+    generatePlainTextResponse,
     getFeeling,
     makeEmbed,
     NotFound,
@@ -19,16 +20,7 @@ export const getTrollPavOweMeEveryoneResponse = (command, triggeredUser) => {
     let content = `\`\`\`
 Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll
 \`\`\`${command === '/troll pavoweme' ? `<@${triggeredUser?.id}>` : ''}`
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            type: 4,
-            data: {
-                content: content
-            },
-        }),
-        headers: { 'Content-Type': 'application/json' },
-    }
+    return generatePlainTextResponse(content)
 }
 
 export const getTrollPavFeelResponse = () => {
@@ -69,6 +61,7 @@ export const getTrollSackPavResponse = async () => {
 
 export const getTrollPatResponse = (triggeredUser, targetUser) => {
     console.log(triggeredUser, targetUser)
-    return NotFound()
+    let content = `<@${triggeredUser?.id}> pats <@${targetUser}>`
+    return generatePlainTextResponse(content)
 }
 
