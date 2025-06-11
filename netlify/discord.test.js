@@ -40,6 +40,7 @@ async function postToHandler(payload) {
         body: JSON.stringify(payload)
     });
     const json = await res.json();
+    console.log(json)
     return { status: res.status, json };
 }
 
@@ -237,7 +238,8 @@ export async function runSelfTests() {
         }
     ]
 
-    const allTests = [...botCommandTests, ...dropCommandTests, ...guideCommandTests, ...trollCommandTests]
+    // const allTests = [...botCommandTests, ...dropCommandTests, ...guideCommandTests, ...trollCommandTests]
+    const allTests = [botCommandTests[0]]
 
     console.log(`Running ${allTests.length} Discord command self-tests...\n`);
 

@@ -12,8 +12,10 @@ export const handler = async (event) => {
   // console.log(event) // debug
 
   const isLocalTestServer = event.headers.host.includes('localhost')
+  const isFromHostedSelf = event.headers.host.includes('vnhoes-bot.netlify.app')
+  console.log(event.headers.host)
 
-  if (!isLocalTestServer) {
+  if (!isLocalTestServer && !isFromHostedSelf) {
     // for public release discord bot, must verify input from discord
     let response = await verifyFromDiscord(rawBody, signature, timestamp, APP_PUBLIC_KEY)
     if (response.statusCode !== 200) {
