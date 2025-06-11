@@ -242,9 +242,7 @@ export async function runSelfTests() {
     console.log(`Running ${allTests.length} Discord command self-tests...\n`);
 
     let pass = 0;
-    let results = []
-
-    for (const { name, payload, validate } of allTests) {
+    let results = allTests.map(async ({ name, payload, validate }) => {
         let res = null
         try {
             const { status, json } = await postToHandler(payload);
@@ -260,9 +258,14 @@ export async function runSelfTests() {
             res = (`❌ ${name} → ${err.message}`);
         }
         console.log(res)
-        results.push(res)
-    }
+        return res
+    })
+
+    results = await Promise.all(results)
+    results.sort()
+
     console.log(`\n✅ Passed ${pass}/${allTests.length} tests`);
+    // console.log(results)
 
     return results
 }

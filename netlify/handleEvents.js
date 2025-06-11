@@ -22,7 +22,7 @@ VNHOES BOT HELP:
   /bot servertime       : show mapleroyals servertime
   /bot roll min max     : roll a number between, up to -10b ~ 10b
   /bot flipcoin         : flip a coin
-  /bot selftest         : healthcheck if this BOT is OK (todo)
+  /bot selftest         : healthcheck if this BOT is OK
   /bot author           : show author
 
   # drop
