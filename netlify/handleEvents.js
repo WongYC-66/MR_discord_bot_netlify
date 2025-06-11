@@ -50,7 +50,7 @@ VNHOES BOT HELP:
   /troll pavoweme       : show how much pav owes me
   /troll pavoweeveryone : show how much pav owes everyone
   /troll pavfeels       : show pav feeling today
-  /troll sackpav        : sack a random BOSS on Pav (todo)
+  /troll sackpav        : sack a random BOSS on Pav
 `
 
 const allowedMainCommand = new Set(['bot', 'drop', 'guide', 'troll'])

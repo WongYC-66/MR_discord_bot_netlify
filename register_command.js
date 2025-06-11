@@ -1,8 +1,9 @@
-// register-commands.js
+// register_commands.js
 
 // FOR DEVELOPERS:
-// 1. Everytimes the bot is newly added to discord channel, run this
-// 2. If new command is created, run this with `node register-command.cjs`
+// 1. Everytimes the bot is newly added to discord channel, must run to register
+// 2. When need new command, must run too
+//  `node register_command.js`
 
 import { REST, Routes } from 'discord.js';
 import 'dotenv/config';
@@ -292,13 +293,13 @@ const rest = new REST({ version: '10' }).setToken(APP_TOKEN);
   try {
     console.log('Registering slash commands...');
     await rest.put(
-      Routes.applicationGuildCommands(APPLICATION_ID, DISCORD_GUILD_ID_1),   // run this for discord test-server
+      Routes.applicationGuildCommands(APPLICATION_ID, DISCORD_GUILD_ID_1),   // run this for discord server 1
       // Routes.applicationGuildCommands(APPLICATION_ID),                  // Use Routes.applicationCommands(CLIENT_ID) for global
       { body: commands }
     );
 
     await rest.put(
-      Routes.applicationGuildCommands(APPLICATION_ID, DISCORD_GUILD_ID_2),   // run this for discord VNHoes
+      Routes.applicationGuildCommands(APPLICATION_ID, DISCORD_GUILD_ID_2),   // run this for discord server 2
       // Routes.applicationGuildCommands(APPLICATION_ID),                  // Use Routes.applicationCommands(CLIENT_ID) for global
       { body: commands }
     );

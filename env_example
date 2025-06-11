@@ -7,6 +7,7 @@ APP_TOKEN =
 # DISCORD CHANNEL ID, RIGHT CLICK DISCORD SERVER -> COPY SERVER ID
 DISCORD_GUILD_ID_1 =             
 
-# FOR TEST & SELF TEST
+# FOR /bot selftest & LOCAL TEST
 # eg. https://vnhoes-bot.netlify.app
-DOMAIN_URL = http://localhost:8888
+DOMAIN_URL = 
+# DOMAIN_URL = http://localhost:8888        # uncomment for local test
