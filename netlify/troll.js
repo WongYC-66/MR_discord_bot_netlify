@@ -67,3 +67,8 @@ export const getTrollSackPavResponse = async () => {
     return generateCodeBlockAndEmbedResponse(content, Embed)
 }
 
+export const getTrollPatResponse = (triggeredUser, targetUser) => {
+    console.log(triggeredUser, targetUser)
+    return NotFound
+}
+

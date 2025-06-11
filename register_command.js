@@ -282,6 +282,19 @@ const commands = [
         name: 'sackpav',
         description: 'sack a random BOSS on Pav',
       },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'pat',
+        description: 'pat a user',
+        options: [
+          {
+            name: 'target',
+            description: 'pat someone\'s head',
+            type: 6, // USER
+            required: true // or true if you always want them to pick
+          }
+        ]
+      }
     ],
   },
 ];

@@ -51,6 +51,7 @@ VNHOES BOT HELP:
   /troll pavoweeveryone : show how much pav owes everyone
   /troll pavfeels       : show pav feeling today
   /troll sackpav        : sack a random BOSS on Pav
+  /troll pat            : pat someone's head
 `
 
 const allowedMainCommand = new Set(['bot', 'drop', 'guide', 'troll'])
@@ -104,6 +105,7 @@ export const handleEvents = async (rawBody) => {
 
     options = options?.options
     let query = null
+    let targetUser = null
 
     switch (command) {
         // bot
@@ -221,6 +223,11 @@ export const handleEvents = async (rawBody) => {
 
         case '/troll sackpav':
             return troll.getTrollSackPavResponse()
+
+        case '/troll pat':
+            options = options?.[0]
+            targetUser = options.value
+            return troll.getTrollPatResponse(triggeredUser, targetUser)
 
         // --------------------- Not registered command ---------------------
         default:
