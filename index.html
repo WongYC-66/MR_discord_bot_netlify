@@ -7,7 +7,10 @@
 </head>
 <body>
   <h2>Your Interaction Endpoint URL</h2>
-  <p id="endpoint">API ENDPOINT: Loading...</p>
+  <p id="endpoint">Loading...</p>
+
+  <h2>Your DOMAIN URL</h2>
+  <p id="domain">Loading...</p>
 
   <script>
     const currentHost = window.location.host;
@@ -15,6 +18,7 @@
     const endpoint = `${currentProtocol}//${currentHost}/.netlify/functions/discord`;
 
     document.getElementById('endpoint').textContent = `${endpoint}`;
+    document.getElementById('domain').textContent = `${currentProtocol}//${currentHost}`;;
   </script>
 </body>
 </html>
