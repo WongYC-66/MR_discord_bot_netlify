@@ -1,8 +1,8 @@
-// Test local with Netlify Dev
+// Test local with Netlify Dev or Modify BASE_URL to hosted netlify function page
 import 'dotenv/config';
 const BASE_URL = `${process.env.DOMAIN_URL}/.netlify/functions/discord`;
 
-function generatePayload(command, subcommand, options = []) {
+export function generatePayload(command, subcommand, options = []) {
     return {
         type: 2,
         data: {
@@ -33,7 +33,7 @@ function generatePayload(command, subcommand, options = []) {
     };
 }
 
-async function postToHandler(payload) {
+export async function postToHandler(payload) {
     const res = await fetch(BASE_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

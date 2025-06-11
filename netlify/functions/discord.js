@@ -7,7 +7,7 @@ export const handler = async (event) => {
   const timestamp = event.headers['x-signature-timestamp']
   const rawBody = event.body || "{}"
   const APP_PUBLIC_KEY = process.env.APP_PUBLIC_KEY
-  const DOMAIN_URL = process.env.DOMAIN_URL.replace(/https?:\/\//, '')
+  const DOMAIN_URL = process.env.DOMAIN_URL?.replace(/https?:\/\//, '')
 
   // console.log({ APP_PUBLIC_KEY })   // debug
   // console.log(event) // debug

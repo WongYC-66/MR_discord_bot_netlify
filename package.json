@@ -8,6 +8,10 @@
     "dotenv": "^16.5.0"
   },
   "scripts": {
-    "test": "node test.js"
+    "test": "node simple_test.js",
+    "jest": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

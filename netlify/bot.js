@@ -1,4 +1,4 @@
-import { runSelfTests } from './discord.test.js'
+import { runSelfTests } from './selftest.js'
 import {
     addFieldsToEmbed,
     API_URL,
