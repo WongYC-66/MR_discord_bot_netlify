@@ -69,6 +69,6 @@ export const getTrollSackPavResponse = async () => {
 
 export const getTrollPatResponse = (triggeredUser, targetUser) => {
     console.log(triggeredUser, targetUser)
-    return NotFound
+    return NotFound()
 }
 
