@@ -466,11 +466,12 @@ export async function sendDiscordImageWebhook(imageBuffer, fileName, embed, appl
     return await res.json();
 }
 
-export const makeEmbed = ({ name, url, thumbnailURL }) => {
+export const makeEmbed = ({ name, description, url, thumbnailURL }) => {
     return {
         color: 0x0099ff,
         title: name,
         url,
+        description,
         thumbnail: {
             url: thumbnailURL
         },

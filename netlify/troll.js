@@ -69,9 +69,9 @@ export const getTrollSackPavResponse = async () => {
 
 export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {
     const isLocalTestServer = event.headers.host.includes('localhost')
-    console.log(triggeredUser.id, targetUser, { isLocalTestServer })
+    // console.log(triggeredUser.id, targetUser, { isLocalTestServer })
     const interaction = JSON.parse(event.body)
-    console.log(interaction)
+    // console.log(interaction)
 
     const baseImageUrl = 'https://media1.tenor.com/m/Wc_Sv1zFlmQAAAAC/nix-voltare-fsp-nix-voltare-fsp-en.gif';      // Pat Image URL
 
@@ -85,8 +85,8 @@ export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {
 
     const fileName = `combined_${triggeredUser.id}_${targetUser}.png`
 
-    const position1 = { x: 90, y: 290 }; // pos of avatar1, only trial and error to find out
-    const position2 = { x: 310, y: 65 };  // pos of avatar2
+    const position1 = { x: 310, y: 65 };  // pos of avatar1, only trial and error to find out
+    const position2 = { x: 90, y: 290 }; // pos of avatar2, only trial and error to find out
     const imageBuffer = await overlayAvatarsToBaseImage(avatarUrl1, avatarUrl2, baseImageUrl, position1, position2)
 
     // Step 2 : Send image
@@ -96,7 +96,8 @@ export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {
         saveImageBuffer(imageBuffer, outputPath)
     } else {
         const Embed = makeEmbed({
-            name: `<@${triggeredUser.id}> pats <@${targetUser}>!`
+            name: `Pat Pat Pat!`,
+            description: `<@${triggeredUser.id}> pats <@${targetUser}>!`,
         })
         Embed.image = { url: `attachment://${fileName}` }
         await sendDiscordImageWebhook(imageBuffer, fileName, Embed, interaction.application_id, interaction.token);
