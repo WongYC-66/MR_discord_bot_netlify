@@ -15,23 +15,24 @@ import {
     pickNumber,
 } from "./utility"
 
-export const getTrollPavOweMeEveryoneResponse = (command, triggeredUser) => {
+export const getTrollOweResponse = (command, triggeredUser, targetUser) => {
     let min = 0
     let max = 100000000
-    let toWho = command === '/troll pavoweme' ? 'you' : 'everyone'
+    let toWho = command === '/troll owe' ? 'you' : 'everyone'
+    let mention = command === '/troll owe' ? `<@${triggeredUser?.id}>` : ''
     let content = `\`\`\`
-Pav owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll
-\`\`\`${command === '/troll pavoweme' ? `<@${triggeredUser?.id}>` : ''}`
+@<${targetUser}> owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll
+\`\`\`${mention}`
     return generatePlainTextResponse(content)
 }
 
-export const getTrollPavFeelResponse = () => {
+export const getTrollFeelsResponse = (targetUser) => {
     const feeling = getFeeling()
-    const content = `Pav feels **${feeling}** today! Doesn't he ?`
-    return generateCodeBlockResponse(content)
+    const content = `<@${targetUser}> \`\`\`feels **${feeling}** today! Doesn't he ?\`\`\``
+    return generatePlainTextResponse(content)
 }
 
-export const getTrollSackPavResponse = async () => {
+export const getTrollSackResponse = async (triggeredUser, targetUser) => {
     const page = pickNumber(1, 8)    // boss monster has 8 pages
     let data = await fetchURLAndReturnArr(`${API_URL}/monster?filter=boss&page=${page}`)
     if (!data) return NotFound()
@@ -47,7 +48,7 @@ export const getTrollSackPavResponse = async () => {
     const url = generateMonsterURL(randomBoss)
 
     const feeling = getFeeling()
-    const content = `SACKING WARNING : You spawned a **${name}** onto Pav's face ! Pav feels **${feeling}** now.`
+    const content = `SACKING WARNING : <@${triggeredUser.id}> spawned a **${name}** onto <@${targetUser}>'s face ! <@${targetUser}> feels **${feeling}** now.`
 
     const Embed = makeEmbed({ name, url, thumbnailURL })
     addFieldsToEmbed(

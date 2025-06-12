@@ -219,24 +219,32 @@ export async function runSelfTests() {
 
     const trollCommandTests = [
         {
-            name: "/troll pavoweme",
-            payload: generatePayload("troll", "pavoweme"),
-            validate: json => json.data?.content?.toLowerCase()?.includes("pav owes you")
+            name: "/troll owe",
+            payload: generatePayload("troll", "owe", [
+                { name: "target", value: "123456789", type: 3 }
+            ]),
+            validate: json => json.data?.content?.toLowerCase()?.includes("owes you")
         },
         {
-            name: "/troll pavoweeveryone",
-            payload: generatePayload("troll", "pavoweeveryone"),
-            validate: json => json.data?.content?.toLowerCase()?.includes("pav owes everyone")
+            name: "/troll oweall",
+            payload: generatePayload("troll", "oweall", [
+                { name: "target", value: "123456789", type: 3 }
+            ]),
+            validate: json => json.data?.content?.toLowerCase()?.includes("owes everyone")
         },
         {
-            name: "/troll pavfeels",
-            payload: generatePayload("troll", "pavfeels"),
-            validate: json => json.data?.content?.toLowerCase()?.includes("pav feels")
+            name: "/troll feels",
+            payload: generatePayload("troll", "feels", [
+                { name: "target", value: "123456789", type: 3 }
+            ]),
+            validate: json => json.data?.content?.toLowerCase()?.includes("feels")
         },
         {
-            name: "/troll sackpav",
-            payload: generatePayload("troll", "sackpav"),
-            validate: json => json.data?.content?.toLowerCase()?.includes("you spawned a")
+            name: "/troll sack",
+            payload: generatePayload("troll", "sack", [
+                { name: "target", value: "123456789", type: 3 }
+            ]),
+            validate: json => json.data?.content?.toLowerCase()?.includes("spawned a")
         }
     ]
 

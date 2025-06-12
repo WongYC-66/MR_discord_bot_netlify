@@ -264,23 +264,55 @@ const commands = [
     options: [
       {
         type: 1,    // SUB_COMMAND
-        name: 'pavoweme',
-        description: 'show how much pav owed me, a troll feature',
+        name: 'owe',
+        description: 'show how much someone owed me, a troll feature',
+        options: [
+          {
+            name: 'target',
+            description: 'who',
+            type: 6, // USER
+            required: true
+          }
+        ]
       },
       {
         type: 1,    // SUB_COMMAND
-        name: 'pavoweeveryone',
-        description: 'show how much pav owed everyone, a troll feature',
+        name: 'oweall',
+        description: 'show how much someone owed everyone, a troll feature',
+        options: [
+          {
+            name: 'target',
+            description: 'who',
+            type: 6, // USER
+            required: true
+          }
+        ]
       },
       {
         type: 1,    // SUB_COMMAND
-        name: 'pavfeels',
-        description: 'show what pav feels today, a troll feature',
+        name: 'feels',
+        description: 'show how someone feels today, a troll feature',
+        options: [
+          {
+            name: 'target',
+            description: 'who',
+            type: 6, // USER
+            required: true
+          }
+        ]
       },
       {
         type: 1,    // SUB_COMMAND
-        name: 'sackpav',
-        description: 'sack a random BOSS on Pav',
+        name: 'feels',
+        description: 'sack a random BOSS on someone, a troll feature',
+        options: [
+          {
+            name: 'target',
+            description: 'who',
+            type: 6, // USER
+            required: true
+          }
+        ]
       },
       {
         type: 1,    // SUB_COMMAND

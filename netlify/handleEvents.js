@@ -47,10 +47,10 @@ VNHOES BOT HELP:
   /guide hpwashinfo     : show hp wash info table
   
   # troll
-  /troll pavoweme       : show how much pav owes me
-  /troll pavoweeveryone : show how much pav owes everyone
-  /troll pavfeels       : show pav feeling today
-  /troll sackpav        : sack a random BOSS on Pav
+  /troll owe            : show how much someone owed me, a troll feature
+  /troll oweall         : show how much someone owed everyone, a troll feature
+  /troll feels          : show how someone feels today, a troll feature
+  /troll sack           : sack a random BOSS on someone, a troll feature
   /troll pat            : pat someone's head
   /troll slap           : slap someone
 `
@@ -215,15 +215,21 @@ export const handleEvents = async (rawBody, event) => {
             return myOneLinerImageResponse('Hp Wash Info', 'https://i.imgur.com/pckfDK8.jpeg')
 
         // troll
-        case '/troll pavoweme':
-        case '/troll pavoweeveryone':
-            return troll.getTrollPavOweMeEveryoneResponse(command, triggeredUser)
+        case '/troll owe':
+        case '/troll oweall':
+            options = options?.[0]
+            targetUser = options.value
+            return troll.getTrollOweResponse(command, triggeredUser, targetUser)
 
-        case '/troll pavfeels':
-            return troll.getTrollPavFeelResponse()
+        case '/troll feels':
+            options = options?.[0]
+            targetUser = options.value
+            return troll.getTrollFeelsResponse(targetUser)
 
-        case '/troll sackpav':
-            return troll.getTrollSackPavResponse()
+        case '/troll sack':
+            options = options?.[0]
+            targetUser = options.value
+            return troll.getTrollSackResponse(triggeredUser, targetUser)
 
         case '/troll pat':
             options = options?.[0]

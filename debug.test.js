@@ -228,32 +228,40 @@ describe("Guide Commands", () => {
 
 describe("Troll Commands", () => {
 
-    test("/troll pavoweme", async () => {
-        const payload = generatePayload("troll", "pavoweme");
+    test("/troll owe", async () => {
+        const payload = generatePayload("troll", "owe", [
+            { name: "target", value: "123456789", type: 3 }
+        ]);
         const { status, json } = await postToHandler(payload);
         expect(status).toBe(200);
-        expect(json.data?.content?.toLowerCase()).toContain("pav owes you");
+        expect(json.data?.content?.toLowerCase()).toContain("owes you");
     });
 
-    test("/troll pavoweeveryone", async () => {
-        const payload = generatePayload("troll", "pavoweeveryone");
+    test("/troll oweall", async () => {
+        const payload = generatePayload("troll", "oweall", [
+            { name: "target", value: "123456789", type: 3 }
+        ]);
         const { status, json } = await postToHandler(payload);
         expect(status).toBe(200);
-        expect(json.data?.content?.toLowerCase()).toContain("pav owes everyone");
+        expect(json.data?.content?.toLowerCase()).toContain("owes everyone");
     });
 
-    test("/troll pavfeels", async () => {
-        const payload = generatePayload("troll", "pavfeels");
+    test("/troll feels", async () => {
+        const payload = generatePayload("troll", "feels", [
+            { name: "target", value: "123456789", type: 3 }
+        ]);
         const { status, json } = await postToHandler(payload);
         expect(status).toBe(200);
-        expect(json.data?.content?.toLowerCase()).toContain("pav feels");
+        expect(json.data?.content?.toLowerCase()).toContain("feels");
     });
 
     test("/troll sackpav", async () => {
-        const payload = generatePayload("troll", "sackpav");
+        const payload = generatePayload("troll", "sack", [
+            { name: "target", value: "123456789", type: 3 }
+        ]);
         const { status, json } = await postToHandler(payload);
         expect(status).toBe(200);
-        expect(json.data?.content?.toLowerCase()).toContain("you spawned a");
+        expect(json.data?.content?.toLowerCase()).toContain("spawned a");
     });
 
 });
