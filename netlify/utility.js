@@ -1,12 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import util from 'util'
-
 import * as cheerio from 'cheerio';
-import { createCanvas, loadImage } from 'canvas';
 import { codeBlock } from 'discord.js';
-
-import 'dotenv/config';
+import util from 'util'
 
 export const LIBRARY_URL = 'https://royals-library.netlify.app';
 export const API_URL = 'https://royals-library.netlify.app/api/v1';
@@ -440,70 +434,6 @@ export const myOneLinerImageResponse = (name, url) => {
     return generateEmbedResponse(Embed)
 }
 
-
-// export const fetchDiscordAvatarURL = async (userId) => {
-//     const botToken = process.env.APP_TOKEN
-//     const userResponse = await fetch(`https://discord.com/api/v10/users/${userId}`, {
-//         headers: { Authorization: `Bot ${botToken}` }
-//     });
-
-//     if (!userResponse.ok) throw new Error('Failed to fetch user info');
-
-//     const user = await userResponse.json();
-//     const avatarUrl = user.avatar
-//         ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
-//         : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
-
-//     return avatarUrl;
-// }
-
-// export const overlayAvatarsToBaseImage = async (
-//     avatarUrl1,
-//     avatarUrl2,
-//     baseImageUrl,
-//     position1,
-//     position2
-// ) => {
-//     const [avatar1, avatar2, baseImage] = await Promise.all([
-//         fetchAndLoadImage(avatarUrl1),
-//         fetchAndLoadImage(avatarUrl2),
-//         fetchAndLoadImage(baseImageUrl),
-//     ]);
-
-//     const canvas = createCanvas(baseImage.width, baseImage.height);
-//     const ctx = canvas.getContext('2d');
-
-//     // Draw base image
-//     ctx.drawImage(baseImage, 0, 0);
-
-//     const avatarSize = 128;
-
-//     // Draw avatars at custom positions
-//     ctx.drawImage(avatar1, position1.x, position1.y, avatarSize, avatarSize);
-//     ctx.drawImage(avatar2, position2.x, position2.y, avatarSize, avatarSize);
-
-//     // Export as buffer
-//     return canvas.toBuffer('image/png');
-// }
-
-// const fetchAndLoadImage = async (url) => {
-//     const res = await fetch(url);
-//     if (!res.ok) throw new Error(`❌ Failed to fetch ${url}`);
-//     const buffer = await res.arrayBuffer();
-//     return loadImage(Buffer.from(buffer));
-// };
-
-// export const saveImageBuffer = (buffer, outputPath) => {
-//     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-//     fs.writeFileSync(outputPath, buffer);
-//     const stats = fs.statSync(outputPath);
-//     const fileSizeKB = (stats.size / 1024).toFixed(2);
-//     // CheckImageSize
-//     console.log(`✅ Image saved to: ${outputPath}`);
-//     console.log(`📏 File size: ${fileSizeKB} KB`);
-// }
-
-
 export const generatePlainTextResponse = (content) => {
     return {
         statusCode: 200,
@@ -551,20 +481,6 @@ export const generateCodeBlockAndEmbedResponse = (content, embed) => {
             data: {
                 content: codeBlock(content),
                 embeds: [embed],
-            },
-        }),
-        headers: { 'Content-Type': 'application/json' },
-    }
-}
-
-export const generateEmbedAndAttachmentResponse = (embed, attachment) => {
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            type: 4,
-            data: {
-                embeds: [embed],
-                files: [attachment],
             },
         }),
         headers: { 'Content-Type': 'application/json' },
