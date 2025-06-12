@@ -8,6 +8,7 @@ import {
     generateCodeBlockResponse,
     generatedImageResponse,
     generateMonsterURL,
+    generatePlainTextAndEmbedResponse,
     generatePlainTextResponse,
     getFeeling,
     makeEmbed,
@@ -19,10 +20,8 @@ export const getTrollOweResponse = (command, triggeredUser, targetUser) => {
     let min = 0
     let max = 100000000
     let toWho = command === '/troll owe' ? 'you' : 'everyone'
-    let mention = command === '/troll owe' ? `<@${triggeredUser?.id}>` : ''
-    let content = `\`\`\`
-@<${targetUser}> owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll
-\`\`\`${mention}`
+    let content = `<@${targetUser}> owed ${toWho} (<@${triggeredUser.id}>) \`\`\` He/She owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll
+\`\`\``
     return generatePlainTextResponse(content)
 }
 
@@ -59,7 +58,7 @@ export const getTrollSackResponse = async (triggeredUser, targetUser) => {
         ],
         Embed,
     )
-    return generateCodeBlockAndEmbedResponse(content, Embed)
+    return generatePlainTextAndEmbedResponse(content, Embed)
 }
 
 export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {

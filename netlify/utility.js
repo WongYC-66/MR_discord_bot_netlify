@@ -573,6 +573,20 @@ export const generateCodeBlockAndEmbedResponse = (content, embed) => {
     }
 }
 
+export const generatePlainTextAndEmbedResponse = (content, embed) => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                content: content,
+                embeds: [embed],
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
 export const generateEmbedAndAttachmentResponse = (embed, attachment) => {
     return {
         statusCode: 200,
