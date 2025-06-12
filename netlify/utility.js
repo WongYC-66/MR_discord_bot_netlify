@@ -441,7 +441,7 @@ export const deferDiscordInteraction = async (interaction) => {
 }
 
 export async function sendDiscordImageWebhook({ imageBuffer, fileName, Embed, interaction }) {
-    // console.log({ fileName, applicationId, interactionToken })
+    // console.log({ fileName, interaction })
 
     const webhookUrl = `https://discord.com/api/v10/webhooks/${interaction.application_id}/${interaction.token}`;
 
@@ -459,6 +459,7 @@ export async function sendDiscordImageWebhook({ imageBuffer, fileName, Embed, in
 
     if (!res.ok) {
         const err = await res.text();
+        console.error(interaction)
         throw new Error(`Failed to send image to Discord: ${res.status} - ${err}`);
     }
 
