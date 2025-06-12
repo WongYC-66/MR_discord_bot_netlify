@@ -285,16 +285,29 @@ const commands = [
       {
         type: 1,    // SUB_COMMAND
         name: 'pat',
-        description: 'pat a user',
+        description: 'pat a user\' head',
         options: [
           {
             name: 'target',
-            description: 'pat someone\'s head',
+            description: 'who',
             type: 6, // USER
             required: true // or true if you always want them to pick
           }
         ]
-      }
+      },
+      {
+        type: 1,    // SUB_COMMAND
+        name: 'slap',
+        description: 'slap someone',
+        options: [
+          {
+            name: 'target',
+            description: 'who',
+            type: 6, // USER
+            required: true // or true if you always want them to pick
+          }
+        ]
+      },
     ],
   },
 ];

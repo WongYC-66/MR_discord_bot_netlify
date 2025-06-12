@@ -412,22 +412,21 @@ export const saveImageBuffer = (buffer, outputPath) => {
     console.log(`📏 File size: ${fileSizeKB} KB`);
 }
 
-export const overlayAvatarsToBaseImage = async (
-    avatarUrl1,
-    avatarUrl2,
-    baseImageUrl,
-    position1,
-    position2
-) => {
-    const [baseImage, avatar1, avatar2] = await Promise.all([
-        Jimp.read(baseImageUrl),
-        Jimp.read(avatarUrl1),
-        Jimp.read(avatarUrl2),
+export const overlayAvatarsToBaseImage = async (caller, target, background) => {
+    // console.log(caller, target, background)
+    const [baseImage, callerImage, targetImage] = await Promise.all([
+        Jimp.read(background.url),
+        Jimp.read(caller.avatarURL),
+        Jimp.read(target.avatarURL),
     ]);
 
+    callerImage.scale(caller.scale);
+    targetImage.scale(target.scale);
+    baseImage.scale(background.scale);
+
     baseImage
-        .composite(avatar1, position1.x, position1.y)
-        .composite(avatar2, position2.x, position2.y);
+        .composite(callerImage, caller.x, caller.y)
+        .composite(targetImage, target.x, target.y);
 
     const buffer = await baseImage.getBuffer('image/png');
     return buffer;
@@ -442,7 +441,7 @@ export const deferDiscordInteraction = async (interaction) => {
 }
 
 export async function sendDiscordImageWebhook(imageBuffer, fileName, embed, applicationId, interactionToken) {
-    console.log({ fileName, applicationId, interactionToken })
+    // console.log({ fileName, applicationId, interactionToken })
 
     const webhookUrl = `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}`;
 
@@ -453,7 +452,7 @@ export async function sendDiscordImageWebhook(imageBuffer, fileName, embed, appl
         embeds: [embed],
     }));
 
-    const res = await fetch(webhookUrl, {
+    const res = await fetch(webhookUrl, {       // send to discord webhook
         method: 'POST',
         body: form,
     });
@@ -586,4 +585,44 @@ export const generateEmbedAndAttachmentResponse = (embed, attachment) => {
         }),
         headers: { 'Content-Type': 'application/json' },
     }
+}
+
+export const generatedImageResponse = async ({ caller, target, background, event, wording }) => {
+    const isLocalTestServer = event.headers.host.includes('localhost')
+    // console.log(triggeredUser.id, targetUser, { isLocalTestServer })
+    const interaction = JSON.parse(event.body)
+    // console.log(interaction)
+
+    const [avatarURL1, avatarURL2] = await Promise.all([
+        fetchDiscordUserAvatar(caller.id),
+        fetchDiscordUserAvatar(target.id),
+    ])
+
+    caller.avatarURL = avatarURL1
+    target.avatarURL = avatarURL2
+
+    // Step 1: Defer interaction to avoid 3sec timeout
+    if (!isLocalTestServer) await deferDiscordInteraction(interaction)
+
+    const fileName = `${wording}.png`
+    const imageBuffer = await overlayAvatarsToBaseImage(caller, target, background)
+
+    // Step 2 : Send image
+    if (isLocalTestServer) {
+        // dev mode, save to local folder instead to verify location and file size, netlify dev would cleanup
+        const outputPath = path.join(__dirname, '/output', fileName);
+        saveImageBuffer(imageBuffer, outputPath)
+    } else {
+        const Embed = makeEmbed({
+            name: `${wording} ${wording} ${wording}!`,
+            description: `<@${caller.id}> pats <@${target.id}>!`,
+        })
+        Embed.image = { url: `attachment://${fileName}` }
+        await sendDiscordImageWebhook(imageBuffer, fileName, Embed, interaction.application_id, interaction.token);
+    }
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true }),
+    };
 }

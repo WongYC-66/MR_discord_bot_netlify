@@ -1,24 +1,18 @@
-import fs from 'fs/promises'
-import path from 'path';
 
 import commaNumber from "comma-number"
 import {
     addFieldsToEmbed,
     API_URL,
-    deferDiscordInteraction,
-    fetchDiscordUserAvatar,
     fetchURLAndReturnArr,
     generateCodeBlockAndEmbedResponse,
     generateCodeBlockResponse,
+    generatedImageResponse,
     generateMonsterURL,
     generatePlainTextResponse,
     getFeeling,
     makeEmbed,
     NotFound,
-    overlayAvatarsToBaseImage,
     pickNumber,
-    saveImageBuffer,
-    sendDiscordImageWebhook
 } from "./utility"
 
 export const getTrollPavOweMeEveryoneResponse = (command, triggeredUser) => {
@@ -68,43 +62,68 @@ export const getTrollSackPavResponse = async () => {
 }
 
 export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {
-    const isLocalTestServer = event.headers.host.includes('localhost')
-    // console.log(triggeredUser.id, targetUser, { isLocalTestServer })
-    const interaction = JSON.parse(event.body)
-    // console.log(interaction)
 
-    const baseImageUrl = 'https://media1.tenor.com/m/Wc_Sv1zFlmQAAAAC/nix-voltare-fsp-nix-voltare-fsp-en.gif';      // Pat Image URL
-
-    const [avatarUrl1, avatarUrl2] = await Promise.all([
-        fetchDiscordUserAvatar(triggeredUser.id),
-        fetchDiscordUserAvatar(targetUser),
-    ])
-
-    // Step 1: Defer interaction
-    if (!isLocalTestServer) await deferDiscordInteraction(interaction)
-
-    const fileName = `combined_${triggeredUser.id}_${targetUser}.png`
-
-    const position1 = { x: 310, y: 65 };  // pos of avatar1, only trial and error to find out
-    const position2 = { x: 90, y: 290 }; // pos of avatar2, only trial and error to find out
-    const imageBuffer = await overlayAvatarsToBaseImage(avatarUrl1, avatarUrl2, baseImageUrl, position1, position2)
-
-    // Step 2 : Send image
-    if (isLocalTestServer) {
-        // dev mode, save to local folder, netlify dev would cleanup
-        const outputPath = path.join(__dirname, '/output', fileName);
-        saveImageBuffer(imageBuffer, outputPath)
-    } else {
-        const Embed = makeEmbed({
-            name: `Pat Pat Pat!`,
-            description: `<@${triggeredUser.id}> pats <@${targetUser}>!`,
-        })
-        Embed.image = { url: `attachment://${fileName}` }
-        await sendDiscordImageWebhook(imageBuffer, fileName, Embed, interaction.application_id, interaction.token);
+    // pat online image
+    const background = {
+        scale: 1.0,
+        url: 'https://media1.tenor.com/m/Wc_Sv1zFlmQAAAAC/nix-voltare-fsp-nix-voltare-fsp-en.gif',
     }
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify({ success: true }),
-    };
+    const caller = {
+        id: triggeredUser.id,
+        x: 310,         // x = x-position in final image
+        y: 65,          // y = y-position in final image
+        scale: 1.0
+    }
+
+    const target = {
+        id: targetUser,
+        x: 90,          // x = x-position in final image
+        y: 290,         // y = y-position in final image
+        scale: 1.0
+    }
+
+    const params = {
+        caller,
+        target,
+        background,
+        event,
+        wording: 'pat',
+    }
+
+    return generatedImageResponse(params)
 }
+
+export const getSlapPunchResponse = async (triggeredUser, targetUser, event) => {
+
+    // punch online image
+    const background = {
+        scale: 0.6,
+        url: 'https://i.imgflip.com/9x592f.jpg',
+    }
+
+    const caller = {
+        id: triggeredUser.id,
+        x: 225,
+        y: 115,
+        scale: 0.4
+    }
+
+    const target = {
+        id: targetUser,
+        x: 135,
+        y: 80,
+        scale: 0.4
+    }
+
+    const params = {
+        caller,
+        target,
+        background,
+        event,
+        wording: 'slap',
+    }
+
+    return generatedImageResponse(params)
+}
+

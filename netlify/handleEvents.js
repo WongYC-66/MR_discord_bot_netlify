@@ -52,6 +52,7 @@ VNHOES BOT HELP:
   /troll pavfeels       : show pav feeling today
   /troll sackpav        : sack a random BOSS on Pav
   /troll pat            : pat someone's head
+  /troll slap           : slap someone
 `
 
 const allowedMainCommand = new Set(['bot', 'drop', 'guide', 'troll'])
@@ -228,6 +229,11 @@ export const handleEvents = async (rawBody, event) => {
             options = options?.[0]
             targetUser = options.value
             return troll.getTrollPatResponse(triggeredUser, targetUser, event)
+
+        case '/troll slap':
+            options = options?.[0]
+            targetUser = options.value
+            return troll.getSlapPunchResponse(triggeredUser, targetUser, event)
 
         // --------------------- Not registered command ---------------------
         default:
