@@ -10,7 +10,6 @@ import {
     fetchURLAndReturnArr,
     generateCodeBlockAndEmbedResponse,
     generateCodeBlockResponse,
-    generateEmbedAndAttachmentResponse,
     generateMonsterURL,
     generatePlainTextResponse,
     getFeeling,
@@ -21,7 +20,6 @@ import {
     saveImageBuffer,
     sendDiscordImageWebhook
 } from "./utility"
-import { AttachmentBuilder } from 'discord.js';
 
 export const getTrollPavOweMeEveryoneResponse = (command, triggeredUser) => {
     let min = 0
@@ -101,7 +99,7 @@ export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {
             name: `<@${triggeredUser.id}> pats <@${targetUser}>!`
         })
         Embed.image = { url: `attachment://${fileName}` }
-        await sendDiscordImageWebhook(imageBuffer, fileName, Embed, interaction.id, interaction.token);
+        await sendDiscordImageWebhook(imageBuffer, fileName, Embed, interaction.application_id, interaction.token);
     }
 
     return {
