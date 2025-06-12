@@ -440,7 +440,7 @@ export const deferDiscordInteraction = async (interaction) => {
     });
 }
 
-export async function sendDiscordImageWebhook({ imageBuffer, fileName, embed, interaction }) {
+export async function sendDiscordImageWebhook({ imageBuffer, fileName, Embed, interaction }) {
     // console.log({ fileName, applicationId, interactionToken })
 
     const webhookUrl = `https://discord.com/api/v10/webhooks/${interaction.application_id}/${interaction.token}`;
@@ -449,7 +449,7 @@ export async function sendDiscordImageWebhook({ imageBuffer, fileName, embed, in
     const form = new FormData();
     form.append('file', blob, fileName);
     form.append('payload_json', JSON.stringify({
-        embeds: [embed],
+        embeds: [Embed],
     }));
 
     const res = await fetch(webhookUrl, {       // send to discord webhook
