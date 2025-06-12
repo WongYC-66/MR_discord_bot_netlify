@@ -80,23 +80,21 @@ export const getTrollPatResponse = async (triggeredUser, targetUser) => {
     const fileName = `combined_${triggeredUser.id}_${targetUser}.png`
     const outputPath = path.join(__dirname, '/tmp', fileName); // netlify AWS lambda only support /tmp ?
 
+    console.log(fileName)
     console.log({ outputPath })
 
     const position1 = { x: 90, y: 290 }; // pos of avatar1, only trial and error to find out
     const position2 = { x: 310, y: 65 };  // pos of avatar2
     const combinedBuffer = await overlayAvatarsToBaseImage(avatarUrl1, avatarUrl2, baseImageUrl, position1, position2)
 
-    // saveImageBuffer(combinedBuffer, outputPath) //
-
-    console.log(fileName)
-
     const Attachment = new AttachmentBuilder(combinedBuffer, { name: fileName });
-
+    
     const Embed = makeEmbed({})
     Embed.image = { url: `attachment://${fileName}` }
-
+    
+    // saveImageBuffer(combinedBuffer, outputPath) //
     // 🔥 CLEANUP, comment out in DEV mode
-    await fs.unlink(outputPath).catch(console.error);
+    // await fs.unlink(outputPath).catch(console.error);
 
     return generateEmbedAndAttachmentResponse(Embed, Attachment)
 }
