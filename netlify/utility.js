@@ -5,7 +5,6 @@ import path from 'path';
 import * as cheerio from 'cheerio';
 import { codeBlock } from 'discord.js';
 import { Jimp } from 'jimp';
-import FormData from 'form-data';
 
 export const LIBRARY_URL = 'https://royals-library.netlify.app';
 export const API_URL = 'https://royals-library.netlify.app/api/v1';
@@ -446,31 +445,25 @@ export async function sendDiscordImageWebhook(imageBuffer, fileName, embed, appl
     console.log({ fileName, applicationId, interactionToken })
 
     const webhookUrl = `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}`;
-    const formData = new FormData();
 
-    // Convert buffer to Blob for native FormData
-    const fileBlob = new Blob([imageBuffer], { type: 'image/png' });
-
-    // Append file
-    formData.append('file', fileBlob, fileName);
-
-    // Append JSON payload referencing the attachment
-    formData.append('payload_json', JSON.stringify({
-        content: '',
+    const blob = new Blob([imageBuffer], { type: 'image/png' });
+    const form = new FormData();
+    form.append('file', blob, fileName);
+    form.append('payload_json', JSON.stringify({
         embeds: [embed],
     }));
 
-    // Send the webhook response
-    const response = await fetch(webhookUrl, {
+    const res = await fetch(webhookUrl, {
         method: 'POST',
-        body: formData,
+        body: form,
     });
 
-    if (!response.ok) {
-        const err = await response.text();
-        console.error('❌ Discord webhook upload failed:', error);
-        throw new Error(`Webhook failed: ${err}`);
+    if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`Failed to send image to Discord: ${res.status} - ${err}`);
     }
+
+    return await res.json();
 }
 
 export const makeEmbed = ({ name, url, thumbnailURL }) => {
