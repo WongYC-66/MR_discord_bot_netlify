@@ -303,7 +303,7 @@ const commands = [
       },
       {
         type: 1,    // SUB_COMMAND
-        name: 'feels',
+        name: 'sack',
         description: 'sack a random BOSS on someone, a troll feature',
         options: [
           {
