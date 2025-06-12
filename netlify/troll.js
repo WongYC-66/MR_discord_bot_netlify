@@ -20,7 +20,9 @@ export const getTrollOweResponse = (command, triggeredUser, targetUser) => {
     let min = 0
     let max = 100000000
     let toWho = command === '/troll owe' ? 'you' : 'everyone'
-    let content = `<@${targetUser}> owed ${toWho} (<@${triggeredUser.id}>) \`\`\` He/She owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll
+    let mention = command === '/troll owe' ? `(<@${triggeredUser.id}>)` : ''
+
+    let content = `<@${targetUser}> owed ${toWho}${mention} \`\`\` He/She owes ${toWho} ${commaNumber(pickNumber(min, max))}! A Random number from 0-100m. PS: this a troll
 \`\`\``
     return generatePlainTextResponse(content)
 }
