@@ -15,6 +15,7 @@ export const handler = async (event) => {
   const isLocalTestServer = event.headers.host.includes('localhost')
   const isInternalCall = event.headers['x-internal-bypass'] === 'true';
   const bypassVerification = isLocalTestServer || isInternalCall
+  console.log({bypassVerification})
 
   if (!bypassVerification) {
     // for public release discord bot, must verify input from discord
@@ -25,7 +26,7 @@ export const handler = async (event) => {
   }
 
   try {
-    let response = await handleEvents(rawBody)  // handle command
+    let response = await handleEvents(rawBody, event)  // handle command
     return response
   } catch (e) {
     console.error(e)

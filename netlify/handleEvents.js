@@ -56,7 +56,7 @@ VNHOES BOT HELP:
 
 const allowedMainCommand = new Set(['bot', 'drop', 'guide', 'troll'])
 
-export const handleEvents = async (rawBody) => {
+export const handleEvents = async (rawBody, event) => {
     // refer to discord API, https://discord.com/developers/docs/interactions/receiving-and-responding
     const body = JSON.parse(rawBody)
 
@@ -227,7 +227,7 @@ export const handleEvents = async (rawBody) => {
         case '/troll pat':
             options = options?.[0]
             targetUser = options.value
-            return troll.getTrollPatResponse(triggeredUser, targetUser)
+            return troll.getTrollPatResponse(triggeredUser, targetUser, event)
 
         // --------------------- Not registered command ---------------------
         default:

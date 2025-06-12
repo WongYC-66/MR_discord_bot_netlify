@@ -1,17 +1,27 @@
+import path from 'path';
+
 import commaNumber from "comma-number"
+import { AttachmentBuilder } from 'discord.js';
+
 import {
     addFieldsToEmbed,
     API_URL,
+    // fetchDiscordAvatarURL,
     fetchURLAndReturnArr,
     generateCodeBlockAndEmbedResponse,
     generateCodeBlockResponse,
+    generateEmbedAndAttachmentResponse,
     generateMonsterURL,
     generatePlainTextResponse,
     getFeeling,
     makeEmbed,
     NotFound,
-    pickNumber
+    // overlayAvatarsToBaseImage,
+    pickNumber,
+    // saveImageBuffer
 } from "./utility"
+
+
 
 export const getTrollPavOweMeEveryoneResponse = (command, triggeredUser) => {
     let min = 0
@@ -59,10 +69,38 @@ export const getTrollSackPavResponse = async () => {
     return generateCodeBlockAndEmbedResponse(content, Embed)
 }
 
-export const getTrollPatResponse = (triggeredUser, targetUser) => {
-    console.log(triggeredUser, targetUser)
-    const feeling = getFeeling()
-    let content = `<@${triggeredUser?.id}> pats <@${targetUser}>'s head ! <@${targetUser}> feels ${feeling} now !`
-    return generatePlainTextResponse(content)
+export const getTrollPatResponse = async (triggeredUser, targetUserId, event) => {
+    return NotFound()
+    console.log(triggeredUser, targetUserId)
+    console.log(event.headers.host)
+    console.log(typeof event.headers.host)
+    const isLocalTestServer = event.headers.host.includes('localhost')
+
+    // const feeling = getFeeling()
+    // let content = `<@${triggeredUser?.id}> pats <@${targetUser}>'s head ! <@${targetUser}> feels ${feeling} now !`
+    
+    // let avatarUrl1 = fetchDiscordAvatarURL(triggeredUser.id)
+    // let avatarUrl2 = fetchDiscordAvatarURL(targetUserId)
+    const baseImageUrl = 'https://media1.tenor.com/m/Wc_Sv1zFlmQAAAAC/nix-voltare-fsp-nix-voltare-fsp-en.gif';      // Pat Image URL
+
+    if (isLocalTestServer) {
+        var avatarUrl1 = 'https://cdn.discordapp.com/avatars/474557435219279873/3f235eb0c6279115704c8edfe617c04a.png?size=128';
+        var avatarUrl2 = 'https://cdn.discordapp.com/avatars/154242342180618240/5dd10d847d569ade65c29c31ac0bb52b.png?size=128';
+    }
+
+    // const __dirname = dirname(import.meta.filename);
+    console.log({ __dirname })
+    const outputPath = path.join(__dirname, 'output', `combined_${avatarUrl1}_${avatarUrl2}.png`);
+
+    const position1 = { x: 100, y: 280 }; // pos of avatar1
+    const position2 = { x: 310, y: 60 };  // pos of avatar2
+
+    const combinedBuffer = await overlayAvatarsToBaseImage(avatarUrl1, avatarUrl2, baseImageUrl, outputPath, position1, position2)
+    saveImageBuffer(combinedBuffer)
+
+    const Embed = makeEmbed({})
+    const Attachment = new AttachmentBuilder(outputPath);
+
+    return generateEmbedAndAttachmentResponse(Embed, Attachment)
 }
 
