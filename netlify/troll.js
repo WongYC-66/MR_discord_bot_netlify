@@ -77,8 +77,8 @@ export const getTrollPatResponse = async (triggeredUser, targetUser) => {
     ])
 
     // const outputPath = path.join(__dirname, 'output', `combined_${triggeredUser.id}_${targetUser}.png`);
-    const outputPath = path.join(__dirname, '/tmp', `combined_${triggeredUser.id}_${targetUser}.png`); // netlify AWS lambda only support /tmp ?
-
+    const fileName = `combined_${triggeredUser.id}_${targetUser}.png`
+    const outputPath = path.join(__dirname, '/tmp', fileName); // netlify AWS lambda only support /tmp ?
 
     console.log({ outputPath })
 
@@ -86,15 +86,14 @@ export const getTrollPatResponse = async (triggeredUser, targetUser) => {
     const position2 = { x: 310, y: 65 };  // pos of avatar2
     const combinedBuffer = await overlayAvatarsToBaseImage(avatarUrl1, avatarUrl2, baseImageUrl, position1, position2)
 
-    saveImageBuffer(combinedBuffer, outputPath)
+    // saveImageBuffer(combinedBuffer, outputPath) //
 
-    const attachFileName = outputPath.split('\\').at(-1)
-    console.log(attachFileName)
-    
-    const Attachment = new AttachmentBuilder(outputPath);
-    
+    console.log(fileName)
+
+    const Attachment = new AttachmentBuilder(combinedBuffer, { name: fileName });
+
     const Embed = makeEmbed({})
-    Embed.image = { url: `attachment://${attachFileName}` }
+    Embed.image = { url: `attachment://${fileName}` }
 
     // 🔥 CLEANUP, comment out in DEV mode
     await fs.unlink(outputPath).catch(console.error);
