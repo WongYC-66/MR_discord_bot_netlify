@@ -73,6 +73,7 @@ export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {
     const isLocalTestServer = event.headers.host.includes('localhost')
     console.log(triggeredUser.id, targetUser, { isLocalTestServer })
     const interaction = event.body
+    console.log(interaction)
 
     const baseImageUrl = 'https://media1.tenor.com/m/Wc_Sv1zFlmQAAAAC/nix-voltare-fsp-nix-voltare-fsp-en.gif';      // Pat Image URL
 
@@ -100,7 +101,7 @@ export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {
             name: `<@${triggeredUser.id}> pats <@${targetUser}>!`
         })
         Embed.image = { url: `attachment://${fileName}` }
-        await sendDiscordImageWebhook(imageBuffer, fileName, Embed, interaction.application_id, interaction.token);
+        await sendDiscordImageWebhook(imageBuffer, fileName, Embed, interaction.id, interaction.token);
     }
 
     return {
