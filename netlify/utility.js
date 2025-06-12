@@ -440,7 +440,7 @@ export const deferDiscordInteraction = async (interaction) => {
     });
 }
 
-export async function sendDiscordImageWebhook({ imageBuffer, fileName, Embed, interaction }) {
+export async function sendDiscordImageWebhook({ imageBuffer, fileName, embed, interaction }) {
     // console.log({ fileName, applicationId, interactionToken })
 
     const webhookUrl = `https://discord.com/api/v10/webhooks/${interaction.application_id}/${interaction.token}`;
@@ -449,7 +449,7 @@ export async function sendDiscordImageWebhook({ imageBuffer, fileName, Embed, in
     const form = new FormData();
     form.append('file', blob, fileName);
     form.append('payload_json', JSON.stringify({
-        embeds: [Embed],
+        embeds: [embed],
     }));
 
     const res = await fetch(webhookUrl, {       // send to discord webhook
@@ -627,13 +627,12 @@ export const generatedImageResponse = async ({ caller, target, background, event
         const outputPath = path.join(__dirname, '/output', fileName);
         saveImageBuffer(imageBuffer, outputPath)
     } else {
-        const mention = `<@${caller.id}> ${wording} <@${target.id}>`
         const Embed = makeEmbed({
             name: `${wording} ${wording} ${wording}!`,
             description: `<@${caller.id}> ${wording} <@${target.id}>!`,
         })
         Embed.image = { url: `attachment://${fileName}` }
-        await sendDiscordImageWebhook({ imageBuffer, fileName, Embed, mention, interaction });
+        await sendDiscordImageWebhook({ imageBuffer, fileName, Embed, interaction });
     }
 
     return {
