@@ -5,6 +5,7 @@ import path from 'path';
 import * as cheerio from 'cheerio';
 import { codeBlock } from 'discord.js';
 import { Jimp } from 'jimp';
+import FormData from 'form-data';
 
 
 export const LIBRARY_URL = 'https://royals-library.netlify.app';
@@ -432,6 +433,35 @@ export const overlayAvatarsToBaseImage = async (
 
     const buffer = await baseImage.getBuffer('image/png');
     return buffer;
+}
+
+export const deferDiscordInteraction = async (interaction) => {
+    await fetch(`https://discord.com/api/v10/interactions/${interaction.id}/${interaction.token}/callback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 5 }),
+    });
+}
+
+export async function sendDiscordImageWebhook(imageBuffer, fileName, embed, applicationId, interactionToken) {
+    const form = new FormData();
+
+    form.append('file', imageBuffer, fileName);
+    form.append('payload_json', JSON.stringify({
+        embeds: [embed],
+        content: '',
+    }));
+
+    const webhookUrl = `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}`;
+    const response = await fetch(webhookUrl, {
+        method: 'POST',
+        body: form,
+    });
+
+    if (!response.ok) {
+        const err = await response.text();
+        throw new Error(`Webhook failed: ${err}`);
+    }
 }
 
 export const makeEmbed = ({ name, url, thumbnailURL }) => {

@@ -227,7 +227,7 @@ export const handleEvents = async (rawBody, event) => {
         case '/troll pat':
             options = options?.[0]
             targetUser = options.value
-            return troll.getTrollPatResponse(triggeredUser, targetUser)
+            return troll.getTrollPatResponse(triggeredUser, targetUser, event)
 
         // --------------------- Not registered command ---------------------
         default:

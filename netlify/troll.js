@@ -5,6 +5,7 @@ import commaNumber from "comma-number"
 import {
     addFieldsToEmbed,
     API_URL,
+    deferDiscordInteraction,
     fetchDiscordUserAvatar,
     fetchURLAndReturnArr,
     generateCodeBlockAndEmbedResponse,
@@ -17,7 +18,8 @@ import {
     NotFound,
     overlayAvatarsToBaseImage,
     pickNumber,
-    saveImageBuffer
+    saveImageBuffer,
+    sendDiscordImageWebhook
 } from "./utility"
 import { AttachmentBuilder } from 'discord.js';
 
@@ -67,8 +69,11 @@ export const getTrollSackPavResponse = async () => {
     return generateCodeBlockAndEmbedResponse(content, Embed)
 }
 
-export const getTrollPatResponse = async (triggeredUser, targetUser) => {
-    console.log(triggeredUser, targetUser)
+export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {
+    const isLocalTestServer = event.headers.host.includes('localhost')
+    console.log(triggeredUser, targetUser, { isLocalTestServer })
+    const interaction = event.body
+
     const baseImageUrl = 'https://media1.tenor.com/m/Wc_Sv1zFlmQAAAAC/nix-voltare-fsp-nix-voltare-fsp-en.gif';      // Pat Image URL
 
     const [avatarUrl1, avatarUrl2] = await Promise.all([
@@ -76,25 +81,30 @@ export const getTrollPatResponse = async (triggeredUser, targetUser) => {
         fetchDiscordUserAvatar(targetUser),
     ])
 
-    // const outputPath = path.join(__dirname, 'output', `combined_${triggeredUser.id}_${targetUser}.png`);
-    const fileName = `combined_${triggeredUser.id}_${targetUser}.png`
-    const outputPath = path.join(__dirname, '/tmp', fileName); // netlify AWS lambda only support /tmp ?
+    // Step 1: Defer interaction
+    if (!isLocalTestServer) await deferDiscordInteraction(interaction)
 
-    console.log(fileName)
-    console.log({ outputPath })
+    const fileName = `combined_${triggeredUser.id}_${targetUser}.png`
 
     const position1 = { x: 90, y: 290 }; // pos of avatar1, only trial and error to find out
     const position2 = { x: 310, y: 65 };  // pos of avatar2
-    const combinedBuffer = await overlayAvatarsToBaseImage(avatarUrl1, avatarUrl2, baseImageUrl, position1, position2)
+    const imageBuffer = await overlayAvatarsToBaseImage(avatarUrl1, avatarUrl2, baseImageUrl, position1, position2)
 
-    const Attachment = new AttachmentBuilder(combinedBuffer, { name: fileName });
-    
-    const Embed = makeEmbed({})
-    Embed.image = { url: `attachment://${fileName}` }
-    
-    // saveImageBuffer(combinedBuffer, outputPath) //
-    // 🔥 CLEANUP, comment out in DEV mode
-    // await fs.unlink(outputPath).catch(console.error);
+    // Step 2 : Send image
+    if (isLocalTestServer) {
+        // dev mode, save to local folder, netlify dev would cleanup
+        const outputPath = path.join(__dirname, '/output', fileName);
+        saveImageBuffer(imageBuffer, outputPath)
+    } else {
+        const Embed = makeEmbed({
+            name: `<@${triggeredUser.id}> pats <@${targetUser}>!`
+        })
+        Embed.image = { url: `attachment://${fileName}` }
+        await sendDiscordImageWebhook(imageBuffer, fileName, Embed, interaction.application_id, interaction.token);
+    }
 
-    return generateEmbedAndAttachmentResponse(Embed, Attachment)
+    return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true }),
+    };
 }
