@@ -7,7 +7,6 @@ import { codeBlock } from 'discord.js';
 import { Jimp } from 'jimp';
 import FormData from 'form-data';
 
-
 export const LIBRARY_URL = 'https://royals-library.netlify.app';
 export const API_URL = 'https://royals-library.netlify.app/api/v1';
 
@@ -444,22 +443,32 @@ export const deferDiscordInteraction = async (interaction) => {
 }
 
 export async function sendDiscordImageWebhook(imageBuffer, fileName, embed, applicationId, interactionToken) {
-    const form = new FormData();
-
-    form.append('file', imageBuffer, fileName);
-    form.append('payload_json', JSON.stringify({
-        embeds: [embed],
-        content: '',
-    }));
+    console.log({ fileName, applicationId, interactionToken })
 
     const webhookUrl = `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}`;
+    const formData = new FormData();
+
+    // Convert buffer to Blob for native FormData
+    const fileBlob = new Blob([imageBuffer], { type: 'image/png' });
+
+    // Append file
+    formData.append('file', fileBlob, fileName);
+
+    // Append JSON payload referencing the attachment
+    formData.append('payload_json', JSON.stringify({
+        content: '',
+        embeds: [embed],
+    }));
+
+    // Send the webhook response
     const response = await fetch(webhookUrl, {
         method: 'POST',
-        body: form,
+        body: formData,
     });
 
     if (!response.ok) {
         const err = await response.text();
+        console.error('❌ Discord webhook upload failed:', error);
         throw new Error(`Webhook failed: ${err}`);
     }
 }

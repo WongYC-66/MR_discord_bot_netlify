@@ -71,7 +71,7 @@ export const getTrollSackPavResponse = async () => {
 
 export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {
     const isLocalTestServer = event.headers.host.includes('localhost')
-    console.log(triggeredUser, targetUser, { isLocalTestServer })
+    console.log(triggeredUser.id, targetUser, { isLocalTestServer })
     const interaction = event.body
 
     const baseImageUrl = 'https://media1.tenor.com/m/Wc_Sv1zFlmQAAAAC/nix-voltare-fsp-nix-voltare-fsp-en.gif';      // Pat Image URL
