@@ -615,7 +615,7 @@ export const generatedImageResponse = async ({ caller, target, background, event
     } else {
         const Embed = makeEmbed({
             name: `${wording} ${wording} ${wording}!`,
-            description: `<@${caller.id}> pats <@${target.id}>!`,
+            description: `<@${caller.id}> ${wording} <@${target.id}>!`,
         })
         Embed.image = { url: `attachment://${fileName}` }
         await sendDiscordImageWebhook(imageBuffer, fileName, Embed, interaction.application_id, interaction.token);
