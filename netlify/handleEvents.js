@@ -56,7 +56,7 @@ VNHOES BOT HELP:
 
 const allowedMainCommand = new Set(['bot', 'drop', 'guide', 'troll'])
 
-export const handleEvents = async (rawBody) => {
+export const handleEvents = async (rawBody, event) => {
     // refer to discord API, https://discord.com/developers/docs/interactions/receiving-and-responding
     const body = JSON.parse(rawBody)
 

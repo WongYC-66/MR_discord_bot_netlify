@@ -1,6 +1,11 @@
+import util from 'util'
+import fs from 'fs';
+import path from 'path';
+
 import * as cheerio from 'cheerio';
 import { codeBlock } from 'discord.js';
-import util from 'util'
+import { Jimp } from 'jimp';
+
 
 export const LIBRARY_URL = 'https://royals-library.netlify.app';
 export const API_URL = 'https://royals-library.netlify.app/api/v1';
@@ -96,6 +101,10 @@ const normalizedID = (type, id) => {
         default:
             return id
     }
+}
+
+export const print = (obj) => {
+    console.log(util.inspect(obj, { showHidden: false, depth: null, colors: true }))
 }
 
 export const generateThumbnailUrl = (type, id) => {
@@ -378,6 +387,53 @@ export const fetchURL = async (url) => {
     return await detailInfo.json()
 }
 
+export const fetchDiscordUserAvatar = async (userId) => {
+    const botToken = process.env.APP_TOKEN
+    const userResponse = await fetch(`https://discord.com/api/v10/users/${userId}`, {
+        headers: { Authorization: `Bot ${botToken}` }
+    });
+
+    if (!userResponse.ok) throw new Error('Failed to fetch user info');
+
+    const user = await userResponse.json();
+    const avatarUrl = user.avatar
+        ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
+        : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
+
+    return avatarUrl;
+}
+
+export const saveImageBuffer = (buffer, outputPath) => {
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+    fs.writeFileSync(outputPath, buffer);
+    const stats = fs.statSync(outputPath);
+    const fileSizeKB = (stats.size / 1024).toFixed(2);
+    // CheckImageSize
+    console.log(`✅ Image saved to: ${outputPath}`);
+    console.log(`📏 File size: ${fileSizeKB} KB`);
+}
+
+export const overlayAvatarsToBaseImage = async (
+    avatarUrl1,
+    avatarUrl2,
+    baseImageUrl,
+    position1,
+    position2
+) => {
+    const [baseImage, avatar1, avatar2] = await Promise.all([
+        Jimp.read(baseImageUrl),
+        Jimp.read(avatarUrl1),
+        Jimp.read(avatarUrl2),
+    ]);
+
+    baseImage
+        .composite(avatar1, position1.x, position1.y)
+        .composite(avatar2, position2.x, position2.y);
+
+    const buffer = await baseImage.getBuffer('image/png');
+    return buffer;
+}
+
 export const makeEmbed = ({ name, url, thumbnailURL }) => {
     return {
         color: 0x0099ff,
@@ -397,6 +453,8 @@ export const addFieldsToEmbed = (fieldArr, embed) => {
     return embed
 }
 
+////////////////////  RESPONSE ////////////////////
+
 export const NotFound = () => {
     return {
         statusCode: 200,
@@ -413,10 +471,6 @@ export const UnRegisteredCommand = () => {
         statusCode: 400,
         body: 'Un-registered command',
     }
-}
-
-export const print = (obj) => {
-    console.log(util.inspect(obj, { showHidden: false, depth: null, colors: true }))
 }
 
 export const myOneLinerLinkResponse = (name, url) => {
@@ -481,6 +535,20 @@ export const generateCodeBlockAndEmbedResponse = (content, embed) => {
             data: {
                 content: codeBlock(content),
                 embeds: [embed],
+            },
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    }
+}
+
+export const generateEmbedAndAttachmentResponse = (embed, attachment) => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            type: 4,
+            data: {
+                embeds: [embed],
+                files: [attachment],
             },
         }),
         headers: { 'Content-Type': 'application/json' },

@@ -25,7 +25,7 @@ export const handler = async (event) => {
   }
 
   try {
-    let response = await handleEvents(rawBody)  // handle command
+    let response = await handleEvents(rawBody, event)  // handle command
     return response
   } catch (e) {
     console.error(e)

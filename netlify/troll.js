@@ -1,17 +1,25 @@
+import fs from 'fs/promises'
+import path from 'path';
+
 import commaNumber from "comma-number"
 import {
     addFieldsToEmbed,
     API_URL,
+    fetchDiscordUserAvatar,
     fetchURLAndReturnArr,
     generateCodeBlockAndEmbedResponse,
     generateCodeBlockResponse,
+    generateEmbedAndAttachmentResponse,
     generateMonsterURL,
     generatePlainTextResponse,
     getFeeling,
     makeEmbed,
     NotFound,
-    pickNumber
+    overlayAvatarsToBaseImage,
+    pickNumber,
+    saveImageBuffer
 } from "./utility"
+import { AttachmentBuilder } from 'discord.js';
 
 export const getTrollPavOweMeEveryoneResponse = (command, triggeredUser) => {
     let min = 0
@@ -59,10 +67,32 @@ export const getTrollSackPavResponse = async () => {
     return generateCodeBlockAndEmbedResponse(content, Embed)
 }
 
-export const getTrollPatResponse = (triggeredUser, targetUser) => {
+export const getTrollPatResponse = async (triggeredUser, targetUser) => {
     console.log(triggeredUser, targetUser)
-    const feeling = getFeeling()
-    let content = `<@${triggeredUser?.id}> pats <@${targetUser}>'s head ! <@${targetUser}> feels ${feeling} now !`
-    return generatePlainTextResponse(content)
-}
+    const baseImageUrl = 'https://media1.tenor.com/m/Wc_Sv1zFlmQAAAAC/nix-voltare-fsp-nix-voltare-fsp-en.gif';      // Pat Image URL
 
+    const [avatarUrl1, avatarUrl2] = await Promise.all([
+        fetchDiscordUserAvatar(triggeredUser.id),
+        fetchDiscordUserAvatar(targetUser),
+    ])
+
+    const outputPath = path.join(__dirname, 'output', `combined_${triggeredUser.id}_${targetUser}.png`);
+    console.log({ outputPath })
+
+    const position1 = { x: 90, y: 290 }; // pos of avatar1, only trial and error to find out
+    const position2 = { x: 310, y: 65 };  // pos of avatar2
+    const combinedBuffer = await overlayAvatarsToBaseImage(avatarUrl1, avatarUrl2, baseImageUrl, position1, position2)
+    saveImageBuffer(combinedBuffer, outputPath)
+    const attachFileName = outputPath.split('\\').at(-1)
+    console.log(attachFileName)
+
+    const Attachment = new AttachmentBuilder(outputPath);
+
+    const Embed = makeEmbed({})
+    Embed.image = { url: `attachment://${attachFileName}` }
+
+    // 🔥 CLEANUP, comment out in DEV mode
+    await fs.unlink(outputPath).catch(console.error);
+
+    return generateEmbedAndAttachmentResponse(Embed, Attachment)
+}
