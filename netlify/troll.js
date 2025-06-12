@@ -4,8 +4,6 @@ import {
     addFieldsToEmbed,
     API_URL,
     fetchURLAndReturnArr,
-    generateCodeBlockAndEmbedResponse,
-    generateCodeBlockResponse,
     generatedImageResponse,
     generateMonsterURL,
     generatePlainTextAndEmbedResponse,
