@@ -32,11 +32,12 @@ export const getTrollFeelsResponse = (targetUser) => {
 }
 
 export const getTrollSackResponse = async (triggeredUser, targetUser) => {
-    const page = pickNumber(1, 8)    // boss monster has 8 pages
-    let data = await fetchURLAndReturnArr(`${API_URL}/monster?filter=boss&page=${page}`)
-    if (!data) return NotFound()
+    const fetchTasks = Array(8).fill().map((_, i) => fetchURLAndReturnArr(`${API_URL}/monster?filter=boss&page=${i + 1}`))
+    let data = await Promise.all(fetchTasks)
+    data = data.flat()
+    if (!data.length) return NotFound()
 
-    const bosses = data.filter(boss => boss.hpRecovery >= 2)  // the boss with hpRecovery property seems to be legit boss
+    const bosses = data.filter(boss => boss.imgURL && boss.drops)  // legit boss = the one with drops and with image?
     const randomBoss = bosses[Math.floor(Math.random() * bosses.length)]
 
     const name = randomBoss?.name || 'undefined'
