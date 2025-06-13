@@ -621,8 +621,8 @@ export const generateEmbedAndAttachmentResponse = (embed, attachment) => {
 
 export const generatedImageResponse = async ({ caller, target, background, event, wording }) => {
     const isLocalTestServer = event.headers.host.includes('localhost')
-    const isSelfTest = event.headers.host === process.env.DOMAIN_URL
-    console.log(caller, target, { isLocalTestServer })
+    const isSelfTest = process.env.DOMAIN_URL.includes(event.headers.host)
+    console.log(caller, target, { isLocalTestServer, isSelfTest })
     const interaction = JSON.parse(event.body)
     // console.log(interaction)
 
