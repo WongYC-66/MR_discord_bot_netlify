@@ -67,21 +67,21 @@ export const getTrollPatResponse = async (triggeredUser, targetUser, event) => {
     // pat online image
     const background = {
         scale: 1.0,
-        url: 'https://media1.tenor.com/m/Wc_Sv1zFlmQAAAAC/nix-voltare-fsp-nix-voltare-fsp-en.gif',
+        url: 'https://media.tenor.com/6fa6sool-Y4AAAAi/love-pat.gif',
     }
 
     const caller = {
         id: triggeredUser.id,
-        x: 310,         // x = x-position in final image
-        y: 65,          // y = y-position in final image
-        scale: 1.0
+        x: 0,         // x = x-position in final image
+        y: 0,          // y = y-position in final image
+        scale: 0.35
     }
 
     const target = {
         id: targetUser,
-        x: 90,          // x = x-position in final image
-        y: 290,         // y = y-position in final image
-        scale: 1.0
+        x: 75,          // x = x-position in final image
+        y: 120,         // y = y-position in final image
+        scale: 0.35
     }
 
     const params = {
@@ -99,22 +99,22 @@ export const getSlapPunchResponse = async (triggeredUser, targetUser, event) => 
 
     // punch online image
     const background = {
-        scale: 0.6,
-        url: 'https://i.imgflip.com/9x592f.jpg',
+        scale: 1.0,
+        url: 'https://media.tenor.com/Hfvbf7U6_VMAAAAi/peach-cat.gif',
     }
 
     const caller = {
         id: triggeredUser.id,
-        x: 225,
-        y: 115,
-        scale: 0.4
+        x: 150,
+        y: 100,
+        scale: 0.35
     }
 
     const target = {
         id: targetUser,
-        x: 135,
-        y: 80,
-        scale: 0.4
+        x: 50,
+        y: 215,
+        scale: 0.35
     }
 
     const params = {

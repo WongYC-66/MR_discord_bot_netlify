@@ -5,6 +5,7 @@ import path from 'path';
 import * as cheerio from 'cheerio';
 import { codeBlock } from 'discord.js';
 import { Jimp } from 'jimp';
+import { GifUtil, GifFrame, BitmapImage, GifCodec } from 'gifwrap';
 
 export const LIBRARY_URL = 'https://royals-library.netlify.app';
 export const API_URL = 'https://royals-library.netlify.app/api/v1';
@@ -449,6 +450,52 @@ export const overlayAvatarsToBaseImage = async (caller, target, background) => {
     return buffer;
 }
 
+export const fetchGiffBufferFromUrl = async (url) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
+    return Buffer.from(await res.arrayBuffer());
+};
+
+export const overlayAvatarsToAnimatedGif = async (caller, target, background) => {
+    console.log('overlaying animated gif')
+
+    const [gif, callerImage, targetImage] = await Promise.all([
+        GifUtil.read(await fetchGiffBufferFromUrl(background.url)),
+        Jimp.read(caller.avatarURL),
+        Jimp.read(target.avatarURL),
+    ]);
+
+    callerImage.scale(caller.scale);
+    targetImage.scale(target.scale);
+
+    const frames = await Promise.all(gif.frames.map(async (frame) => {
+        const jimpFrame = await new Jimp({
+            width: frame.bitmap.width,
+            height: frame.bitmap.height,
+            data: Buffer.from(frame.bitmap.data)
+        });
+
+        jimpFrame.scale(background.scale);
+
+        jimpFrame
+            .composite(callerImage.clone(), caller.x, caller.y)
+            .composite(targetImage.clone(), target.x, target.y);
+
+        return new GifFrame(jimpFrame.bitmap, {
+            delayCentisecs: frame.delayCentisecs,
+            disposalMethod: frame.disposalMethod,
+        });
+    }));
+
+
+    GifUtil.quantizeDekker(frames);
+
+    const codec = new GifCodec();
+    const encodedGif = await codec.encodeGif(frames, { loops: gif.loops });
+    console.log('im here')
+    return encodedGif.buffer; // This is your Buffer
+};
+
 export const deferDiscordInteraction = async (interaction) => {
     await fetch(`https://discord.com/api/v10/interactions/${interaction.id}/${interaction.token}/callback`, {
         method: 'POST',
@@ -638,7 +685,8 @@ export const generatedImageResponse = async ({ caller, target, background, event
     if (!isLocalTestServer && !isNetlifySelfTest) await deferDiscordInteraction(interaction)
 
     const fileName = `${wording}.png`
-    const imageBuffer = await overlayAvatarsToBaseImage(caller, target, background)
+    // const imageBuffer = await overlayAvatarsToBaseImage(caller, target, background)
+    const imageBuffer = await overlayAvatarsToAnimatedGif(caller, target, background)
 
     // Step 2 : Send image
     if (isLocalTestServer || isNetlifySelfTest) {
