@@ -5,7 +5,7 @@ import path from 'path';
 import * as cheerio from 'cheerio';
 import { codeBlock } from 'discord.js';
 import { Jimp } from 'jimp';
-import { GifUtil, GifFrame, BitmapImage, GifCodec } from 'gifwrap';
+import { GifUtil, GifFrame, GifCodec } from 'gifwrap';
 
 export const LIBRARY_URL = 'https://royals-library.netlify.app';
 export const API_URL = 'https://royals-library.netlify.app/api/v1';
@@ -509,7 +509,8 @@ export async function sendDiscordImageWebhook({ imageBuffer, fileName, Embed, in
 
     const webhookUrl = `https://discord.com/api/v10/webhooks/${interaction.application_id}/${interaction.token}`;
 
-    const blob = new Blob([imageBuffer], { type: 'image/png' });
+    const fileType = fileName.split('.').at(-1)
+    const blob = new Blob([imageBuffer], { type: `image/${fileType}` });
     const form = new FormData();
     form.append('file', blob, fileName);
     form.append('payload_json', JSON.stringify({
@@ -684,7 +685,7 @@ export const generatedImageResponse = async ({ caller, target, background, event
     // Step 1: Defer interaction to avoid 3sec timeout
     if (!isLocalTestServer && !isNetlifySelfTest) await deferDiscordInteraction(interaction)
 
-    const fileName = `${wording}.png`
+    const fileName = `${wording}.gif`
     // const imageBuffer = await overlayAvatarsToBaseImage(caller, target, background)
     const imageBuffer = await overlayAvatarsToAnimatedGif(caller, target, background)
 
