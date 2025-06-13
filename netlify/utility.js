@@ -336,6 +336,7 @@ export const pickMatchedNameOrWithDrop = (data, query) => {
     // if has name matched, get the first one with drops
     // else get whatever at first
     // console.log(query)
+    // console.log(data)
     let nameMatchedWithDrop = data      // avoid sort, use sorted res from API
         .filter(({ name }) => name.trim().toLowerCase() === query.toLowerCase())
         .filter(({ drops }) => drops == true)

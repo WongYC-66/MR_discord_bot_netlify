@@ -70,7 +70,7 @@ export const getMobDropResponse = async (query) => {
     console.log(query)
     // 1. fetch the query to get list
     let data = await fetchURLAndReturnArr(`${API_URL}/monster?search=${query}`)
-    if (!data) return NotFound()
+    if (!data.length) return NotFound()
 
     // 2. be selective here, pick the exact name first, then pick the one with drops
     // i think this is what user hope to see
