@@ -213,7 +213,7 @@ export const pickNumber = (minInput, maxInput) => {
 export const decideMobStrings = (mobs) => {
     let mobStringsWithURL = formatToArrOfMobNameWithURL(mobs)
     let mobStringsWithoutURL = formatToArrOfName(mobs)
-    return mobStringsWithURL.join('\n').length < 6000 ? mobStringsWithURL : mobStringsWithoutURL
+    return mobStringsWithURL.join('\n').length < 5500 ? mobStringsWithURL : mobStringsWithoutURL
 }
 
 const formatToArrOfMobNameWithURL = (arrayOfElWithIdAndName) => {
