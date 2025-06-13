@@ -492,7 +492,6 @@ export const overlayAvatarsToAnimatedGif = async (caller, target, background) =>
 
     const codec = new GifCodec();
     const encodedGif = await codec.encodeGif(frames, { loops: gif.loops });
-    console.log('im here')
     return encodedGif.buffer; // This is your Buffer
 };
 
@@ -669,7 +668,7 @@ export const generateEmbedAndAttachmentResponse = (embed, attachment) => {
 
 export const generatedImageResponse = async ({ caller, target, background, event, wording }) => {
     const isLocalTestServer = event.headers.host.includes('localhost')
-    const isNetlifySelfTest = event.headers.host.includes('netlify')
+    const isInternalCall = event.headers['x-internal-bypass'] === 'true';
     console.log(caller, target, { isLocalTestServer, isNetlifySelfTest })
     const interaction = JSON.parse(event.body)
     // console.log(interaction)
@@ -683,17 +682,17 @@ export const generatedImageResponse = async ({ caller, target, background, event
     target.avatarURL = avatarURL2
 
     // Step 1: Defer interaction to avoid 3sec timeout
-    if (!isLocalTestServer && !isNetlifySelfTest) await deferDiscordInteraction(interaction)
+    if (!isLocalTestServer && !isInternalCall) await deferDiscordInteraction(interaction)
 
     const fileName = `${wording}.gif`
     // const imageBuffer = await overlayAvatarsToBaseImage(caller, target, background)
     const imageBuffer = await overlayAvatarsToAnimatedGif(caller, target, background)
 
     // Step 2 : Send image
-    if (isLocalTestServer || isNetlifySelfTest) {
+    if (isLocalTestServer || isInternalCall) {
         // dev mode, save to local folder instead to verify location and file size, netlify dev would cleanup
         const outputPath = path.join(__dirname, '/output', fileName);
-        if (!isNetlifySelfTest) saveImageBuffer(imageBuffer, outputPath)     // netlify can't save anything on hosted
+        if (!isInternalCall) saveImageBuffer(imageBuffer, outputPath)     // netlify can't save anything on hosted
     } else {
         const Embed = makeEmbed({
             name: `${wording} ${wording} ${wording}!`,
