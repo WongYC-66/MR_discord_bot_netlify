@@ -213,7 +213,9 @@ export const pickNumber = (minInput, maxInput) => {
 export const decideMobStrings = (mobs) => {
     let mobStringsWithURL = formatToArrOfMobNameWithURL(mobs)
     let mobStringsWithoutURL = formatToArrOfName(mobs)
-    return mobStringsWithURL.join('\n').length < 5500 ? mobStringsWithURL : mobStringsWithoutURL
+    let lenWithURL = mobStringsWithURL.join('\n').length
+    console.log({lenWithURL})
+    return lenWithURL < 5000 ? mobStringsWithURL : mobStringsWithoutURL
 }
 
 const formatToArrOfMobNameWithURL = (arrayOfElWithIdAndName) => {
@@ -284,7 +286,7 @@ export const decideDropStrings = (drops) => {
     const dropStringsWithoutURL = processDropsWithoutURL(drops)
     const lenWithURL = Object.values(dropStringsWithURL).flat().join('\n').length
     console.log({ lenWithURL })
-    return lenWithURL < 5500 ? dropStringsWithURL : dropStringsWithoutURL
+    return lenWithURL < 5000 ? dropStringsWithURL : dropStringsWithoutURL
 }
 
 const processDropsWithURL = (drops) => {
