@@ -332,6 +332,20 @@ export const splitLongDropStringIntoArray = (drops) => {
     return result;
 };
 
+export const pickMatchedNameOrWithDrop = (data, query) => {
+    // if has name matched, get the first one with drops
+    // else none matched, get the first one with drops
+    let nameMatched = data.filter(({ name }) => name === query)
+    let res = null
+    if (nameMatched.length) {
+        res = nameMatched.filter(({ drops }) => drops == true)
+    } else {
+        data = data.filter(({ drops }) => drops == true)
+        res = data[0]
+    }
+    return res
+}
+
 export const getFeeling = () => {
     const choices = [
         "happy",

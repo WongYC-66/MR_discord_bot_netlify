@@ -10,6 +10,7 @@ import {
     generateMonsterURL,
     makeEmbed,
     NotFound,
+    pickMatchedNameOrWithDrop,
     splitLongDropStringIntoArray,
     splitLongMobStringIntoArray
 } from "./utility"
@@ -66,11 +67,15 @@ export const getItemDroppedByResponse = async (query) => {
 
 export const getMobDropResponse = async (query) => {
     console.log(query)
-    // 1. fetch the query to get the 1st Mob that matches
-    let data = await fetchURLAndReturnFirst(`${API_URL}/monster?search=${query}`)
+    // 1. fetch the query to get list
+    let data = await fetchURL(`${API_URL}/monster?search=${query}`)
     if (!data) return NotFound()
 
-    // 2. fetch the detail, assume the ID always correct since fetch 1 is ok.
+    // 2. be selective here, pick the exact name first, then pick the one with drops
+    // i think this is what user hope to see
+    data = pickMatchedNameOrWithDrop(data, query)
+
+    // 3. fetch the detail, assume the ID always correct since fetch 1 is ok.
     let mobInfo = await fetchURL(`${API_URL}/monster?id=${data.id}`)
 
     const name = data?.name || 'undefined'
