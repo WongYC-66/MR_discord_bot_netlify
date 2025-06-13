@@ -122,6 +122,11 @@ const commands = [
       },
       {
         type: 1,    // SUB_COMMAND
+        name: 'guildhq',
+        description: 'show guild HQ map',
+      },
+      {
+        type: 1,    // SUB_COMMAND
         name: 'selftest',
         description: 'healthcheck if this BOT is OK',
       },

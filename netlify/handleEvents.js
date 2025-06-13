@@ -22,6 +22,7 @@ VNHOES BOT HELP:
   /bot servertime       : show mapleroyals servertime
   /bot roll min max     : roll a number between, up to -10b ~ 10b
   /bot flipcoin         : flip a coin
+  /bot guildhq          : show guild HQ map
   /bot selftest         : healthcheck if this BOT is OK
   /bot author           : show author
 
@@ -148,6 +149,9 @@ export const handleEvents = async (rawBody, event) => {
 
         case '/bot flipcoin':
             return bot.getCoinFlipResponse()
+
+        case '/bot guildhq':
+            return myOneLinerImageResponse('VNHoes Guild HQ', 'https://maplestory.io/api/GMS/83/map/103000000/render')
 
         case '/bot selftest':
             return bot.getSelfTestResponse()

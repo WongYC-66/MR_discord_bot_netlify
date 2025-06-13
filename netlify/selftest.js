@@ -108,6 +108,11 @@ export async function runSelfTests() {
             validate: json => json.data?.content?.toLowerCase()?.includes("you flipped a")
         },
         {
+            name: "/bot guildhq",
+            payload: generatePayload("bot", "guildhq"),
+            validate: json => json.data?.embeds?.[0]?.description?.toLowerCase()?.includes("guild")
+        },
+        {
             name: "/bot author",
             payload: generatePayload("bot", "author"),
             validate: json => json.data?.embeds?.[0]?.description?.toLowerCase()?.includes("scotty5c")

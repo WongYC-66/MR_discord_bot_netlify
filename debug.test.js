@@ -82,6 +82,13 @@ describe("Bot Commands", () => {
         expect(json.data?.content?.toLowerCase()).toContain("you flipped a");
     });
 
+    test("/bot guildhq", async () => {
+        const payload = generatePayload("bot", "guildhq");
+        const { status, json } = await postToHandler(payload);
+        expect(status).toBe(200);
+        expect(json.data?.embeds?.[0]?.description.toLowerCase()).toContain("guild");
+    });
+
     test("/bot author", async () => {
         const payload = generatePayload("bot", "author");
         const { status, json } = await postToHandler(payload);
