@@ -215,7 +215,7 @@ export const decideMobStrings = (mobs) => {
     let mobStringsWithoutURL = formatToArrOfName(mobs)
     let lenWithURL = mobStringsWithURL.join('\n').length
     console.log({lenWithURL})
-    return lenWithURL < 5000 ? mobStringsWithURL : mobStringsWithoutURL
+    return lenWithURL < 4500 ? mobStringsWithURL : mobStringsWithoutURL
 }
 
 const formatToArrOfMobNameWithURL = (arrayOfElWithIdAndName) => {
@@ -286,7 +286,7 @@ export const decideDropStrings = (drops) => {
     const dropStringsWithoutURL = processDropsWithoutURL(drops)
     const lenWithURL = Object.values(dropStringsWithURL).flat().join('\n').length
     console.log({ lenWithURL })
-    return lenWithURL < 5000 ? dropStringsWithURL : dropStringsWithoutURL
+    return lenWithURL < 4500 ? dropStringsWithURL : dropStringsWithoutURL
 }
 
 const processDropsWithURL = (drops) => {
