@@ -351,7 +351,7 @@ export const pickMatchedNameOrWithDrop = (data, query) => {
 }
 
 export const getFeeling = () => {
-    const moreChoices = [
+    const choices = [
         "internal screaming",
         "pretending to care",
         "spooked",
