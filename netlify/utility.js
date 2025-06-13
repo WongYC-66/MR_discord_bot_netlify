@@ -669,7 +669,7 @@ export const generateEmbedAndAttachmentResponse = (embed, attachment) => {
 export const generatedImageResponse = async ({ caller, target, background, event, wording }) => {
     const isLocalTestServer = event.headers.host.includes('localhost')
     const isInternalCall = event.headers['x-internal-bypass'] === 'true';
-    console.log(caller, target, { isLocalTestServer, isNetlifySelfTest })
+    console.log(caller, target, { isLocalTestServer, isInternalCall })
     const interaction = JSON.parse(event.body)
     // console.log(interaction)
 
