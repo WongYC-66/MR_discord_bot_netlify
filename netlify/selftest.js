@@ -22,9 +22,9 @@ export function generatePayload(command, subcommand, options = []) {
         channel_id: "876543210987654321",
         member: {
             user: {
-                id: "222222222222222222",
+                id: "474557435219279873",
                 username: "TestUser",
-                discriminator: "0001"
+                discriminator: "0"
             },
             roles: [],
             permissions: "2147483647"
@@ -34,6 +34,7 @@ export function generatePayload(command, subcommand, options = []) {
 }
 
 export async function postToHandler(payload) {
+    const botToken = process.env.APP_TOKEN
     const res = await fetch(BASE_URL, {
         method: "POST",
         headers: {
@@ -242,14 +243,29 @@ export async function runSelfTests() {
         {
             name: "/troll sack",
             payload: generatePayload("troll", "sack", [
-                { name: "target", value: "123456789", type: 3 }
+                { name: "target", value: "474557435219279873", type: 6 }
             ]),
             validate: json => json.data?.content?.toLowerCase()?.includes("spawned a")
-        }
+        },
+        {
+            name: "/troll pat",
+            payload: generatePayload("troll", "pat", [
+                { name: "target", value: "474557435219279873", type: 6 }
+            ]),
+            validate: json => true
+        },
+        {
+            name: "/troll slap",
+            payload: generatePayload("troll", "slap", [
+                { name: "target", value: "474557435219279873", type: 6 }
+            ]),
+            validate: json => true
+        },
     ]
 
     const allTests = [...botCommandTests, ...dropCommandTests, ...guideCommandTests, ...trollCommandTests]
     // const allTests = [botCommandTests[0]]
+    // const allTests = [...trollCommandTests]
 
     console.log(`Running ${allTests.length} Discord command self-tests...\n`);
 

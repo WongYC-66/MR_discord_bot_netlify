@@ -255,13 +255,29 @@ describe("Troll Commands", () => {
         expect(json.data?.content?.toLowerCase()).toContain("feels");
     });
 
-    test("/troll sackpav", async () => {
+    test("/troll sack", async () => {
         const payload = generatePayload("troll", "sack", [
-            { name: "target", value: "123456789", type: 3 }
+            { name: "target", value: "123456789", type: 6 }
         ]);
         const { status, json } = await postToHandler(payload);
         expect(status).toBe(200);
         expect(json.data?.content?.toLowerCase()).toContain("spawned a");
+    });
+
+    test("/troll pat", async () => {
+        const payload = generatePayload("troll", "pat", [
+            { name: "target", value: "474557435219279873", type: 6 }
+        ]);
+        const { status, json } = await postToHandler(payload);
+        expect(status).toBe(200);
+    });
+
+    test("/troll slap", async () => {
+        const payload = generatePayload("troll", "slap", [
+            { name: "target", value: "474557435219279873", type: 6 }
+        ]);
+        const { status, json } = await postToHandler(payload);
+        expect(status).toBe(200);
     });
 
 });
