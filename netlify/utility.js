@@ -334,14 +334,14 @@ export const splitLongDropStringIntoArray = (drops) => {
 
 export const pickMatchedNameOrWithDrop = (data, query) => {
     // if has name matched, get the first one with drops
-    // else none matched, get the first one with drops
-    let nameMatched = data.filter(({ name }) => name === query)
-    let res = null
-    if (nameMatched.length) {
-        res = nameMatched.filter(({ drops }) => drops == true)
-    } else {
-        data = data.filter(({ drops }) => drops == true)
-        res = data[0]
+    // else get whatever at first
+    // console.log(query)
+    let nameMatchedWithDrop = data      // avoid sort, use sorted res from API
+        .filter(({ name }) => name.trim().toLowerCase() === query.toLowerCase())
+        .filter(({ drops }) => drops == true)
+    let res = data[0]
+    if (nameMatchedWithDrop.length) {
+        res = nameMatchedWithDrop[0]
     }
     return res
 }
@@ -392,7 +392,7 @@ export const fetchURLAndReturnFirst = async (url) => {
 export const fetchURLAndReturnArr = async (url) => {
     let data = await fetch(url)
     data = await data.json()
-    return data.data      // get the first of returned array
+    return data.data      // get the array, no need pagination info
 }
 
 export const fetchURL = async (url) => {
