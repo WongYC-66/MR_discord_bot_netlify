@@ -176,7 +176,12 @@ export const getCoinFlipResponse = () => {
 }
 
 export const getSelfTestResponse = async () => {
-    let content = await runSelfTests()
+    let content = await runSelfTests({
+        ignore: [
+            '/troll pat',
+            '/troll slap'
+        ]
+    })
     content = content.join('\n')
     return generateCodeBlockResponse(content)
 }

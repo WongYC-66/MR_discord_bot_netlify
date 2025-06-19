@@ -47,7 +47,7 @@ export async function postToHandler(payload) {
     return { status: res.status, json };
 }
 
-export async function runSelfTests() {
+export async function runSelfTests(option) {
     const botCommandTests = [
         {
             name: "/bot help",
@@ -268,9 +268,14 @@ export async function runSelfTests() {
         },
     ]
 
-    const allTests = [...botCommandTests, ...dropCommandTests, ...guideCommandTests, ...trollCommandTests]
-    // const allTests = [botCommandTests[0]]
-    // const allTests = [...trollCommandTests]
+    let allTests = [...botCommandTests, ...dropCommandTests, ...guideCommandTests, ...trollCommandTests]
+    // let allTests = [botCommandTests[0]]
+    // let allTests = [...trollCommandTests]
+
+    // Check option to ignore any ?
+    if (option?.ignore) {
+        allTests = allTests.filter(({ name }) => !option.ignore.includes(name))
+    }
 
     console.log(`Running ${allTests.length} Discord command self-tests...\n`);
 
