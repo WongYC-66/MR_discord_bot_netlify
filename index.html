@@ -9,16 +9,22 @@
   <h2>Your Interaction Endpoint URL</h2>
   <p id="endpoint">Loading...</p>
 
+  <h2>Your reminder Endpoint URL</h2>
+  <p id="reminder-endpoint">Loading...</p>
+
   <h2>Your DOMAIN URL</h2>
   <p id="domain">Loading...</p>
 
   <script>
     const currentHost = window.location.host;
     const currentProtocol = window.location.protocol;
+
     const endpoint = `${currentProtocol}//${currentHost}/.netlify/functions/discord`;
+    const reminderEndpoint = `${currentProtocol}//${currentHost}/.netlify/functions/reminder?event=<>&channel_id=<>`;
 
     document.getElementById('endpoint').textContent = `${endpoint}`;
-    document.getElementById('domain').textContent = `${currentProtocol}//${currentHost}`;;
+    document.getElementById('reminder-endpoint').textContent = `${reminderEndpoint}`;
+    document.getElementById('domain').textContent = `${currentProtocol}//${currentHost}`;
   </script>
 </body>
 </html>
